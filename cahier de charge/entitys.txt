@@ -1,375 +1,234 @@
-ENTITÉS MCD - SYSTÈME DE GESTION DES RESSOURCES HUMAINES
-ENTITÉ "EMPLOYÉ"
-employee_code : "HR-EMP-001" (Identifiant métier)
-
-national_id : Numéro de sécurité sociale
-
-passport_number : Numéro de passeport (pour employés internationaux)
-
-INFORMATIONS PERSONNELLES
-first_name : Prénom
-
-last_name : Nom
-
-middle_name : Deuxième prénom
-
-gender : "M"/"F"/"O" (Genre)
-
-date_of_birth : Date de naissance
-
-marital_status : "Célibataire", "Marié", "Divorcé"
-
-dependents_count : Nombre de personnes à charge (pour calcul fiscal)
-
-COORDONNÉES
-personal_email : Email personnel
-
-corporate_email : Email professionnel
-
-phone_mobile : Téléphone mobile
-
-phone_home : Téléphone domicile
-
-address_line1 : Adresse ligne 1
-
-address_line2 : Adresse ligne 2
-
-city : Ville
-
-state : État/Région
-
-postal_code : Code postal
-
-country : Pays
-
-CONTACT D'URGENCE
-emergency_contact_name : Nom du contact d'urgence
-
-emergency_contact_phone : Téléphone du contact d'urgence
-
-emergency_contact_relation : Relation avec le contact
-
-ATTRIBUTS MÉTIER (RELATIONS MCD)
-department_code : Code département (Relation avec Département)
-
-job_position_code : Code poste (Relation avec Poste)
-
-manager_code : Code manager (Relation réflexive)
-
-STATUT PROFESSIONNEL
-employment_status : "Actif", "En congé", "Terminé"
-
-hire_date : Date d'embauche
-
-probation_end_date : Date fin période d'essai
-
-termination_date : Date de départ
-
-termination_reason : Raison du départ
-
-CONFORMITÉ
-has_signed_contract : Contrat signé (0/1)
-
-has_background_check : Vérification antécédents (0/1)
-
-is_verified : Employé vérifié (0/1)
-
-RÈGLES MÉTIER
-is_valid : Employé valide (attribut dérivé - règle métier)
-
-ENTITÉ "DÉPARTEMENT"
-department_code : "DEP-IT", "DEP-HR"
-
-department_name : Nom du département
-
-department_type : "Fonctionnel", "Projet", "Centre de coût"
-
-cost_center_code : Code centre de coût
-
-location_code : Code localisation
-
-manager_code : Code manager (Relation avec Employé)
-
-established_date : Date de création
-
-annual_budget : Budget annuel
-
-headcount_approved : Effectif approuvé
-
-headcount_current : Effectif actuel
-
-STRUCTURE HIÉRARCHIQUE
-parent_department_code : Code département parent
-
-hierarchy_level : Niveau hiérarchique
-
-ENTITÉ "POSTE"
-job_code : "JOB-DEV-001"
-
-job_title : Intitulé du poste
-
-job_family : "Technique", "Administratif", "Managerial"
-
-job_grade : "G7", "G8" (Niveau de classification)
-
-eeo_category : Catégorie EEO (Égalité des chances)
-
-GRILLE SALARIALE (RÈGLE MÉTIER)
-salary_min : Salaire minimum
-
-salary_mid : Salaire médian
-
-salary_max : Salaire maximum
-
-currency : "USD", "EUR", "GBP" (Devise)
-
-EXIGENCES
-experience_years_required : Années d'expérience requises
-
-education_level : Niveau d'éducation requis
-
-required_certifications : Certifications requises (attribut multivalué)
-
-ENTITÉ "PAIE" (TRANSACTION MÉTIER)
-payroll_id : "PAY-2024-01-EMP001"
-
-employee_code : Code employé (Relation)
-
-period_start : Début période
-
-period_end : Fin période
-
-payment_date : Date de paiement
-
-GAINS (MCD : AGGRÉGATION DES ÉLÉMENTS DE PAIE)
-basic_salary : Salaire de base
-
-housing_allowance : Allocation logement
-
-transportation_allowance : Allocation transport
-
-overtime_pay : Heures supplémentaires
-
-performance_bonus : Prime performance
-
-commission : Commission
-
-other_allowances : Autres allocations
-
-total_earnings : Total gains
-
-DÉDUCTIONS (MCD : AGGRÉGATION)
-income_tax : Impôt sur le revenu
-
-social_security_employee : Sécurité sociale employé
-
-social_security_employer : Sécurité sociale employeur
-
-health_insurance : Assurance santé
-
-pension_contribution : Cotisation retraite
-
-loan_deductions : Retenues prêts
-
-other_deductions : Autres déductions
-
-total_deductions : Total déductions
-
-SALAIRE NET (ATTRIBUT DÉRIVÉ - RÈGLE MÉTIER)
-net_pay : Salaire net
-
-DÉTAILS PAIEMENT
-payment_method : "Virement", "Espèces", "Chèque"
-
-bank_account_number : Numéro compte bancaire
-
-bank_name : Nom banque
-
-payment_status : "En attente", "Payé", "Échoué"
-
-CONFORMITÉ
-tax_certificate_number : Numéro certificat fiscal
-
-is_tax_filed : Déclaration fiscale déposée (0/1)
-
-ENTITÉ "POINTAGE" (ÉVÉNEMENT MÉTIER)
-attendance_id : "ATT-2024-01-01-EMP001"
-
-employee_code : Code employé
-
-date : Date du pointage
-
-SUIVI DU TEMPS
-scheduled_start : Heure début prévue
-
-scheduled_end : Heure fin prévue
-
-actual_start : Heure début réelle
-
-actual_end : Heure fin réelle
-
-CALCULS (RÈGLES MÉTIER)
-scheduled_hours : Heures programmées
-
-actual_hours : Heures réelles
-
-regular_hours : Heures normales
-
-overtime_hours : Heures supplémentaires
-
-night_hours : Heures de nuit
-
-holiday_hours : Heures jours fériés
-
-STATUT
-attendance_status : "Présent", "Absent", "Retard", "Demi-journée"
-
-shift_code : "Matin", "Soir", "Nuit"
-
-approval_status : "En attente", "Approuvé", "Rejeté"
-
-approver_code : Code approbateur (Relation)
-
-NOTES
-remarks : Remarques
-
-ENTITÉ "CONGÉ" (PROCESSUS MÉTIER)
-leave_id : "LVE-2024-EMP001-001"
-
-employee_code : Code employé
-
-leave_type : "Annuel", "Maladie", "Maternité", "Non payé"
-
-start_date : Date début
-
-end_date : Date fin
-
-total_days : Total jours
-
-ÉTATS WORKFLOW (PROCESSUS MCT)
-request_status : "Brouillon", "Soumis", "Approuvé", "Rejeté"
-
-request_date : Date demande
-
-approval_date : Date approbation
-
-approver_code : Code approbateur
-
-RÈGLES MÉTIER
-days_deducted : Jours déduits
-
-supporting_document_path : Chemin document justificatif
-
-is_medical : Congé maladie (0/1)
-
-medical_certificate_number : Numéro certificat médical
-
-RELATION AVEC PAIE
-is_paid_leave : Congé payé (0/1)
-
-ENTITÉ "CONTRAT" (ACCORD LÉGAL)
-contract_id : "CNT-EMP001-2024"
-
-employee_code : Code employé
-
-contract_type : "CDI", "CDD", "Période d'essai"
-
-start_date : Date début
-
-end_date : Date fin
-
-signing_date : Date signature
-
-CONDITIONS
-basic_salary : Salaire de base
-
-salary_currency : Devise du salaire
-
-working_hours_per_week : Heures par semaine
-
-probation_period_days : Jours période d'essai
-
-notice_period_days : Jours préavis
-
-AVANTAGES (MCD : COMPOSITION)
-has_health_insurance : Assurance santé (0/1)
-
-has_pension : Retraite (0/1)
-
-has_stock_options : Actions (0/1)
-
-annual_leave_days : Jours congés annuels
-
-sick_leave_days : Jours congés maladie
-
-DOCUMENTS
-contract_file_path : Chemin contrat
-
-signed_copy_path : Chemin copie signée
-
-is_digital_signature : Signature numérique (0/1)
-
-ENTITÉ "CONFIGURATION FISCALE" (RÈGLES MÉTIER)
-country_code : "US", "UK", "FR", "DE"
-
-tax_year : Année fiscale
-
-TRANCHES FISCALES (MCD : ATTRIBUT MULTIVALUÉ)
-brackets : Tableau des tranches (min_income, max_income, tax_rate, fixed_amount)
-
-bracket_count : Nombre de tranches
-
-ALLOCATIONS
-personal_allowance : Allocation personnelle
-
-married_allowance : Allocation marié
-
-dependent_allowance : Allocation personne à charge
-
-SÉCURITÉ SOCIALE
-employee_rate : Taux employé
-
-employer_rate : Taux employeur
-
-max_contribution : Plafond cotisation
-
-DÉCLARATION
-tax_form_code : Code formulaire fiscal
-
-filing_deadline : Date limite déclaration
-
-RELATIONS MCD
-RELATION "TRAVAILLE DANS" (1:N)
-employee_code : Code employé
-
-department_code : Code département
-
-assignment_date : Date d'affectation
-
-assignment_type : "Principal", "Matrice", "Temporaire"
-
-allocation_percentage : Pourcentage d'allocation (pour temps partiel)
-
-RELATION "OCCUPE POSTE" (1:1)
-employee_code : Code employé
-
-job_code : Code poste
-
-effective_date : Date d'effet
-
-end_date : Date de fin
-
-grade_level : Niveau de grade
-
-RELATION "POSSÈDE COMPÉTENCE" (N:M)
-employee_code : Code employé
-
-skill_code : Code compétence
-
-proficiency_level : "Débutant", "Intermédiaire", "Expert"
-
-certification_date : Date certification
-
-certified_by : Certifié par
-
-    
+table employe {
+  code_employe varchar(20) // "HR-EMP-001" (Identifiant métier)
+  cin varchar(20) // Numéro de sécurité sociale
+  numero_passeport varchar(20) // Numéro de passeport (pour employés internationaux)
+
+  // INFORMATIONS PERSONNELLES
+  prenom varchar(50) // Prénom
+  nom varchar(50) // Nom
+  deuxieme_prenom varchar(30) // Deuxième prénom
+  sexe char(1) // "M"/"F"/"O" (Genre)
+  date_naissance date // struct tm from time.h - Date de naissance
+  situation_matrimoniale varchar(15) // "Célibataire", "Marié", "Divorcé"
+  nb_personnes_charge integer // Nombre de personnes à charge (pour calcul fiscal)
+
+  // COORDONNÉES
+  email_personnel varchar(100) // Email personnel
+  email_professionnel varchar(100) // Email professionnel
+  telephone_mobile varchar(20) // Téléphone mobile
+  telephone_domicile varchar(20) // Téléphone domicile
+  adresse_ligne1 varchar(100) // Adresse ligne 1
+  adresse_ligne2 varchar(100) // Adresse ligne 2
+  ville varchar(50) // Ville
+  region varchar(50) // État/Région
+  code_postal varchar(20) // Code postal
+  pays varchar(50) // Pays
+
+  // CONTACT D'URGENCE
+  nom_contact_urgence varchar(100) // Nom du contact d'urgence
+  telephone_contact_urgence varchar(20) // Téléphone du contact d'urgence
+  relation_contact_urgence varchar(30) // Relation avec le contact
+
+  // ATTRIBUTS MÉTIER (RELATIONS MCD)
+  code_departement varchar(20) // Code département (Relation avec Département)
+  code_poste varchar(20) // Code poste (Relation avec Poste)
+  code_manager varchar(20) // Code manager (Relation réflexive)
+
+  // STATUT PROFESSIONNEL
+  statut_emploi varchar(20) // "Actif", "En congé", "Terminé"
+  date_embauche date // Date d'embauche
+  date_fin_periode_essai date // Date fin période d'essai
+  date_depart date // Date de départ
+  raison_depart varchar(50) // Raison du départ
+
+  // CONFORMITÉ
+  contrat_signe boolean // Contrat signé (0/1)
+  verification_antecedents boolean // Vérification antécédents (0/1)
+  verifie boolean // Employé vérifié (0/1)
+
+  // RÈGLES MÉTIER
+  est_valide boolean // Employé valide (attribut dérivé - règle métier)
+}
+
+table departement {
+  code_departement varchar(20) // "DEP-IT", "DEP-HR"
+  nom_departement varchar(100) // Nom du département
+  type_departement varchar(30) // "Fonctionnel", "Projet", "Centre de coût"
+  code_centre_cout varchar(20) // Code centre de coût
+  code_localisation varchar(20) // Code localisation
+  code_manager varchar(20) // Code manager (Relation avec Employé)
+  date_creation date // Date de création
+  budget_annuel decimal(12,2) // Budget annuel
+  effectif_approuve integer // Effectif approuvé
+  effectif_actuel integer // Effectif actuel
+
+  // STRUCTURE HIÉRARCHIQUE
+  code_departement_parent varchar(20) // Code département parent
+  niveau_hierarchique integer // Niveau hiérarchique
+}
+
+table poste {
+  code_poste varchar(20) // "JOB-DEV-001"
+  intitule_poste varchar(100) // Intitulé du poste
+  famille_metier varchar(50) // "Technique", "Administratif", "Managerial"
+  grade_poste varchar(10) // "G7", "G8" (Niveau de classification)
+  categorie_eeo varchar(10) // Catégorie EEO (Égalité des chances)
+
+  // GRILLE SALARIALE (RÈGLE MÉTIER)
+  salaire_minimum decimal(10,2) // Salaire minimum
+  salaire_median decimal(10,2) // Salaire médian
+  salaire_maximum decimal(10,2) // Salaire maximum
+  devise varchar(5) // "USD", "EUR", "GBP" (Devise)
+
+  // EXIGENCES
+  annees_experience_requises integer // Années d'expérience requises
+  niveau_education varchar(50) // Niveau d'éducation requis
+  certifications_requises text // Certifications requises (attribut multivalué)
+}
+
+table paie {
+  id_paie varchar(30) // "PAY-2024-01-EMP001"
+  code_employe varchar(20) // Code employé (Relation)
+  periode_debut date // Début période
+  periode_fin date // Fin période
+  date_paiement date // Date de paiement
+
+  // GAINS (MCD : AGGRÉGATION DES ÉLÉMENTS DE PAIE)
+  salaire_base decimal(10,2) // Salaire de base
+  allocation_logement decimal(10,2) // Allocation logement
+  allocation_transport decimal(10,2) // Allocation transport
+  heures_supplementaires decimal(10,2) // Heures supplémentaires
+  prime_performance decimal(10,2) // Prime performance
+  commission decimal(10,2) // Commission
+  autres_allocations decimal(10,2) // Autres allocations
+  total_gains decimal(10,2) // Total gains
+
+  // DÉDUCTIONS (MCD : AGGRÉGATION)
+  impot_revenu decimal(10,2) // Impôt sur le revenu
+  securite_sociale_employe decimal(10,2) // Sécurité sociale employé
+  securite_sociale_employeur decimal(10,2) // Sécurité sociale employeur
+  assurance_sante decimal(10,2) // Assurance santé
+  cotisation_retraite decimal(10,2) // Cotisation retraite
+  retenues_prets decimal(10,2) // Retenues prêts
+  autres_deductions decimal(10,2) // Autres déductions
+  total_deductions decimal(10,2) // Total déductions
+
+  // SALAIRE NET (ATTRIBUT DÉRIVÉ - RÈGLE MÉTIER)
+  salaire_net decimal(10,2) // Salaire net
+
+  // DÉTAILS PAIEMENT
+  mode_paiement varchar(20) // "Virement", "Espèces", "Chèque"
+  numero_compte_bancaire varchar(30) // Numéro compte bancaire
+  nom_banque varchar(50) // Nom banque
+  statut_paiement varchar(20) // "En attente", "Payé", "Échoué"
+
+  // CONFORMITÉ
+  numero_certificat_fiscal varchar(30) // Numéro certificat fiscal
+  declaration_fiscale_deposee boolean // Déclaration fiscale déposée (0/1)
+}
+
+table pointage {
+  id_pointage varchar(30) // "ATT-2024-01-01-EMP001"
+  code_employe varchar(20) // Code employé
+  date date // Date du pointage
+
+  // SUIVI DU TEMPS
+  heure_debut_prevue timestamp // Heure début prévue
+  heure_fin_prevue timestamp // Heure fin prévue
+  heure_debut_reelle timestamp // Heure début réelle
+  heure_fin_reelle timestamp // Heure fin réelle
+
+  // CALCULS (RÈGLES MÉTIER)
+  heures_programmees decimal(4,2) // Heures programmées
+  heures_reelles decimal(4,2) // Heures réelles
+  heures_normales decimal(4,2) // Heures normales
+  heures_supplementaires decimal(4,2) // Heures supplémentaires
+  heures_nuit decimal(4,2) // Heures de nuit
+  heures_jours_feries decimal(4,2) // Heures jours fériés
+
+  // STATUT
+  statut_presence varchar(20) // "Présent", "Absent", "Retard", "Demi-journée"
+  code_shift varchar(20) // "Matin", "Soir", "Nuit"
+  statut_approbation varchar(20) // "En attente", "Approuvé", "Rejeté"
+  code_approbateur varchar(20) // Code approbateur (Relation)
+
+  // NOTES
+  remarques varchar(200) // Remarques
+}
+
+table conge {
+  id_conge varchar(30) // "LVE-2024-EMP001-001"
+  code_employe varchar(20) // Code employé
+  type_conge varchar(30) // "Annuel", "Maladie", "Maternité", "Non payé"
+  date_debut date // Date début
+  date_fin date // Date fin
+  total_jours decimal(5,2) // Total jours
+
+  // ÉTATS WORKFLOW (PROCESSUS MCT)
+  statut_demande varchar(20) // "Brouillon", "Soumis", "Approuvé", "Rejeté"
+  date_demande date // Date demande
+  date_approbation date // Date approbation
+  code_approbateur varchar(20) // Code approbateur
+
+  // RÈGLES MÉTIER
+  jours_deduits decimal(5,2) // Jours déduits
+  chemin_document_justificatif varchar(200) // Chemin document justificatif
+  est_medical boolean // Congé maladie (0/1)
+  numero_certificat_medical varchar(30) // Numéro certificat médical
+
+  // RELATION AVEC PAIE
+  est_conge_paye boolean // Congé payé (0/1)
+}
+
+table contrat {
+  id_contrat varchar(30) // "CNT-EMP001-2024"
+  code_employe varchar(20) // Code employé
+  type_contrat varchar(30) // "CDI", "CDD", "Période d'essai"
+  date_debut date // Date début
+  date_fin date // Date fin
+  date_signature date // Date signature
+
+  // CONDITIONS
+  salaire_base decimal(10,2) // Salaire de base
+  devise_salaire varchar(5) // Devise du salaire
+  heures_par_semaine integer // Heures par semaine
+  periode_essai_jours integer // Jours période d'essai
+  preavis_jours integer // Jours préavis
+
+  // AVANTAGES (MCD : COMPOSITION)
+  assurance_sante boolean // Assurance santé (0/1)
+  retraite boolean // Retraite (0/1)
+  stock_options boolean // Actions (0/1)
+  jours_conges_annuels decimal(5,2) // Jours congés annuels
+  jours_conges_maladie decimal(5,2) // Jours congés maladie
+
+  // DOCUMENTS
+  chemin_contrat varchar(200) // Chemin contrat
+  chemin_copie_signee varchar(200) // Chemin copie signée
+  signature_numerique boolean // Signature numérique (0/1)
+}
+
+table configuration_fiscale {
+  code_pays varchar(5) // "US", "UK", "FR", "DE"
+  annee_fiscale integer // Année fiscale
+
+  // TRANCHES FISCALES (MCD : ATTRIBUT MULTIVALUÉ)
+  // -- Tableau des tranches : plafonds, taux, montant_fixe
+  // -- Format JSON ou table séparée
+  brackets json // Tableau des tranches (min_revenu, max_revenu, taux_imposition, montant_fixe)
+  nombre_tranches integer // Nombre de tranches
+
+  // ALLOCATIONS
+  allocation_personnelle decimal(10,2) // Allocation personnelle
+  allocation_marie decimal(10,2) // Allocation marié
+  allocation_personne_charge decimal(10,2) // Allocation personne à charge
+
+  // SÉCURITÉ SOCIALE
+  taux_employe decimal(5,4) // Taux employé
+  taux_employeur decimal(5,4) // Taux employeur
+  plafond_cotisation decimal(10,2) // Plafond cotisation
+
+  // DÉCLARATION
+  code_formulaire_fiscal varchar(20) // Code formulaire fiscal
+  date_limite_declaration date // Date limite déclaration
+}
