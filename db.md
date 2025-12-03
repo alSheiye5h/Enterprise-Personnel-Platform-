@@ -35,9 +35,14 @@ table employer {
   status_employer varchar // enum
   date_embauche date // tm from time.h
   date_fin_periode_essai date // tm from time.h
-  date_depart date // tm ...
-  
+  date_demission date // tm ...
 
+  // conformité
+  contract_signe boolean 
+  verification_antecedents bolean
+  verifie boolean
 
+  // regle metier
+  valid boolean
 
 }
