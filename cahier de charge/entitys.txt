@@ -1,0 +1,375 @@
+ENTITÉS MCD - SYSTÈME DE GESTION DES RESSOURCES HUMAINES
+ENTITÉ "EMPLOYÉ"
+employee_code : "HR-EMP-001" (Identifiant métier)
+
+national_id : Numéro de sécurité sociale
+
+passport_number : Numéro de passeport (pour employés internationaux)
+
+INFORMATIONS PERSONNELLES
+first_name : Prénom
+
+last_name : Nom
+
+middle_name : Deuxième prénom
+
+gender : "M"/"F"/"O" (Genre)
+
+date_of_birth : Date de naissance
+
+marital_status : "Célibataire", "Marié", "Divorcé"
+
+dependents_count : Nombre de personnes à charge (pour calcul fiscal)
+
+COORDONNÉES
+personal_email : Email personnel
+
+corporate_email : Email professionnel
+
+phone_mobile : Téléphone mobile
+
+phone_home : Téléphone domicile
+
+address_line1 : Adresse ligne 1
+
+address_line2 : Adresse ligne 2
+
+city : Ville
+
+state : État/Région
+
+postal_code : Code postal
+
+country : Pays
+
+CONTACT D'URGENCE
+emergency_contact_name : Nom du contact d'urgence
+
+emergency_contact_phone : Téléphone du contact d'urgence
+
+emergency_contact_relation : Relation avec le contact
+
+ATTRIBUTS MÉTIER (RELATIONS MCD)
+department_code : Code département (Relation avec Département)
+
+job_position_code : Code poste (Relation avec Poste)
+
+manager_code : Code manager (Relation réflexive)
+
+STATUT PROFESSIONNEL
+employment_status : "Actif", "En congé", "Terminé"
+
+hire_date : Date d'embauche
+
+probation_end_date : Date fin période d'essai
+
+termination_date : Date de départ
+
+termination_reason : Raison du départ
+
+CONFORMITÉ
+has_signed_contract : Contrat signé (0/1)
+
+has_background_check : Vérification antécédents (0/1)
+
+is_verified : Employé vérifié (0/1)
+
+RÈGLES MÉTIER
+is_valid : Employé valide (attribut dérivé - règle métier)
+
+ENTITÉ "DÉPARTEMENT"
+department_code : "DEP-IT", "DEP-HR"
+
+department_name : Nom du département
+
+department_type : "Fonctionnel", "Projet", "Centre de coût"
+
+cost_center_code : Code centre de coût
+
+location_code : Code localisation
+
+manager_code : Code manager (Relation avec Employé)
+
+established_date : Date de création
+
+annual_budget : Budget annuel
+
+headcount_approved : Effectif approuvé
+
+headcount_current : Effectif actuel
+
+STRUCTURE HIÉRARCHIQUE
+parent_department_code : Code département parent
+
+hierarchy_level : Niveau hiérarchique
+
+ENTITÉ "POSTE"
+job_code : "JOB-DEV-001"
+
+job_title : Intitulé du poste
+
+job_family : "Technique", "Administratif", "Managerial"
+
+job_grade : "G7", "G8" (Niveau de classification)
+
+eeo_category : Catégorie EEO (Égalité des chances)
+
+GRILLE SALARIALE (RÈGLE MÉTIER)
+salary_min : Salaire minimum
+
+salary_mid : Salaire médian
+
+salary_max : Salaire maximum
+
+currency : "USD", "EUR", "GBP" (Devise)
+
+EXIGENCES
+experience_years_required : Années d'expérience requises
+
+education_level : Niveau d'éducation requis
+
+required_certifications : Certifications requises (attribut multivalué)
+
+ENTITÉ "PAIE" (TRANSACTION MÉTIER)
+payroll_id : "PAY-2024-01-EMP001"
+
+employee_code : Code employé (Relation)
+
+period_start : Début période
+
+period_end : Fin période
+
+payment_date : Date de paiement
+
+GAINS (MCD : AGGRÉGATION DES ÉLÉMENTS DE PAIE)
+basic_salary : Salaire de base
+
+housing_allowance : Allocation logement
+
+transportation_allowance : Allocation transport
+
+overtime_pay : Heures supplémentaires
+
+performance_bonus : Prime performance
+
+commission : Commission
+
+other_allowances : Autres allocations
+
+total_earnings : Total gains
+
+DÉDUCTIONS (MCD : AGGRÉGATION)
+income_tax : Impôt sur le revenu
+
+social_security_employee : Sécurité sociale employé
+
+social_security_employer : Sécurité sociale employeur
+
+health_insurance : Assurance santé
+
+pension_contribution : Cotisation retraite
+
+loan_deductions : Retenues prêts
+
+other_deductions : Autres déductions
+
+total_deductions : Total déductions
+
+SALAIRE NET (ATTRIBUT DÉRIVÉ - RÈGLE MÉTIER)
+net_pay : Salaire net
+
+DÉTAILS PAIEMENT
+payment_method : "Virement", "Espèces", "Chèque"
+
+bank_account_number : Numéro compte bancaire
+
+bank_name : Nom banque
+
+payment_status : "En attente", "Payé", "Échoué"
+
+CONFORMITÉ
+tax_certificate_number : Numéro certificat fiscal
+
+is_tax_filed : Déclaration fiscale déposée (0/1)
+
+ENTITÉ "POINTAGE" (ÉVÉNEMENT MÉTIER)
+attendance_id : "ATT-2024-01-01-EMP001"
+
+employee_code : Code employé
+
+date : Date du pointage
+
+SUIVI DU TEMPS
+scheduled_start : Heure début prévue
+
+scheduled_end : Heure fin prévue
+
+actual_start : Heure début réelle
+
+actual_end : Heure fin réelle
+
+CALCULS (RÈGLES MÉTIER)
+scheduled_hours : Heures programmées
+
+actual_hours : Heures réelles
+
+regular_hours : Heures normales
+
+overtime_hours : Heures supplémentaires
+
+night_hours : Heures de nuit
+
+holiday_hours : Heures jours fériés
+
+STATUT
+attendance_status : "Présent", "Absent", "Retard", "Demi-journée"
+
+shift_code : "Matin", "Soir", "Nuit"
+
+approval_status : "En attente", "Approuvé", "Rejeté"
+
+approver_code : Code approbateur (Relation)
+
+NOTES
+remarks : Remarques
+
+ENTITÉ "CONGÉ" (PROCESSUS MÉTIER)
+leave_id : "LVE-2024-EMP001-001"
+
+employee_code : Code employé
+
+leave_type : "Annuel", "Maladie", "Maternité", "Non payé"
+
+start_date : Date début
+
+end_date : Date fin
+
+total_days : Total jours
+
+ÉTATS WORKFLOW (PROCESSUS MCT)
+request_status : "Brouillon", "Soumis", "Approuvé", "Rejeté"
+
+request_date : Date demande
+
+approval_date : Date approbation
+
+approver_code : Code approbateur
+
+RÈGLES MÉTIER
+days_deducted : Jours déduits
+
+supporting_document_path : Chemin document justificatif
+
+is_medical : Congé maladie (0/1)
+
+medical_certificate_number : Numéro certificat médical
+
+RELATION AVEC PAIE
+is_paid_leave : Congé payé (0/1)
+
+ENTITÉ "CONTRAT" (ACCORD LÉGAL)
+contract_id : "CNT-EMP001-2024"
+
+employee_code : Code employé
+
+contract_type : "CDI", "CDD", "Période d'essai"
+
+start_date : Date début
+
+end_date : Date fin
+
+signing_date : Date signature
+
+CONDITIONS
+basic_salary : Salaire de base
+
+salary_currency : Devise du salaire
+
+working_hours_per_week : Heures par semaine
+
+probation_period_days : Jours période d'essai
+
+notice_period_days : Jours préavis
+
+AVANTAGES (MCD : COMPOSITION)
+has_health_insurance : Assurance santé (0/1)
+
+has_pension : Retraite (0/1)
+
+has_stock_options : Actions (0/1)
+
+annual_leave_days : Jours congés annuels
+
+sick_leave_days : Jours congés maladie
+
+DOCUMENTS
+contract_file_path : Chemin contrat
+
+signed_copy_path : Chemin copie signée
+
+is_digital_signature : Signature numérique (0/1)
+
+ENTITÉ "CONFIGURATION FISCALE" (RÈGLES MÉTIER)
+country_code : "US", "UK", "FR", "DE"
+
+tax_year : Année fiscale
+
+TRANCHES FISCALES (MCD : ATTRIBUT MULTIVALUÉ)
+brackets : Tableau des tranches (min_income, max_income, tax_rate, fixed_amount)
+
+bracket_count : Nombre de tranches
+
+ALLOCATIONS
+personal_allowance : Allocation personnelle
+
+married_allowance : Allocation marié
+
+dependent_allowance : Allocation personne à charge
+
+SÉCURITÉ SOCIALE
+employee_rate : Taux employé
+
+employer_rate : Taux employeur
+
+max_contribution : Plafond cotisation
+
+DÉCLARATION
+tax_form_code : Code formulaire fiscal
+
+filing_deadline : Date limite déclaration
+
+RELATIONS MCD
+RELATION "TRAVAILLE DANS" (1:N)
+employee_code : Code employé
+
+department_code : Code département
+
+assignment_date : Date d'affectation
+
+assignment_type : "Principal", "Matrice", "Temporaire"
+
+allocation_percentage : Pourcentage d'allocation (pour temps partiel)
+
+RELATION "OCCUPE POSTE" (1:1)
+employee_code : Code employé
+
+job_code : Code poste
+
+effective_date : Date d'effet
+
+end_date : Date de fin
+
+grade_level : Niveau de grade
+
+RELATION "POSSÈDE COMPÉTENCE" (N:M)
+employee_code : Code employé
+
+skill_code : Code compétence
+
+proficiency_level : "Débutant", "Intermédiaire", "Expert"
+
+certification_date : Date certification
+
+certified_by : Certifié par
+
+    

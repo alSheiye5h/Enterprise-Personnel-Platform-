@@ -1,0 +1,139 @@
+1. EMPLOYÉ (Cœur du système)
+sql
+Attributs:
+• code_employe (PK): "EMP-001"
+• nir (UK): "1 85 08 75 115 036 33"
+• nom: "DUPONT"
+• prenom: "Jean"
+• date_naissance: "1985-08-15"
+• sexe: "M"
+• adresse: "123 Rue de Paris"
+• email: "jean.dupont@entreprise.com"
+• telephone: "0612345678"
+• date_embauche: "2020-01-15"
+• statut: "Actif"
+2. DÉPARTEMENT (Structure organisationnelle)
+sql
+• code_departement: "DEPT-IT"
+• nom: "Informatique"
+• centre_cout: "CC-IT-001"
+• budget_annuel: 500000.00
+• localisation: "Bâtiment A, 3ème étage"
+• directeur_id: (FK vers Employé)
+3. POSTE (Fonction/Grade)
+sql
+• code_poste: "POST-DEV-01"
+• intitule: "Développeur Senior"
+• famille_metier: "Technique"
+• grade: "E1"
+• salaire_min: 45000.00
+• salaire_max: 65000.00
+• experience_requise: 5
+4. CONTRAT (Engagement juridique)
+sql
+• numero_contrat: "CNT-EMP001-2024"
+• type_contrat: "CDI"
+• date_debut: "2024-01-01"
+• date_fin: "2026-12-31" (ou NULL pour CDI)
+• salaire_base: 55000.00
+• heures_semaine: 35
+• periode_essai: 90 (jours)
+5. PAIE (Transaction mensuelle)
+sql
+• id_paie: "PAY-2024-01-EMP001"
+• periode_debut: "2024-01-01"
+• periode_fin: "2024-01-31"
+• salaire_brut: 4583.33
+• cotisations_salariales: 917.67
+• salaire_net: 3665.66
+• date_paiement: "2024-01-25"
+• statut: "Payé"
+6. PRÉSENCE (Pointage horaire)
+sql
+• id_presence: "PRES-20240115-EMP001"
+• date: "2024-01-15"
+• heure_arrivee: "08:30:00"
+• heure_depart: "17:45:00"
+• heures_normales: 8.25
+• heures_supp: 0.50
+• statut: "Présent"
+• approbation: "Validé"
+7. CONGÉ (Absence programmée)
+sql
+• id_conge: "CONG-2024-EMP001-001"
+• type_conge: "Annuel"
+• date_debut: "2024-07-01"
+• date_fin: "2024-07-15"
+• jours_ouvres: 10.00
+• statut_demande: "Approuvé"
+• approbateur_id: (FK vers Employé)
+8. COMPÉTENCE (Savoir-faire)
+sql
+• code_competence: "COMP-JAVA-01"
+• nom: "Java Spring Boot"
+• categorie: "Technique"
+• niveau: "Avancé"
+• date_certification: "2023-06-15"
+• organisme_certificateur: "Oracle"
+9. FORMATION (Développement)
+sql
+• id_formation: "FORM-2024-001"
+• intitule: "Formation Sécurité RGPD"
+• type: "Interne"
+• date_debut: "2024-03-15"
+• date_fin: "2024-03-16"
+• duree_heures: 14
+• cout: 1200.00
+• prestataire: "Formation Plus"
+10. ÉVALUATION (Performance)
+sql
+• id_evaluation: "EVAL-2024-EMP001"
+• type: "Annuelle"
+• date_evaluation: "2024-12-15"
+• note_globale: 4.2/5
+• objectifs_atteints: 85%
+• plan_amelioration: "Formation leadership"
+• evaluateur_id: (FK vers Employé)
+11. BANQUE (Informations financières)
+sql
+• id_compte: "BANK-EMP001"
+• iban: "FR76 3000 1000 0100 0000 0000 123"
+• bic: "BNPAFRPP"
+• titulaire_compte: "Jean DUPONT"
+• banque: "BNP Paribas"
+• agence: "Lyon Centre"
+12. RÉGLEMENTATION (Paramètres légaux)
+sql
+• code_reglementation: "REG-SMIC-2024"
+• nom: "SMIC 2024"
+• valeur: 11.65 (€/heure)
+• date_application: "2024-01-01"
+• date_fin: "2024-12-31"
+• organisme: "Ministère du Travail"
+13. DOCUMENT (Gestion documentaire)
+sql
+• id_document: "DOC-CV-EMP001"
+• type: "CV"
+• nom_fichier: "cv_jean_dupont.pdf"
+• chemin: "/documents/employes/EMP001/"
+• taille: 245000 (bytes)
+• date_upload: "2024-01-10"
+• confidentialite: "Restreint"
+14. ABSENCE (Absence imprévue)
+sql
+• id_absence: "ABS-20240120-EMP001"
+• type: "Maladie"
+• date_debut: "2024-01-20"
+• date_fin: "2024-01-22"
+• certificat_medical: "Oui"
+• numero_certificat: "MED-2024-12345"
+• statut: "Validé par la CPAM"
+15. EQUIPEMENT (Matériel attribué)
+sql
+• id_equipement: "EQP-LAPTOP-001"
+• type: "Ordinateur portable"
+• modele: "Dell Latitude 5440"
+• numero_serie: "CN-08RRC3-64180-5B1-1CM3"
+• date_attribution: "2024-01-15"
+• etat: "Neuf"
+• valeur: 1200.00

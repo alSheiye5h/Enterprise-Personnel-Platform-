@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cahier des Charges - MERISE HR Nexus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00c9ff, #92fe9d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            background: rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .download-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            text-align: center;
+            border: 2px dashed #667eea;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px 36px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 50px;
+            text-decoration: none;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+        
+        .download-btn i {
+            margin-right: 10px;
+        }
+        
+        .format-options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .format-btn {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .format-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .toc {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .toc h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+        
+        .toc li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .toc li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .toc a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .toc a:hover {
+            color: #667eea;
+        }
+        
+        .toc a i {
+            margin-right: 10px;
+            color: #667eea;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section h2 i {
+            color: #667eea;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+        }
+        
+        .merise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .merise-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            border-top: 5px solid;
+            transition: transform 0.3s ease;
+        }
+        
+        .merise-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .mcd { border-top-color: #4CAF50; }
+        .mct { border-top-color: #2196F3; }
+        .mld { border-top-color: #FF9800; }
+        .mpd { border-top-color: #9C27B0; }
+        
+        .merise-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .merise-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .file-structure {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .file-structure pre {
+            white-space: pre-wrap;
+        }
+
+        .descrip-file-structure {
+            font-size: 12px;
+            color: #ddd;
+        }
+        
+        .diagram {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .diagram img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 40px auto;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+        
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 4px solid #667eea;
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+        
+        .timeline-item:nth-child(odd)::after {
+            right: -12px;
+        }
+        
+        .timeline-item:nth-child(even)::after {
+            left: -12px;
+        }
+        
+        .timeline-content {
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .timeline-content h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: #2c3e50;
+            color: white;
+            margin-top: 40px;
+            border-radius: 0 0 20px 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+            
+            .timeline-item::after {
+                left: 20px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-file-contract"></i> CAHIER DES CHARGES</h1>
+            <div class="subtitle">MERISE HR Nexus - Système de Gestion RH & Paie</div>
+            <div class="badges">
+                <div class="badge"><i class="fas fa-method"></i> Méthodologie MERISE</div>
+                <div class="badge"><i class="fas fa-code"></i> Langage C</div>
+                <div class="badge"><i class="fas fa-database"></i> Système de Fichiers</div>
+                <div class="badge"><i class="fas fa-shield-alt"></i> Entreprise Grade</div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="download-section">
+                <h2><i class="fas fa-download"></i> TÉLÉCHARGER LE CAHIER DES CHARGES COMPLET</h2>
+                <p>Téléchargez le document complet en un seul fichier</p>
+                <a href="#" class="download-btn" onclick="downloadAll()">
+                    <i class="fas fa-file-archive"></i> TÉLÉCHARGER TOUT (ZIP)
+                </a>
+                <p>Ou téléchargez par section :</p>
+                <div class="format-options">
+                    <a href="#" class="format-btn" onclick="downloadPDF()"><i class="fas fa-file-pdf"></i> PDF Complet</a>
+                    <a href="#" class="format-btn" onclick="downloadDOC()"><i class="fas fa-file-word"></i> Word Document</a>
+                    <a href="#" class="format-btn" onclick="downloadMD()"><i class="fas fa-file-alt"></i> Markdown</a>
+                </div>
+            </div>
+            
+            <div class="toc">
+                <h2><i class="fas fa-list"></i> TABLE DES MATIÈRES</h2>
+                <ul>
+                    <li><a href="#intro"><i class="fas fa-play-circle"></i> 1. INTRODUCTION</a></li>
+                    <li><a href="#contexte"><i class="fas fa-bullseye"></i> 2. CONTEXTE & OBJECTIFS</a></li>
+                    <li><a href="#merise"><i class="fas fa-project-diagram"></i> 3. MÉTHODOLOGIE MERISE</a></li>
+                    <li><a href="#exigences"><i class="fas fa-tasks"></i> 4. EXIGENCES FONCTIONNELLES</a></li>
+                    <li><a href="#technique"><i class="fas fa-cogs"></i> 5. EXIGENCES TECHNIQUES</a></li>
+                    <li><a href="#mcd"><i class="fas fa-sitemap"></i> 6. MODÈLE CONCEPTUEL (MCD)</a></li>
+                    <li><a href="#mct"><i class="fas fa-project-diagram"></i> 7. MODÈLE CONCEPTUEL DES TRAITEMENTS (MCT)</a></li>
+                    <li><a href="#mld"><i class="fas fa-database"></i> 8. MODÈLE LOGIQUE (MLD)</a></li>
+                    <li><a href="#mpd"><i class="fas fa-hdd"></i> 9. MODÈLE PHYSIQUE (MPD)</a></li>
+                    <li><a href="#architecture"><i class="fas fa-layer-group"></i> 10. ARCHITECTURE</a></li>
+                    <li><a href="#fichiers"><i class="fas fa-folder-tree"></i> 11. STRUCTURE DES FICHIERS</a></li>
+                    <li><a href="#plan"><i class="fas fa-calendar-alt"></i> 12. PLAN DE DÉVELOPPEMENT</a></li>
+                    <li><a href="#livrables"><i class="fas fa-box"></i> 13. LIVRABLES</a></li>
+                </ul>
+            </div>
+            
+            <!-- Section 1: Introduction -->
+            <div class="section" id="intro">
+                <h2><i class="fas fa-play-circle"></i> 1. INTRODUCTION</h2>
+                <p><strong>Projet :</strong> MERISE HR Nexus - Système de Gestion RH & Paie</p>
+                <p><strong>Référence :</strong> HR-MERISE-2024-001</p>
+                <p><strong>Version :</strong> 1.0.0</p>
+                <p><strong>Date :</strong> Janvier 2024</p>
+                
+                <div class="highlight">
+                    <h3><i class="fas fa-info-circle"></i> Présentation du Projet</h3>
+                    <p>Le projet <strong>MERISE HR Nexus</strong> vise à développer un système intégré de gestion des ressources humaines et de la paie en appliquant rigoureusement la méthodologie <strong>MERISE</strong>. Ce système doit permettre la gestion complète du cycle de vie des employés avec un module de paie automatisé et conforme aux réglementations.</p>
+                </div>
+                
+                <h3><i class="fas fa-bullseye"></i> Portée du Projet</h3>
+                <ul>
+                    <li>Gestion des données des employés</li>
+                    <li>Traitement automatique de la paie</li>
+                    <li>Gestion des temps et présences</li>
+                    <li>Gestion des congés et absences</li>
+                    <li>Reporting et conformité réglementaire</li>
+                    <li>Interface administrateur et portail employé</li>
+                </ul>
+            </div>
+            
+            <!-- Section 2: Contexte et Objectifs -->
+            <div class="section" id="contexte">
+                <h2><i class="fas fa-bullseye"></i> 2. CONTEXTE & OBJECTIFS</h2>
+                
+                <h3><i class="fas fa-history"></i> Contexte Actuel</h3>
+                <p>L'entreprise dispose actuellement de systèmes RH dispersés avec traitement manuel de la paie, absence de traçabilité et non-conformité avec les nouvelles réglementations.</p>
+                
+                <h3><i class="fas fa-chart-line"></i> Objectifs Stratégiques</h3>
+                <div class="merise-grid">
+                    <div class="merise-card">
+                        <div class="icon"><i class="fas fa-database"></i></div>
+                        <h3>Centraliser</h3>
+                        <p>Toutes les données RH dans un système unique</p>
+                    </div>
+                    <div class="merise-card">
+                        <div class="icon"><i class="fas fa-robot"></i></div>
+                        <h3>Automatiser</h3>
+                        <p>Les processus de paie et gestion des temps</p>
+                    </div>
+                    <div class="merise-card">
+                        <div class="icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3>Garantir</h3>
+                        <p>La conformité légale et fiscale</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 3: Méthodologie MERISE -->
+            <div class="section" id="merise">
+                <h2><i class="fas fa-project-diagram"></i> 3. MÉTHODOLOGIE MERISE</h2>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>CYCLE ABSTRAIT</h4>
+                            <p><strong>MCD</strong> - Modèle Conceptuel de Données</p>
+                            <p><strong>MCT</strong> - Modèle Conceptuel de Traitements</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>CYCLE DES DÉCISIONS</h4>
+                            <p><strong>MLD</strong> - Modèle Logique de Données</p>
+                            <p><strong>MOT</strong> - Modèle Organisationnel de Traitements</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>CYCLE PHYSIQUE</h4>
+                            <p><strong>MPD</strong> - Modèle Physique de Données</p>
+                            <p><strong>MOP</strong> - Modèle Opérationnel de Traitements</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="merise-grid">
+                    <div class="merise-card mcd">
+                        <div class="icon"><i class="fas fa-sitemap"></i></div>
+                        <h3>MCD</h3>
+                        <p>Modèle Conceptuel de Données</p>
+                        <p><strong>Entités et relations</strong></p>
+                        <p><em>Quoi ?</em></p>
+                    </div>
+                    <div class="merise-card mct">
+                        <div class="icon"><i class="fas fa-project-diagram"></i></div>
+                        <h3>MCT</h3>
+                        <p>Modèle Conceptuel de Traitements</p>
+                        <p><strong>Processus métier</strong></p>
+                        <p><em>Comment ?</em></p>
+                    </div>
+                    <div class="merise-card mld">
+                        <div class="icon"><i class="fas fa-database"></i></div>
+                        <h3>MLD</h3>
+                        <p>Modèle Logique de Données</p>
+                        <p><strong>Schéma relationnel</strong></p>
+                        <p><em>Structure ?</em></p>
+                    </div>
+                    <div class="merise-card mpd">
+                        <div class="icon"><i class="fas fa-hdd"></i></div>
+                        <h3>MPD</h3>
+                        <p>Modèle Physique de Données</p>
+                        <p><strong>Implémentation physique</strong></p>
+                        <p><em>Avec quoi ?</em></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 4: Exigences -->
+            <div class="section" id="exigences">
+                <h2><i class="fas fa-tasks"></i> 4. EXIGENCES FONCTIONNELLES</h2>
+                
+                <h3><i class="fas fa-users"></i> Gestion des Employés</h3>
+                <ul>
+                    <li><strong>FON-EMP-001</strong>: Gestion du profil employé (CRUD)</li>
+                    <li><strong>FON-EMP-002</strong>: Gestion hiérarchique et organisationnelle</li>
+                    <li><strong>FON-EMP-003</strong>: Gestion des contrats et statuts</li>
+                </ul>
+                
+                <h3><i class="fas fa-money-bill-wave"></i> Gestion de la Paie</h3>
+                <ul>
+                    <li><strong>FON-PAY-001</strong>: Calcul automatique mensuel</li>
+                    <li><strong>FON-PAY-002</strong>: Génération des bulletins (PDF)</li>
+                    <li><strong>FON-PAY-003</strong>: Déclarations sociales automatiques</li>
+                </ul>
+            </div>
+            
+            <!-- Section 6: MCD -->
+            <div class="section" id="mcd">
+                <h2><i class="fas fa-sitemap"></i> 6. MODÈLE CONCEPTUEL (MCD)</h2>
+                
+                <div class="highlight">
+                    <h3><i class="fas fa-download"></i> Livrables MCD à Produire</h3>
+                    <div class="file-structure">
+                        <pre>📁 mcd/
+├── 📄 diagrammes/
+│   ├── mcd_complet.dia
+│   ├── mcd_employe.dia
+│   └── mcd_paie.dia
+├── 📄 dictionnaire/
+│   ├── entites.md
+│   ├── associations.md <span class="descrip-file-structure">[Documente les relations entre entités (1:N, M:N) avec leurs cardinalités et contraintes] (contrainte: must)</span>
+│   └── regles_metier.md <span class="descrip-file-structure">[Spécifie les contraintes métier (ex: "un employé ne peut avoir qu'un contrat actif")]</span>
+└── 📄 validation/
+    ├── check_list.md <span class="descrip-file-structure">[Liste de vérification pour valider la complétude et cohérence du modèle]</span>
+    └── compte_rendu.md <span class="descrip-file-structure">[Rapport détaillé des validations effectuées et des décisions prises]</span></pre>
+                    </div>
+                </div>
+                
+                <h3><i class="fas fa-table"></i> Entités Principales</h3>
+                <table style="width:100%; border-collapse: collapse; margin:20px 0;">
+                    <tr style="background:#667eea; color:white;">
+                        <th style="padding:12px; text-align:left;">Entité</th>
+                        <th style="padding:12px; text-align:left;">Identifiant</th>
+                        <th style="padding:12px; text-align:left;">Attributs Clés</th>
+                    </tr>
+                    <tr style="border-bottom:1px solid #ddd;">
+                        <td style="padding:10px;"><strong>Employé</strong></td>
+                        <td style="padding:10px;">Code Employé</td>
+                        <td style="padding:10px;">Nom, Prénom, Date Naissance, CIN</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid #ddd;">
+                        <td style="padding:10px;"><strong>Département</strong></td>
+                        <td style="padding:10px;">Code Département</td>
+                        <td style="padding:10px;">Nom, Budget, Responsable</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid #ddd;">
+                        <td style="padding:10px;"><strong>Paie</strong></td>
+                        <td style="padding:10px;">ID Paie</td>
+                        <td style="padding:10px;">Période, Salaire Brut, Net, Date Paiement</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- Section 7: MCT -->
+            <div class="section" id="mct">
+                <h2><i class="fas fa-project-diagram"></i> 7. MODÈLE CONCEPTUEL DES TRAITEMENTS (MCT)</h2>
+                
+                <div class="highlight">
+                    <h3><i class="fas fa-download"></i> Livrables MCT à Produire</h3>
+                    <div class="file-structure">
+                        <pre>📁 mct/
+├── 📄 processus/
+│   ├── processus_paie.md
+│   ├── processus_conge.md
+│   └── processus_recrutement.md
+├── 📄 flux/
+│   ├── flux_donnees.md
+│   ├── flux_validation.md
+│   └── flux_erreurs.md
+└── 📄 acteurs/
+    ├── roles.md
+    ├── permissions.md
+    └── interfaces.md</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 8: MLD -->
+            <div class="section" id="mld">
+                <h2><i class="fas fa-database"></i> 8. MODÈLE LOGIQUE (MLD)</h2>
+                
+                <h3><i class="fas fa-code"></i> Exemple de Schéma SQL</h3>
+                <div class="file-structure">
+                    <pre>CREATE TABLE employe (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    code_employe VARCHAR(20) UNIQUE NOT NULL,
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL,
+    date_naissance DATE NOT NULL,
+    nir VARCHAR(15) UNIQUE NOT NULL,
+    id_departement INT NOT NULL,
+    id_poste INT NOT NULL,
+    date_embauche DATE NOT NULL,
+    statut ENUM('ACTIF', 'INACTIF', 'CONGE') DEFAULT 'ACTIF',
+    FOREIGN KEY (id_departement) REFERENCES departement(id)
+);</pre>
+                </div>
+            </div>
+            
+            <!-- Section 9: MPD -->
+            <div class="section" id="mpd">
+                <h2><i class="fas fa-hdd"></i> 9. MODÈLE PHYSIQUE (MPD)</h2>
+                
+                <h3><i class="fas fa-file-code"></i> Structure de Fichier Binaire</h3>
+                <div class="file-structure">
+                    <pre>typedef struct {
+    uint32_t magic;          // 0x4852454D "HREM"
+    uint32_t version;        // Version du format
+    uint64_t created;        // Timestamp création
+    uint32_t record_size;    // Taille d'un enregistrement
+    uint32_t record_count;   // Nombre d'enregistrements
+    uint32_t free_list_head; // Tête de liste libre
+    uint32_t checksum;       // Checksum CRC32
+} EmployeeFileHeader;</pre>
+                </div>
+            </div>
+            
+            <!-- Section 10: Architecture -->
+            <div class="section" id="architecture">
+                <h2><i class="fas fa-layer-group"></i> 10. ARCHITECTURE LOGICIELLE</h2>
+                
+                <div class="highlight">
+                    <h3><i class="fas fa-download"></i> Modules en C à Implémenter</h3>
+                    <div class="file-structure">
+                        <pre>📁 src/
+├── 📁 abstract_cycle/      # MCD + MCT
+├── 📁 decision_cycle/     # MLD + MOT
+├── 📁 physical_cycle/     # MPD + MOP
+├── 📁 modules/           # Modules fonctionnels
+│   ├── employe/
+│   ├── paie/
+│   ├── temps/
+│   └── conges/
+├── 📁 interfaces/        # Interfaces utilisateur
+└── 📁 core/             # Noyau système</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 11: Structure des Fichiers -->
+            <div class="section" id="fichiers">
+                <h2><i class="fas fa-folder-tree"></i> 11. STRUCTURE DES FICHIERS</h2>
+                
+                <h3><i class="fas fa-folder-open"></i> Arborescence Complète du Projet</h3>
+                <div class="file-structure">
+                    <pre>merise-hr-nexus/
+├── 📁 src/                          # Code source (5,000+ fichiers)
+├── 📁 data/                         # Données système
+│   ├── 📁 master/                   # Données maîtres
+│   ├── 📁 transactions/             # Données transactionnelles
+│   ├── 📁 indexes/                  # Indexes B+Tree
+│   ├── 📁 audit/                    # Logs d'audit
+│   ├── 📁 backup/                   # Sauvegardes
+│   └── 📁 temp/                     # Fichiers temporaires
+├── 📁 tests/                        # Tests unitaires/intégration
+├── 📁 docs/                         # Documentation complète
+│   ├── 📁 merise/                   # Documentation MERISE
+│   ├── 📁 technique/                # Documentation technique
+│   ├── 📁 utilisateur/              # Documentation utilisateur
+│   └── 📁 projet/                   # Documentation projet
+└── 📁 scripts/                      # Scripts utilitaires</pre>
+                </div>
+            </div>
+            <div class="merise-card">
+                <h3>Module Employé</h3>
+                <p><strong>Responsable:</strong> Jean Dupont</p>
+                <p><strong>Fonctions:</strong> CRUD employés, import/export, reporting</p>
+                <p><strong>Interfaces:</strong> employe.h (15 fonctions publiques)</p>
+                <p><strong>Dépendances:</strong> database.h, security.h</p>
+            </div>
+            <div class="merise-card">
+                <h3>Module Paie</h3>
+                <p><strong>Responsable:</strong> Marie Martin</p>
+                <p><strong>Fonctions:</strong> Calcul salaires, génération bulletins, déclarations</p>
+                <p><strong>Interfaces:</strong> payroll.h (12 fonctions)</p>
+                <p><strong>Dépendances:</strong> tax.h, social_security.h</p>
+            </div>
+            
+            <!-- Section 12: Plan de Développement -->
+            <div class="section" id="plan">
+                <h2><i class="fas fa-calendar-alt"></i> 12. PLAN DE DÉVELOPPEMENT</h2>
+                
+                <h3><i class="fas fa-road"></i> Roadmap 12 Semaines</h3>
+                <div class="timeline">
+                    <!-- À insérer dans la timeline -->
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>15-28 JANVIER 2024</h4>
+                            <p><strong>Phase 1: Cycle Abstrait</strong></p>
+                            <p><strong>Livrables:</strong></p>
+                            <ul>
+                                <li>MCD complet avec 15 entités</li>
+                                <li>MCT avec 10 processus détaillés</li>
+                                <li>Validation client signée</li>
+                            </ul>
+                            <p><strong>Équipe:</strong> Architecte + Analyste métier</p>
+                            <p><strong>Budget:</strong> 8,000 €</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>29 JANVIER - 11 FÉVRIER</h4>
+                            <p><strong>Phase 2: Cycle des Décisions</strong></p>
+                            <p><strong>Livrables:</strong></p>
+                            <ul>
+                                <li>MLD normalisé (3NF)</li>
+                                <li>Algorithmes de calcul paie</li>
+                                <li>Prototypes d'interface</li>
+                            </ul>
+                            <p><strong>Équipe:</strong> Architecte DB + Développeur senior</p>
+                            <p><strong>Budget:</strong> 12,000 €</p>
+                        </div>
+                    </div>
+                    <!-- 10 phases supplémentaires -->
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>SEMAINES 5-8</h4>
+                            <p><strong>Cycle Physique</strong></p>
+                            <p>• Implémentation MPD<br>• Système de fichiers</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>SEMAINES 9-12</h4>
+                            <p><strong>Implémentation & Tests</strong></p>
+                            <p>• Développement modules<br>• Tests et validation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 13: Livrables -->
+            <div class="section" id="livrables">
+                <h2><i class="fas fa-box"></i> 13. LIVRABLES</h2>
+                <div class="merise-grid">
+                    <div class="merise-card">
+                        <h3>Documentation Technique</h3>
+                        <ul>
+                            <li><strong>Cahier des charges:</strong> PDF, 150 pages</li>
+                            <li><strong>Documentation API:</strong> HTML/PDF, 200 pages</li>
+                            <li><strong>Guide d'installation:</strong> PDF, 50 pages</li>
+                            <li><strong>Schémas de base:</strong> .dia/.drawio, 20 fichiers</li>
+                            <li><strong>Manuel administrateur:</strong> PDF, 100 pages</li>
+                        </ul>
+                    </div>
+                    <div class="merise-card">
+                        <h3>Code Source</h3>
+                        <ul>
+                            <li><strong>Application complète:</strong> 5,000+ fichiers C</li>
+                            <li><strong>Scripts de déploiement:</strong> 200+ fichiers</li>
+                            <li><strong>Tests automatisés:</strong> 1,000+ fichiers</li>
+                            <li><strong>Configurations:</strong> 50+ fichiers</li>
+                            <li><strong>Documentation code:</strong> Doxygen HTML</li>
+                        </ul>
+                    </div>
+                    <div class="merise-card">
+                        <h3>Exécutables</h3>
+                        <ul>
+                            <li><strong>Binaire principal:</strong> hr-system (Linux x64)</li>
+                            <li><strong>Outils d'admin:</strong> 10 utilitaires</li>
+                            <li><strong>Scripts de maintenance:</strong> 50 scripts</li>
+                            <li><strong>Base de données initiale:</strong> 100MB de données test</li>
+                            <li><strong>Images Docker:</strong> hr-system:latest</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="merise-grid">
+                    <div class="merise-card">
+                        <div class="icon"><i class="fas fa-file-alt"></i></div>
+                        <h3>Documentation</h3>
+                        <p>• Cahier des charges complet<br>• Documentation MERISE<br>• Manuel utilisateur</p>
+                    </div>
+                    <div class="merise-card">
+                        <div class="icon"><i class="fas fa-code"></i></div>
+                        <h3>Code Source</h3>
+                        <p>• 5,000+ fichiers C<br>• Makefile complet<br>• Scripts d'installation</p>
+                    </div>
+                    <div class="merise-card">
+                        <div class="icon"><i class="fas fa-check-circle"></i></div>
+                        <h3>Tests</h3>
+                        <p>• Tests unitaires<br>• Tests d'intégration<br>• Tests de performance</p>
+                    </div>
+                    <div class="merise-card">
+                        <div class="icon"><i class="fas fa-cogs"></i></div>
+                        <h3>Exécutable</h3>
+                        <p>• Application compilée<br>• Base de données<br>• Outils d'administration</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bouton de téléchargement final -->
+            <div class="download-section">
+                <h2><i class="fas fa-file-download"></i> PRÊT À TÉLÉCHARGER ?</h2>
+                <p>Cliquez sur le bouton ci-dessous pour télécharger le cahier des charges complet</p>
+                <a href="#" class="download-btn" onclick="downloadAll()">
+                    <i class="fas fa-download"></i> TÉLÉCHARGER TOUT LE CAHIER DES CHARGES
+                </a>
+                <p><small>Format : ZIP contenant tous les fichiers (PDF, DOC, MD, diagrammes)</small></p>
+            </div>
+        </div>
+        
+        <footer>
+            <p><strong>MERISE HR Nexus</strong> - Cahier des Charges Version 1.0.0</p>
+            <p>© 2024 - Tous droits réservés</p>
+            <p style="margin-top:20px; opacity:0.8;">
+                <i class="fas fa-envelope"></i> contact@merise-hr-nexus.com | 
+                <i class="fas fa-phone"></i> +33 1 23 45 67 89
+            </p>
+        </footer>
+    </div>
+    
+    <script>
+        function downloadAll() {
+            // Créer le contenu du cahier des charges complet
+            const content = generateCompleteCahier();
+            
+            // Créer un blob avec le contenu
+            const blob = new Blob([content], { type: 'text/markdown' });
+            
+            // Créer un lien de téléchargement
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'Cahier_Charges_MERISE_HR_Nexus.md';
+            
+            // Simuler le clic
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Afficher une notification
+            alert('Téléchargement du cahier des charges démarré !');
+        }
+        
+        function downloadPDF() {
+            alert('Fonctionnalité PDF en cours de développement. Téléchargez la version Markdown pour l\'instant.');
+        }
+        
+        function downloadDOC() {
+            alert('Fonctionnalité Word en cours de développement. Téléchargez la version Markdown pour l\'instant.');
+        }
+        
+        function downloadMD() {
+            const content = generateCompleteCahier();
+            const blob = new Blob([content], { type: 'text/markdown' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'Cahier_Charges_MERISE_HR_Nexus.md';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            alert('Cahier des charges Markdown téléchargé !');
+        }
+        
+        function generateCompleteCahier() {
+            return `# CAHIER DES CHARGES - MERISE HR NEXUS
+
+## 📋 FICHE D'IDENTIFICATION
+
+| Élément | Détails |
+|---------|---------|
+| **Projet** | Système de Gestion des Ressources Humaines et de la Paie |
+| **Référence** | HR-MERISE-2024-001 |
+| **Version** | 1.0.0 |
+| **Date** | Janvier 2024 |
+| **Client** | Entreprise Cible |
+| **Prestataire** | Équipe de Développement |
+| **Méthodologie** | MERISE Complète |
+| **Langage** | C (ANSI C99) |
+| **Durée estimée** | 12 semaines |
+| **Responsable** | Directeur des Systèmes d'Information |
+
+## 📁 TABLE DES MATIÈRES
+
+1. [INTRODUCTION](#1-introduction)
+2. [CONTEXTE ET OBJECTIFS](#2-contexte-et-objectifs)
+3. [CADRE MÉTHODOLOGIQUE](#3-cadre-méthodologique)
+4. [EXIGENCES FONCTIONNELLES](#4-exigences-fonctionnelles)
+5. [EXIGENCES TECHNIQUES](#5-exigences-techniques)
+6. [MODÈLE CONCEPTUEL DES DONNÉES (MCD)](#6-modèle-conceptuel-des-données-mcd)
+7. [MODÈLE CONCEPTUEL DES TRAITEMENTS (MCT)](#7-modèle-conceptuel-des-traitements-mct)
+8. [MODÈLE LOGIQUE DES DONNÉES (MLD)](#8-modèle-logique-des-données-mld)
+9. [MODÈLE PHYSIQUE DES DONNÉES (MPD)](#9-modèle-physique-des-données-mpd)
+10. [ARCHITECTURE LOGICIELLE](#10-architecture-logicielle)
+11. [STRUCTURE DES FICHIERS](#11-structure-des-fichiers)
+12. [PLAN DE DÉVELOPPEMENT](#12-plan-de-développement)
+13. [LIVRABLES](#13-livrables)
+14. [CRITÈRES DE VALIDATION](#14-critères-de-validation)
+
+## 1. INTRODUCTION
+
+### 1.1 Présentation du Projet
+Le projet **MERISE HR Nexus** vise à développer un système intégré de gestion des ressources humaines et de la paie en appliquant rigoureusement la méthodologie **MERISE**.
+
+### 1.2 Portée du Projet
+- Gestion des données des employés
+- Traitement automatique de la paie
+- Gestion des temps et présences
+- Gestion des congés et absences
+- Reporting et conformité réglementaire
+- Interface administrateur et portail employé
+
+### 1.3 Parties Prenantes
+- **Directeur des RH** : Définition des besoins métier
+- **Responsable de la Paie** : Exigences de calcul et conformité
+- **DSI** : Intégration technique et sécurité
+- **Employés** : Utilisateurs finaux du portail
+- **Équipe de développement** : Réalisation technique
+
+## 2. CONTEXTE ET OBJECTIFS
+
+### 2.1 Contexte Actuel
+L'entreprise dispose actuellement de systèmes RH dispersés avec traitement manuel de la paie, absence de traçabilité et non-conformité avec les nouvelles réglementations.
+
+### 2.2 Objectifs Stratégiques
+1. **Centraliser** toutes les données RH dans un système unique
+2. **Automatiser** les processus de paie et de gestion des temps
+3. **Garantir** la conformité légale et fiscale
+4. **Améliorer** l'expérience employé via un portail self-service
+5. **Fournir** des tableaux de bord décisionnels en temps réel
+
+### 2.3 Objectifs Opérationnels
+- Réduction de 70% du temps de traitement de la paie
+- Élimination des erreurs de calcul manuelles
+- Traçabilité complète de toutes les transactions
+- Accessibilité 24/7 pour les employés
+- Génération automatique des déclarations sociales
+
+## 3. CADRE MÉTHODOLOGIQUE
+
+### 3.1 Choix de MERISE
+La méthodologie MERISE est retenue pour :
+- **Séparation claire** entre données et traitements
+- **Approche structurée** de la conception
+- **Traçabilité** entre besoins métier et implémentation
+- **Adaptabilité** aux évolutions futures
+- **Documentation exhaustive** intégrée au processus
+
+### 3.2 Phases MERISE à Implémenter
+
+| Phase | Produits Attendus | Responsable |
+|-------|-------------------|-------------|
+| **Cycle Abstrait** | MCD + MCT | Architecte Métier |
+| **Cycle des Décisions** | MLD + MOT | Architecte Technique |
+| **Cycle Physique** | MPD + MOP | Chef de Projet Technique |
+| **Implémentation** | Code Source + Tests | Équipe de Développement |
+| **Recette** | Validation + Documentation | QA + Utilisateurs |
+
+### 3.3 Contraintes Méthodologiques
+- Respect strict des normes MERISE
+- Documentation complète à chaque phase
+- Revues formelles des modèles
+- Validation par les utilisateurs clés
+- Rétro-conception obligatoire après modifications
+
+## 4. EXIGENCES FONCTIONNELLES
+
+### 4.1 Gestion des Employés
+\`\`\`yaml
+FON-EMP-001: Gestion du profil employé
+  Description: Création, modification, consultation, archivage
+  Priorité: Critique
+  Règles:
+    - Chaque employé a un code unique
+    - Historisation des modifications
+    - Validation des données obligatoire
+\`\`\`
+
+### 4.2 Gestion de la Paie
+\`\`\`yaml
+FON-PAY-001: Calcul automatique de la paie
+  Description: Calcul mensuel des salaires
+  Priorité: Critique
+  Règles:
+    - Intégration des données de présence
+    - Application des barèmes fiscaux
+    - Gestion des prélèvements
+\`\`\`
+
+### 4.3 Gestion des Temps
+\`\`\`yaml
+FON-TIM-001: Pointage et présence
+  Description: Suivi des heures travaillées
+  Priorité: Haute
+  Règles:
+    - Interface de pointage
+    - Calcul automatique des heures supplémentaires
+    - Validation hiérarchique
+\`\`\`
+
+### 4.4 Gestion des Congés
+\`\`\`yaml
+FON-LEA-001: Demandes de congés
+  Description: Workflow de demande/approbation
+  Priorité: Haute
+  Règles:
+    - Workflow configurable
+    - Calcul des soldes
+    - Intégration avec la paie
+\`\`\`
+
+## 5. EXIGENCES TECHNIQUES
+
+### 5.1 Environnement Technique
+\`\`\`yaml
+Langage: C (norme ANSI C99)
+Compilateur: GCC 9.0+ ou Clang 10.0+
+Système d'exploitation: Linux (Ubuntu 20.04+), Unix
+Base de données: Système de fichiers avec indexation B+Tree
+Interface: CLI (admin) + Web (employés)
+Sécurité: AES-256, TLS 1.3
+\`\`\`
+
+### 5.2 Contraintes de Performance
+\`\`\`yaml
+Nombre d'employés supportés: Jusqu'à 10,000
+Temps de réponse: < 2 secondes (95% des requêtes)
+Disponibilité: 99.5% (hors maintenance)
+Sauvegarde: Journalière automatique
+Reprise: Maximum 1 heure après incident
+\`\`\`
+
+### 5.3 Sécurité et Conformité
+- Chiffrement des données sensibles
+- Journalisation complète des accès
+- Authentification forte (MFA optionnel)
+- Conformité RGPD
+- Archivage sécurisé (10 ans pour la paie)
+
+## 6. MODÈLE CONCEPTUEL DES DONNÉES (MCD)
+
+### 6.1 Livrable Exigé
+\`\`\`bash
+# Structure du livrable MCD
+📁 mcd/
+├── 📄 diagrammes/
+│   ├── mcd_complet.dia        # Diagramme global
+│   ├── mcd_employe.dia        # Focus employé
+│   └── mcd_paie.dia           # Focus paie
+├── 📄 dictionnaire/
+│   ├── entites.md             # Description des entités
+│   ├── associations.md        # Description des associations
+│   └── regles_metier.md       # Règles de gestion
+├── 📄 specifications/
+│   ├── entite_employe.md      # Spécification complète
+│   ├── entite_paie.md
+│   └── entite_contrat.md
+└── 📄 validation/
+    ├── check_list.md          # Liste de vérification
+    └── compte_rendu.md        # Compte-rendu de validation
+\`\`\`
+
+### 6.2 Entités Principales à Modéliser
+| Entité | Identifiant | Attributs Clés | Cardinalités |
+|--------|-------------|----------------|--------------|
+| **Employé** | Code Employé | Nom, Prénom, Date Naissance, CIN | 1,N |
+| **Département** | Code Département | Nom, Budget, Responsable | 0,N |
+| **Poste** | Code Poste | Intitulé, Grille Salariale, Grade | 1,N |
+| **Contrat** | Numéro Contrat | Type, Date Début, Date Fin, Salaire Base | 1,1 |
+| **Paie** | ID Paie | Période, Salaire Brut, Net, Date Paiement | 0,N |
+| **Présence** | ID Pointage | Date, Heure Arrivée, Heure Départ | 0,N |
+| **Congé** | ID Congé | Type, Date Début, Date Fin, Statut | 0,N |
+
+### 6.3 Associations Principales
+\`\`\`mermaid
+erDiagram
+    EMPLOYE ||--o{ CONTRAT : "a_signé"
+    EMPLOYE }|--|| DEPARTEMENT : "travaille_dans"
+    EMPLOYE }|--|| POSTE : "occupe"
+    EMPLOYE ||--o{ PAIE : "perçoit"
+    EMPLOYE ||--o{ PRESENCE : "enregistre"
+    EMPLOYE ||--o{ CONGE : "demande"
+    CONTRAT ||--|| TYPE_CONTRAT : "est_de_type"
+    PAIE ||--o{ LIGNE_PAIE : "comprend"
+\`\`\`
+
+### 6.4 Règles de Gestion
+\`\`\`c
+// Exemple de règle métier à implémenter
+REGLE RG-EMP-001: "Un employé ne peut avoir qu'un seul contrat actif à la fois"
+REGLE RG-PAY-001: "Le salaire net ne peut être négatif"
+REGLE RG-TIM-001: "Les heures supplémentaires déclenchent une majoration de 25%"
+REGLE RG-LEA-001: "Le solde de congés ne peut être négatif"
+\`\`\`
+
+## 7. MODÈLE CONCEPTUEL DES TRAITEMENTS (MCT)
+
+### 7.1 Livrable Exigé
+\`\`\`bash
+📁 mct/
+├── 📄 processus/
+│   ├── processus_paie.md      # Processus complet de paie
+│   ├── processus_conge.md     # Workflow des congés
+│   └── processus_recrutement.md
+├── 📄 flux/
+│   ├── flux_donnees.md        # Flux inter-processus
+│   ├── flux_validation.md     # Flux de validation
+│   └── flux_erreurs.md        # Gestion des erreurs
+├── 📄 acteurs/
+│   ├── roles.md              # Définition des rôles
+│   ├── permissions.md        # Matrice des permissions
+│   └── interfaces.md         # Interfaces par rôle
+└── 📄 validation/
+    ├── scenarios.md          # Scénarios de test
+    └── validation_metier.md  # Validation avec métier
+\`\`\`
+
+### 7.2 Processus à Modéliser
+
+#### Processus 1: Traitement Mensuel de la Paie
+\`\`\`mermaid
+flowchart TD
+    A[Début Mois M] --> B[Collecte des données]
+    B --> C{Vérification complétude}
+    C -->|OK| D[Calcul préliminaire]
+    C -->|Données manquantes| E[Relance automatique]
+    E --> B
+    D --> F[Validation RH]
+    F --> G[Calcul définitif]
+    G --> H[Génération bulletins]
+    H --> I[Transmission bancaire]
+    I --> J[Archivage]
+    J --> K[Fin Processus]
+\`\`\`
+
+#### Processus 2: Gestion des Congés
+\`\`\`mermaid
+flowchart TD
+    A[Demande employé] --> B{Vérification solde}
+    B -->|Solde insuffisant| C[Refus automatique]
+    B -->|Solde suffisant| D[Transmission manager]
+    D --> E{Délai réponse}
+    E -->|>48h| F[Escalade RH]
+    E -->|<48h| G{Décision}
+    G -->|Approuvé| H[Mise à jour solde]
+    G -->|Refusé| I[Notification employé]
+    H --> J[Planification remplacement]
+    J --> K[Fin processus]
+    C --> I
+    F --> G
+\`\`\`
+
+### 7.3 Matrice des Flux
+| Processus | Déclencheur | Entrées | Sorties | Acteurs |
+|-----------|-------------|---------|---------|---------|
+| **Calcul Paie** | Fin de période | Données présence, contrats | Bulletins, virements | Système, RH |
+| **Gestion Congés** | Demande employé | Solde, planning | Décision, mise à jour | Employé, Manager, RH |
+| **Recrutement** | Poste vacant | CV, entretiens | Contrat, planning intégration | RH, Manager |
+
+## 8. MODÈLE LOGIQUE DES DONNÉES (MLD)
+
+### 8.1 Livrable Exigé
+\`\`\`bash
+📁 mld/
+├── 📄 schema/
+│   ├── schema_relationnel.sql  # SQL théorique
+│   ├── normalisation.md        # Preuve 3NF
+│   └── dependances.md          # Dépendances fonctionnelles
+├── 📄 tables/
+│   ├── employe.md             # Structure table employé
+│   ├── paie.md               # Structure table paie
+│   └── ...                   # Toutes les tables
+├── 📄 contraintes/
+│   ├── contraintes_integrite.md
+│   ├── triggers_metier.md
+│   └── regles_validation.md
+└── 📄 optimisation/
+    ├── index.md              # Stratégie d'indexation
+    └── requetes_type.md      # Requêtes fréquentes
+\`\`\`
+
+### 8.2 Schéma Relationnel à Produire
+\`\`\`sql
+-- TABLE EMPLOYE (Version normalisée)
+CREATE TABLE employe (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    code_employe VARCHAR(20) UNIQUE NOT NULL,
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL,
+    date_naissance DATE NOT NULL,
+    nir VARCHAR(15) UNIQUE NOT NULL,
+    id_departement INT NOT NULL,
+    id_poste INT NOT NULL,
+    id_contrat_actuel INT,
+    date_embauche DATE NOT NULL,
+    date_depart DATE,
+    statut ENUM('ACTIF', 'INACTIF', 'CONGE') DEFAULT 'ACTIF',
+    FOREIGN KEY (id_departement) REFERENCES departement(id),
+    FOREIGN KEY (id_poste) REFERENCES poste(id)
+) ENGINE=InnoDB;
+
+-- TABLE PAIE (Version normalisée)
+CREATE TABLE paie (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    id_employe INT NOT NULL,
+    periode_debut DATE NOT NULL,
+    periode_fin DATE NOT NULL,
+    salaire_brut DECIMAL(10,2) NOT NULL,
+    total_cotisations DECIMAL(10,2) NOT NULL,
+    salaire_net DECIMAL(10,2) NOT NULL,
+    date_paiement DATE NOT NULL,
+    statut ENUM('CALCULE', 'VALIDE', 'PAYE') DEFAULT 'CALCULE',
+    FOREIGN KEY (id_employe) REFERENCES employe(id),
+    CHECK (salaire_net > 0),
+    CHECK (periode_fin > periode_debut)
+) ENGINE=InnoDB;
+\`\`\`
+
+### 8.3 Preuve de Normalisation
+Pour chaque table, fournir :
+1. **Forme Non Normalisée** (FNN)
+2. **1ère Forme Normale** (1NF)
+3. **2ème Forme Normale** (2NF)
+4. **3ème Forme Normale** (3NF)
+5. **Forme Normale de Boyce-Codd** (BCNF) si applicable
+
+**Exemple pour la table Employé :**
+\`\`\`
+FNN: Employé(Code, Nom, Prénom, Département(Nom, Budget))
+1NF: Employé(Code, Nom, Prénom), Département(Code, Nom, Budget)
+2NF: Employé(Code, Nom, Prénom, DeptCode), Département(Code, Nom, Budget)
+3NF: Même que 2NF (pas de dépendances transitives)
+BCNF: Vérifier que tous les déterminants sont clés candidates
+\`\`\`
+
+### 8.4 Stratégie d'Indexation
+| Table | Index Primaire | Index Secondaires | Type |
+|-------|---------------|-------------------|------|
+| **employe** | id | code_employe (UNIQUE), nir (UNIQUE) | B+Tree |
+| **paie** | id | (id_employe, periode_debut) | Composite |
+| **presence** | id | (id_employe, date) | Composite |
+
+## 9. MODÈLE PHYSIQUE DES DONNÉES (MPD)
+
+### 9.1 Livrable Exigé
+\`\`\`bash
+📁 mpd/
+├── 📄 structure_fichiers/
+│   ├── format_fichiers.bin    # Format binaire
+│   ├── en_tetes.md           # Structure des en-têtes
+│   └── enregistrements.md    # Structure des enregistrements
+├── 📄 indexation/
+│   ├── btree_spec.md         # Spécification B+Tree
+│   ├── hash_spec.md          # Spécification tables de hachage
+│   └── performance.md        # Analyse de performance
+├── 📄 gestion_memoire/
+│   ├── cache.md              # Stratégie de cache
+│   ├── compression.md        # Algorithmes de compression
+│   └── buffer.md             # Gestion des buffers
+└── 📄 sauvegarde/
+    ├── backup_strategy.md    # Stratégie de sauvegarde
+    └── recovery_plan.md      # Plan de reprise
+\`\`\`
+
+### 9.2 Format des Fichiers à Implémenter
+
+#### Fichier employes.dat
+\`\`\`c
+// Structure d'en-tête
+typedef struct {
+    uint32_t magic;          // 0x4852454D "HREM"
+    uint32_t version;        // Version du format
+    uint64_t created;        // Timestamp création
+    uint64_t modified;       // Dernière modification
+    uint32_t record_size;    // Taille d'un enregistrement (256)
+    uint32_t record_count;   // Nombre d'enregistrements
+    uint32_t free_list_head; // Tête de liste libre
+    uint32_t checksum;       // Checksum CRC32
+} EmployeeFileHeader;
+
+// Structure d'enregistrement
+typedef struct {
+    uint8_t flags;           // Bitmask: deleted, compressed, etc.
+    uint32_t id;             // ID unique
+    char code[20];           // Code employé
+    char nom[50];            // Nom
+    char prenom[50];         // Prénom
+    char date_naissance[11]; // YYYY-MM-DD
+    char nir[15];            // Numéro sécurité sociale
+    uint32_t dept_id;        // ID département
+    uint32_t poste_id;       // ID poste
+    char date_embauche[11];  // YYYY-MM-DD
+    char date_depart[11];    // YYYY-MM-DD (peut être vide)
+    uint8_t statut;          // 0=actif, 1=inactif, 2=congé
+    uint8_t reserved[35];    // Réservé pour extensions
+} EmployeeRecord;
+\`\`\`
+
+### 9.3 Arbre B+ à Implémenter
+\`\`\`c
+// Structure de nœud B+Tree
+#define ORDER 32  // Ordre de l'arbre
+
+typedef struct BTreeNode {
+    uint8_t is_leaf;                 // 1=feuille, 0=interne
+    uint32_t num_keys;               // Nombre de clés actuelles
+    uint32_t keys[ORDER - 1];        // Tableau de clés
+    union {
+        struct BTreeNode *children[ORDER];  // Pour nœuds internes
+        uint32_t record_ptrs[ORDER];        // Pour nœuds feuilles
+    } data;
+    struct BTreeNode *next;          // Pointeur vers feuille suivante
+    struct BTreeNode *parent;        // Pointeur vers parent
+} BTreeNode;
+\`\`\`
+
+### 9.4 Stratégie de Sauvegarde
+\`\`\`yaml
+Sauvegarde complète: Tous les dimanches à 02:00
+Sauvegarde incrémentielle: Quotidienne à 01:00
+Rétention: 
+  - Quotidiennes: 7 jours
+  - Hebdomadaires: 4 semaines
+  - Mensuelles: 12 mois
+  - Annuelles: 7 ans
+Test de restauration: Mensuel (premier lundi)
+\`\`\`
+
+## 10. ARCHITECTURE LOGICIELLE
+
+### 10.1 Livrable Exigé
+\`\`\`bash
+📁 architecture/
+├── 📄 diagrammes/
+│   ├── architecture_globale.uml
+│   ├── composants.uml
+│   └── deployment.uml
+├── 📄 modules/
+│   ├── module_employe.md     # Spécification module employé
+│   ├── module_paie.md        # Spécification module paie
+│   └── module_securite.md    # Spécification sécurité
+├── 📄 interfaces/
+│   ├── api.md               # API interne
+│   ├── cli.md              # Interface ligne de commande
+│   └── web.md              # Interface web
+└── 📄 integration/
+    ├── data_flow.md         # Flux de données
+    └── error_handling.md    # Gestion des erreurs
+\`\`\`
+
+### 10.2 Structure des Modules en C
+\`\`\`c
+// Module Employé (employe.h)
+#ifndef MODULE_EMPLOYE_H
+#define MODULE_EMPLOYE_H
+
+#include "types.h"
+#include "database.h"
+
+// Fonctions publiques du module
+Employe* employe_creer(const char* nom, const char* prenom, ...);
+int employe_modifier(uint32_t id, const EmployeModifications* modifs);
+int employe_supprimer(uint32_t id);
+Employe* employe_rechercher_par_id(uint32_t id);
+ListeEmployes* employe_rechercher_par_nom(const char* nom);
+int employe_exporter_csv(const char* fichier);
+int employe_importer_csv(const char* fichier);
+
+#endif
+\`\`\`
+
+### 10.3 Diagramme de Composants
+\`\`\`mermaid
+graph TB
+    subgraph "Couche Présentation"
+        CLI[Interface CLI Admin]
+        Web[Portail Web Employés]
+        API[API REST]
+    end
+    
+    subgraph "Couche Métier"
+        M_EMP[Module Employé]
+        M_PAY[Module Paie]
+        M_TIM[Module Temps]
+        M_LEA[Module Congés]
+    end
+    
+    subgraph "Couche Données"
+        DB[(Système de Fichiers)]
+        Cache[Cache Mémoire]
+        Index[Index B+Tree]
+    end
+    
+    subgraph "Couche Infrastructure"
+        Sec[Module Sécurité]
+        Log[Module Journalisation]
+        Backup[Module Sauvegarde]
+    end
+    
+    CLI --> M_EMP
+    Web --> M_EMP
+    API --> M_PAY
+    
+    M_EMP --> DB
+    M_PAY --> DB
+    M_TIM --> DB
+    M_LEA --> DB
+    
+    DB --> Cache
+    DB --> Index
+    
+    Sec --> CLI
+    Sec --> Web
+    Sec --> API
+    
+    Log --> DB
+    Backup --> DB
+\`\`\`
+
+## 11. STRUCTURE DES FICHIERS
+
+### 11.1 Arborescence à Implémenter
+\`\`\`bash
+merise-hr-nexus/
+├── 📁 src/                          # Code source (5,000+ fichiers)
+├── 📁 data/                         # Données système
+│   ├── 📁 master/                   # Données maîtres
+│   ├── 📁 transactions/             # Données transactionnelles
+│   ├── 📁 indexes/                  # Indexes B+Tree
+│   ├── 📁 audit/                    # Logs d'audit
+│   ├── 📁 backup/                   # Sauvegardes
+│   └── 📁 temp/                     # Fichiers temporaires
+├── 📁 tests/                        # Tests unitaires/intégration
+├── 📁 docs/                         # Documentation complète
+│   ├── 📁 merise/                   # Documentation MERISE
+│   ├── 📁 technique/                # Documentation technique
+│   ├── 📁 utilisateur/              # Documentation utilisateur
+│   └── 📁 projet/                   # Documentation projet
+└── 📁 scripts/                      # Scripts utilitaires
+\`\`\`
+
+### 11.2 Structure Détailée du Code Source
+\`\`\`bash
+📁 src/
+├── 📁 abstract_cycle/      # MCD + MCT
+│   ├── 📁 mcd/            # Modèle Conceptuel de Données
+│   │   ├── 📁 entites/    # Définition des entités
+│   │   ├── 📁 associations/ # Associations
+│   │   └── 📁 regles_metier/ # Règles de gestion
+│   └── 📁 mct/            # Modèle Conceptuel de Traitements
+│       ├── 📁 processus/  # Processus métier
+│       ├── 📁 flux/       # Flux de données
+│       └── 📁 acteurs/    # Rôles et permissions
+├── 📁 decision_cycle/     # MLD + MOT
+│   ├── 📁 mld/           # Modèle Logique de Données
+│   │   ├── 📁 schema/    # Schéma relationnel
+│   │   ├── 📁 normalisation/ # Preuve de normalisation
+│   │   └── 📁 optimisation/ # Optimisation
+│   └── 📁 mot/           # Modèle Organisationnel de Traitements
+│       ├── 📁 algorithmes/ # Algorithmes métier
+│       ├── 📁 workflows/  # Workflows
+│       └── 📁 regles/     # Règles de traitement
+├── 📁 physical_cycle/     # MPD + MOP
+│   ├── 📁 mpd/           # Modèle Physique de Données
+│   │   ├── 📁 fichiers/  # Structure des fichiers
+│   │   ├── 📁 indexation/ # Système d'indexation
+│   │   └── 📁 gestion/   # Gestion du stockage
+│   └── 📁 mop/           # Modèle Opérationnel de Traitements
+│       ├── 📁 transactions/ # Gestion des transactions
+│       ├── 📁 concurrence/ # Gestion de la concurrence
+│       └── 📁 performance/ # Optimisation performances
+├── 📁 modules/           # Modules fonctionnels
+│   ├── 📁 employe/      # Module employé
+│   ├── 📁 paie/         # Module paie
+│   ├── 📁 temps/        # Module temps
+│   ├── 📁 conges/       # Module congés
+│   └── 📁 reporting/    # Module reporting
+├── 📁 interfaces/       # Interfaces utilisateur
+│   ├── 📁 cli/         # Interface ligne de commande
+│   │   ├── 📁 admin/   # Interface administrateur
+│   │   └── 📁 employe/ # Interface employé
+│   └── 📁 web/         # Interface web (optionnel)
+├── 📁 core/            # Noyau du système
+│   ├── database.c      # Gestionnaire de base de données
+│   ├── transaction.c   # Gestionnaire de transactions
+│   ├── security.c      # Module de sécurité
+│   ├── audit.c         # Module d'audit
+│   ├── backup.c        # Module de sauvegarde
+│   └── configuration.c # Gestion de la configuration
+└── 📁 common/          # Bibliothèques communes
+    ├── 📁 utils/       # Utilitaires
+    ├── 📁 data_structures/ # Structures de données
+    └── 📁 logging/     # Journalisation
+\`\`\`
+
+## 12. PLAN DE DÉVELOPPEMENT
+
+### 12.1 Roadmap - 12 Semaines
+
+| Semaines | Phase | Activités | Livrables |
+|----------|-------|-----------|-----------|
+| **1-2** | Cycle Abstrait | Modélisation MCD/MCT, Validation métier | MCD complet, MCT validé |
+| **3-4** | Cycle des Décisions | Normalisation MLD, Algorithmes MOT | MLD normalisé, Algorithmes |
+| **5-8** | Cycle Physique | Implémentation MPD, Système fichiers | Système de fichiers, Index B+Tree |
+| **9-10** | Développement | Modules fonctionnels, Interfaces | Modules complets, Interfaces CLI |
+| **11-12** | Tests & Validation | Tests unitaires, Intégration, Performance | Tests complets, Documentation |
+
+### 12.2 Équipe de Développement
+- **Chef de Projet** : Coordination générale
+- **Architecte MERISE** : Modélisation MCD/MCT/MLD/MPD
+- **Développeur C Senior** : Noyau système, modules
+- **Développeur C Junior** : Utilitaires, tests
+- **Testeur QA** : Validation, tests de performance
+- **Documentaliste** : Documentation complète
+
+### 12.3 Jalons Principaux
+1. **Jalon 1 (Semaine 2)** : Validation des modèles conceptuels
+2. **Jalon 2 (Semaine 4)** : Validation du schéma logique
+3. **Jalon 3 (Semaine 8)** : Système de fichiers opérationnel
+4. **Jalon 4 (Semaine 10)** : Modules fonctionnels complets
+5. **Jalon 5 (Semaine 12)** : Recette finale et livraison
+
+## 13. LIVRABLES
+
+### 13.1 Livrables Principaux
+
+| Livrable | Format | Contenu | Destinataire |
+|----------|--------|---------|--------------|
+| **Documentation MERISE** | PDF/Markdown | MCD, MCT, MLD, MPD complets | Équipe projet, Client |
+| **Code Source** | Fichiers C | 5,000+ fichiers organisés | Équipe maintenance |
+| **Application Exécutable** | Binaire Linux | Programme compilé + données | Utilisateurs finaux |
+| **Tests Automatisés** | Scripts + Rapports | Tests unitaires/intégration | Équipe QA |
+| **Manuels Utilisateur** | PDF/HTML | Guides admin, RH, employés | Tous utilisateurs |
+
+### 13.2 Structure des Livrables
+\`\`\`bash
+📦 livrables_finaux/
+├── 📁 documentation/
+│   ├── 📁 merise/          # Documentation MERISE complète
+│   ├── 📁 technique/       # Documentation technique
+│   ├── 📁 utilisateur/     # Guides utilisateur
+│   └── 📁 projet/          # Documentation projet
+├── 📁 code_source/
+│   ├── 📁 src/            # Code source complet
+│   ├── 📁 tests/          # Tests automatisés
+│   ├── Makefile           # Script de compilation
+│   └── README.md          # Instructions d'installation
+├── 📁 application/
+│   ├── hr-nexus           # Exécutable principal
+│   ├── 📁 data/           # Structure de données initiale
+│   ├── 📁 config/         # Fichiers de configuration
+│   └── 📁 scripts/        # Scripts d'administration
+├── 📁 tests_rapports/
+│   ├ 📁 unitaires/        # Rapports tests unitaires
+│   ├ 📁 integration/      # Rapports tests intégration
+│   └ 📁 performance/      # Rapports tests performance
+└── 📁 formation/
+    ├── 📁 videos/         # Vidéos de formation
+    ├── 📁 presentations/  # Présentations PowerPoint
+    └── 📁 exercises/      # Exercices pratiques
+\`\`\`
+
+### 13.3 Critères d'Acceptation
+1. **Fonctionnalité** : 100% des exigences fonctionnelles implémentées
+2. **Performance** : Temps de réponse < 2s pour 10,000 employés
+3. **Sécurité** : Chiffrement AES-256, authentification forte
+4. **Fiabilité** : Disponibilité 99.5%, reprise en 1 heure max
+5. **Maintenabilité** : Code documenté, tests automatisés
+6. **Documentation** : Documentation complète et à jour
+
+## 14. CRITÈRES DE VALIDATION
+
+### 14.1 Validation Technique
+- ✓ Compilation sans erreurs ni warnings
+- ✓ Tests unitaires : couverture > 90%
+- ✓ Tests d'intégration : tous les workflows validés
+- ✓ Tests de performance : objectifs atteints
+- ✓ Tests de sécurité : audits réussis
+
+### 14.2 Validation Métier
+- ✓ Validation des modèles MERISE par les experts métier
+- ✓ Tests utilisateurs avec scénarios réels
+- ✓ Validation des calculs de paie avec l'équipe comptable
+- ✓ Validation des workflows avec les responsables RH
+
+### 14.3 Validation Conformité
+- ✓ Audit RGPD réalisé
+- ✓ Conformité légale (droit du travail)
+- ✓ Archivage sécurisé (10 ans pour la paie)
+- ✓ Traçabilité complète des opérations
+
+---
+
+## 📄 SIGNATURES
+
+| Rôle | Nom | Signature | Date |
+|------|-----|-----------|------|
+| **Client** | | | |
+| **Chef de Projet** | | | |
+| **Architecte Technique** | | | |
+| **Responsable RH** | | | |
+
+---
+
+**Document validé le :** ____________________
+
+**Prochaine révision prévue :** Juin 2024
+
+**Classification :** INTERNE - CONFIDENTIEL
+
+---
+© 2024 MERISE HR Nexus - Tous droits réservés
+`;
+        }
+    </script>
+</body>
+</html>
