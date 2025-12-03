@@ -1,0 +1,57 @@
+hr_payroll_system/
+├── 📁 1_abstract_cycle/          # MCD + MCT
+│   ├── 📄 business_entities.h    # Conceptual entities
+│   ├── 📄 business_rules.h       # Business constraints
+│   ├── 📄 process_flows.h        # Organizational processes
+│   └── 📄 domain_dictionary.txt  # Business glossary
+├── 📁 2_decision_cycle/          # MLD + MOT
+│   ├── 📄 database_schema.h      # Logical data model
+│   ├── 📄 algorithms/            # Business algorithms
+│   │   ├── payroll_calculator.h
+│   │   ├── tax_engine.h
+│   │   └── leave_processor.h
+│   └── 📄 business_logic.h       # Processing rules
+├── 📁 3_physical_cycle/          # MPD + MOP
+│   ├── 📄 storage_engine.h       # Physical data model
+│   ├── 📄 file_operations.h      # Low-level file ops
+│   ├── 📄 transaction_manager.h  # ACID operations
+│   └── 📄 cache_manager.h        # Performance layer
+├── 📁 data/                      # MERISE MPD implementation
+│   ├── 📁 entities/              # Master data (3NF normalized)
+│   │   ├── employees.dat        # Employee master file
+│   │   ├── departments.dat      # Department data
+│   │   ├── jobs.dat            # Job positions
+│   │   └── contracts.dat       # Employment contracts
+│   ├── 📁 transactions/         # Business transactions
+│   │   ├── payroll/            # Payroll periods
+│   │   │   ├── 2024/
+│   │   │   │   ├── 01_january.dat
+│   │   │   │   └── 02_february.dat
+│   │   │   └── current.dat
+│   │   ├── attendance/         # Time records
+│   │   │   ├── daily_logs.dat
+│   │   │   └── monthly_summary.dat
+│   │   └── leaves/            # Leave records
+│   │       ├── requests.dat
+│   │       └── balances.dat
+│   ├── 📁 references/          # Reference data
+│   │   ├── tax_tables.dat     # Tax brackets by country
+│   │   ├── salary_scales.dat  # Salary ranges
+│   │   └── country_codes.dat  # Country-specific rules
+│   ├── 📁 indexes/            # Physical indexes (B+ trees)
+│   │   ├── emp_by_id.idx
+│   │   ├── emp_by_dept.idx
+│   │   └── payroll_by_period.idx
+│   ├── 📁 audit/              # Audit trail (immutable)
+│   │   ├── changes.log       # Data modifications
+│   │   ├── access.log        # Who accessed what
+│   │   └── transactions.log  # Business transactions
+│   └── 📁 temp/              # Transaction workspace
+├── 📁 interfaces/
+│   ├── 📄 hr_cli.h           # HR admin interface
+│   ├── 📄 employee_portal.h  # Self-service portal
+│   └── 📄 reporting_engine.h # Reports generator
+├── 📄 main.c                 # Application entry
+├── 📄 Makefile
+├── 📄 README.md
+└── 📄 config.cfg            # System configuration
