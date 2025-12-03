@@ -34,7 +34,9 @@ table employer {
   // status professionnel
   status_employer varchar // enum
   date_embauche date // tm from time.h
-  date_fin_periode_essai 
+  date_fin_periode_essai date // tm from time.h
+  date_depart date // tm ...
+  
 
 
 
