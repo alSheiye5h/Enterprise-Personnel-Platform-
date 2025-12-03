@@ -1,7 +1,7 @@
 table employer {
-  code_employer varchar // 15 char
+  code_employer varchar // 20 char
   cin varchar // 15 char
-  numero_passport varchar // 15 char
+  numero_passport varchar // 20 char
 
   // personal info
   prenom varchar // 50 char
@@ -43,6 +43,68 @@ table employer {
   verifie boolean
 
   // regle metier
-  valid boolean
+  valid boolean 
 
 }
+
+
+table departement {
+  code_departement varchar // 20 char
+  nom_departement varchar // 30 char
+  type_departement varchar // 50 char
+  code_centre_coup varchar // 30 char
+  code_localisation varchar // 20 char
+  code_manager varchar // 20 char
+  date_creation date // tm time.h
+  budget_annuel float 
+  effectif_approuve int
+  effectif_actuel int
+
+  // structure hierarchique
+  code_departement_parent varchar // 20 char
+  niveau_hierarchique int 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
