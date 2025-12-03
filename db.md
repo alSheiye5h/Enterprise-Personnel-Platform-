@@ -7,9 +7,9 @@ table employer {
   prenom varchar // 50 char
   nom varchar // 50 char
   surnom varchar // 50
-  sexe char // 1 char
+  sexe char // 1 char enum
   date_de_naissance date // tm struct from time.h
-  situation_matrimonial varchar // 15 char
+  situation_matrimonial varchar // 15 char enum
   personne_a_charge integer // dependents personnes for taxs
 
   // coordonnées
@@ -22,13 +22,19 @@ table employer {
   code_postal int
 
   // contact d'urgence
-  nom_contact_durgence varchar // 50 cahr
-  telephone_contact_durgence  int
-  relation_avec_contact_durgence varchar // 15 char
+  nom_contact_urgence varchar // 50 cahr
+  telephone_contact_urgence  int
+  relation_avec_contact_urgence varchar // 15 char
 
   // les relations
   code_departement varchar // 20 char
   code_poste varchar // 20 cahr
+  code_manager varchar // 20 char
+
+  // status professionnel
+  status_employer varchar // enum
+  date_embauche date // tm from time.h
+  date_fin_periode_essai 
 
 
 
