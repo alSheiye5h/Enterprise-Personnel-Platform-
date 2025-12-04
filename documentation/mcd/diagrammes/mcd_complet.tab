@@ -1,0 +1,332 @@
+// version avec des commentaires plus naturels, comme un humain les écrirait
+
+table employe {
+  code_employe varchar(20) [not null, pk, increment]       // identifiant interne comme HR-EMP-001
+  cin varchar(20)  [not null]          // numéro CIN / sécurité sociale
+  numero_passeport varchar(20) [not null] // pour les internationaux
+  numero_immatriculation_cnss varchar(20) [not null]
+  
+  // section infos personnelles
+  prenom varchar(50)  [not null]            // prénom principal
+  nom varchar(50)   [not null]              // nom de famille
+  deuxieme_prenom varchar(30)     // 2ème prénom si existe
+  sexe char(1) [not null]                   // M/F/O
+  date_naissance date  [not null]           // date de naissance
+  situation_matrimoniale varchar(15) [not null]// marié, célib, divorcé
+  nb_personnes_charge integer [not null]  // pour calcul impôts
+  
+  // coordonnées diverses
+  email_personnel varchar(100)   // perso
+  email_professionnel varchar(100) [not null] // pro
+  telephone_mobile varchar(20) [not null]   // portable
+  telephone_domicile varchar(20)  // fixe maison
+  adresse_ligne1 varchar(100)  [not null]   // rue et numéro
+  adresse_ligne2 varchar(100)     // complément adresse
+  ville varchar(50)     [not null]          // ville
+  region varchar(50)   [not null]           // région/état
+  code_postal varchar(20)  [not null]       // code postal
+  pays varchar(50) [not null]               // pays
+  
+  // contact urgence
+  nom_contact_urgence varchar(100)   // nom du contact
+  telephone_contact_urgence varchar(20) // tel contact
+  relation_contact_urgence varchar(30)  // lien familial
+  
+  // liens vers autres tables
+  code_departement varchar(20) [not null]   // réf. département
+  code_poste varchar(20)   [not null]       // réf. poste
+  
+  // statut dans l'entreprise
+  statut_emploi varchar(20)  [not null]     // actif, congé, parti
+  date_embauche date   [not null]           // date d'entrée
+  date_fin_periode_essai date     // fin période essai
+  date_depart date                // date de sortie
+  raison_depart varchar(50)       // motif départ
+  
+  // conformité administrative
+  contrat_signe boolean  [not null]         // oui/non
+  verification_antecedents boolean [not null]// vérif faite ?
+  verifie boolean  [not null] // dossier complet
+  
+  // flag métier
+  est_valide boolean  [not null]  // actif et conforme
+}
+
+table hierarchie_employe {
+  id integer [pk, increment]      // identifiant unique auto-incrémenté
+  code_employe varchar(20) [not null, ref: <> employe.code_employe] 
+  code_manager varchar(20) [not null, ref: <> employe.code_employe] 
+  
+  // Type de relation hiérarchique
+  type_relation varchar(30) [not null] 
+    // HIERARCHIQUE = Ligne hiérarchique directe
+    // FONCTIONNEL = Relation fonctionnelle (matricielle)
+    // MENTORAT = Relation mentor/mentoré
+    // PROJET = Manager de projet
+    // CLIENT = Relation client (consulting)
+    // PARRAINAGE = Parrainage (onboarding)
+  
+  // Contexte de la relation
+  code_departement varchar(20) [not null, ref: > departement.code_departement]
+  code_projet varchar(20)        // Si relation projet
+  code_competence varchar(20) [not null, ref: > competence.code_competence]   // Si relation mentorat par compétence
+  
+  // Caractéristiques de la relation
+  date_debut date [not null]
+  date_fin date                  // NULL = relation permanente
+  niveau_relation integer [default: 1]     // 1=direct, 2=indirect, 3=...
+  poids_decision decimal(5,2) [default: 100.00]     // Poids dans les décisions
+  
+  // Périmètre de la relation
+  scope_relation varchar(20) [default: 'COMPLET'] 
+    // COMPLET, PARTIEL, PROJET, FONCTIONNEL
+  domaines_autorises json        // Domaines où le manager a autorité
+  
+  // Validation
+  statut_relation varchar(20) [default: 'ACTIVE'] 
+    // ACTIVE, INACTIVE, SUSPENDUE, HISTORIQUE
+  approuvee_par varchar(20) [ref: > employe.code_employe]
+  date_approbation date
+  
+  // Métadonnées
+  date_creation timestamp [default: `CURRENT_TIMESTAMP`]
+  commentaires text
+  
+  // Contraintes
+  // constraint: check (code_employe != code_manager)          // Pas d'auto-gestion
+  // constraint: check (niveau_relation between 1 and 5)
+  // constraint: check (poids_decision between 0.00 and 100.00)
+  // constraint: unique (code_employe, code_manager, type_relation, code_departement, code_projet) 
+  //   where: date_fin is null and statut_relation = 'ACTIVE'
+}
+
+
+table departement {
+  code_departement varchar(20) [pk]   // ex: DEP-IT, DEP-HR
+  nom_departement varchar(100) [not null]   // nom complet
+  type_departement varchar(30) [not null] // fonctionnel, projet, etc.
+  code_centre_cout varchar(20)  [not null] // code centre coût
+  code_localisation varchar(20)  // lieu géo
+  code_manager varchar(20) [ref: <> employe.code_employe]       // responsable dépt
+  date_creation date   [not null]     // date création
+  budget_annuel decimal(12,2) [not null] // budget annuel
+  effectif_approuve integer [not null]  // headcount approuvé
+  effectif_actuel integer [not null]  // taille réelle
+  
+  // hiérarchie
+  code_departement_parent varchar(20) [ref: <> departement.code_departement] // dépt parent
+  niveau_hierarchique integer     // niveau dans l'arbre
+}
+
+table poste {
+  code_poste varchar(20) [pk]         // JOB-DEV-001
+  intitule_poste varchar(100) [not null] // nom complet et officiel du poste au sein de l'entreprise
+  famille_metier varchar(50) [not null] // technique, admin, etc.
+  grade_poste varchar(10)  [not null] // grade G7, G8
+  categorie_eeo varchar(10) [not null] // classif Equal Employment Opportunity
+  
+  // fourchettes salariales
+  salaire_minimum decimal(10,2) // plancher
+  salaire_median decimal(10,2) // médian
+  salaire_maximum decimal(10,2) // plafond
+  devise varchar(5)    // EUR, USD, etc.
+  
+  // prérequis
+  annees_experience_requises integer // expérience requise
+  niveau_education varchar(50)    // niveau études
+  certifications_requises text    // certs obligatoires
+}
+
+table paie {
+  id_paie varchar(30) [pk]            // PAY-2024-01-EMP001
+  code_employe varchar(20) [not null, ref: > employe.code_employe]
+  periode_debut date [not null]
+  periode_fin date [not null]
+  date_paiement date [not null]
+  
+  // section revenus
+  salaire_base decimal(10,2) [not null]
+  allocation_logement decimal(10,2) [not null]
+  allocation_transport decimal(10,2) [not null]
+  heures_supplementaires decimal(10,2) [not null]
+  prime_performance decimal(10,2) [not null]
+  commission decimal(10,2) [not null]
+  autres_allocations decimal(10,2) [not null]
+  total_gains decimal(10,2) [not null]
+  
+  // section retenues
+  impot_revenu decimal(10,2) [not null]
+  cotisation_cnss_employe decimal(10,2) [not null]
+  cotisation_cnss_employeur decimal(10,2) [not null]
+  assurance_sante_AMO decimal(10,2) [not null]
+  cotisation_retraite decimal(10,2) [not null]
+  retenues_prets decimal(10,2) [not null]
+  autres_deductions decimal(10,2) [not null]
+  total_deductions decimal(10,2) [not null]
+  
+  // net
+  salaire_net decimal(10,2) [not null]
+  
+  // infos paiement
+  mode_paiement varchar(20) [not null]
+  numero_compte_bancaire varchar(30) [not null]
+  nom_banque varchar(50) [not null]
+  statut_paiement varchar(20) [not null]
+  
+  // fiscal
+  numero_certificat_fiscal varchar(30)
+  declaration_fiscale_deposee boolean [not null]
+}
+
+table pointage {
+  id_pointage varchar(30) [pk]
+  code_employe varchar(20) [not null, ref: > employe.code_employe]
+  date date [not null]
+  
+  // horaires
+  heure_debut_prevue timestamp [not null]
+  heure_fin_prevue timestamp [not null]
+  heure_debut_reelle timestamp [not null]
+  heure_fin_reelle timestamp [not null]
+  
+  // calculs temps
+  heures_programmees decimal(4,2) [not null]
+  heures_reelles decimal(4,2) [not null]
+  heures_normales decimal(4,2) [not null]
+  heures_supplementaires decimal(4,2) [not null]
+  heures_nuit decimal(4,2) [not null]
+  heures_jours_feries decimal(4,2) [not null]
+  
+  // statuts
+  statut_presence varchar(20) [not null]
+  code_shift varchar(20) [not null]
+  statut_approbation varchar(20) [not null]
+  code_approbateur varchar(20) [ref: > employe.code_employe]
+  
+  remarques varchar(200)
+}
+
+table conge {
+  id_conge varchar(30) [pk]
+  code_employe varchar(20) [not null, ref: > employe.code_employe]
+  type_conge varchar(30) [not null]
+  date_debut date [not null]
+  date_fin date [not null]
+  total_jours decimal(5,2) [not null]
+  
+  // workflow
+  statut_demande varchar(20) [not null]
+  date_demande date [not null]
+  date_approbation date
+  code_approbateur varchar(20) [ref: > employe.code_employe]
+  
+  // gestion
+  jours_deduits decimal(5,2) [not null]
+  chemin_document_justificatif varchar(200)
+  est_medical boolean [not null]
+  numero_certificat_medical varchar(30)
+  
+  // lien paie
+  est_conge_paye boolean [not null]
+}
+
+table contrat {
+  id_contrat varchar(30) [pk]
+  code_employe varchar(20) [not null, ref: > employe.code_employe]
+  type_contrat varchar(30) [not null]
+  date_debut date [not null]
+  date_fin date
+  date_signature date [not null]
+  
+  // rémunération
+  salaire_base decimal(10,2) [not null]
+  devise_salaire varchar(5) [not null]
+  heures_par_semaine integer [not null]
+  periode_essai_jours integer [not null]
+  preavis_jours integer [not null]
+  
+  // avantages
+  assurance_sante boolean [not null]
+  retraite boolean [not null]
+  stock_options boolean [not null]
+  jours_conges_annuels decimal(5,2) [not null]
+  jours_conges_maladie decimal(5,2) [not null]
+  
+  // documents
+  chemin_contrat varchar(200)
+  chemin_copie_signee varchar(200)
+  signature_numerique boolean [not null]
+}
+
+table configuration_fiscale {
+  code_pays varchar(5) [pk, not null]
+  annee_fiscale integer [not null]
+  
+  // tranches
+  brackets json [not null]
+  nombre_tranches integer [not null]
+  
+  // allocations
+  allocation_personnelle decimal(10,2) [not null]
+  allocation_marie decimal(10,2) [not null]
+  allocation_personne_charge decimal(10,2) [not null]
+  
+  // sécu sociale
+  taux_employe decimal(5,4) [not null]
+  taux_employeur decimal(5,4) [not null]
+  plafond_cotisation decimal(10,2) [not null]
+  
+  // déclaration
+  code_formulaire_fiscal varchar(20)
+  date_limite_declaration date [not null]
+}
+
+table competence {
+  code_competence varchar(20) [pk, not null]
+  nom_competence varchar(100) [not null]
+  categorie varchar(50) [not null]
+  niveau varchar(20) [not null]
+  date_certification date [not null]
+  organisme_certificateur varchar(100) [not null]
+  date_expiration date [not null]
+  duree_validite_mois integer [not null]
+}
+
+table formation {
+  id_formation varchar(30) [pk, not null]
+  intitule_formation varchar(200) [not null]
+  type_formation varchar(50) [not null]
+  date_debut date [not null]
+  date_fin date [not null]
+  duree_heures integer [not null]
+  cout decimal(10,2) [not null]
+  prestataire varchar(100) [not null]
+  lieu varchar(100) [not null]
+  nb_participants integer [not null]
+  statut varchar(20) [not null]
+}
+
+// tables de relation
+table travaille_dans {
+  code_employe varchar(20) [pk, not null, ref: > employe.code_employe]
+  code_departement varchar(20) [pk, not null, ref: > departement.code_departement]
+  date_affectation date [not null]
+  type_affectation varchar(30) [not null]
+  pourcentage_allocation decimal(5,2) [not null]
+}
+
+table occupe_poste {
+  code_employe varchar(20) [pk, not null, ref: > employe.code_employe]
+  code_poste varchar(20) [pk, not null, ref: > poste.code_poste]
+  date_effet date [not null]
+  date_fin date
+  niveau_grade varchar(10) [not null]
+}
+
+table possede_competence {
+  code_employe varchar(20) [pk, not null, ref: > employe.code_employe]
+  code_competence varchar(20) [pk, not null, ref: > competence.code_competence]
+  niveau_maitrise varchar(20) [not null]
+  date_certification date [not null]
+  certifie_par varchar(50) [not null, ref: > employe.code_employe]
+}

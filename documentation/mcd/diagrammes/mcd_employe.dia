@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dia:diagram>
+<dia:diagramdata>
+<dia:attribute name="background"><dia:color val="#ffffff"/></dia:attribute>
+<dia:attribute name="paper">
+<dia:composite type="paper">
+<dia:attribute name="name"><dia:string>#A4#</dia:string></dia:attribute>
+<dia:attribute name="tmargin"><dia:real val="2.8222"/></dia:attribute>
+<dia:attribute name="bmargin"><dia:real val="2.8222"/></dia:attribute>
+<dia:attribute name="lmargin"><dia:real val="2.8222"/></dia:attribute>
+<dia:attribute name="rmargin"><dia:real val="2.8222"/></dia:attribute>
+<dia:attribute name="is_portrait"><dia:boolean val="false"/></dia:attribute>
+<dia:attribute name="scaling"><dia:real val="0.8"/></dia:attribute>
+</dia:composite>
+</dia:attribute>
+</dia:diagramdata>
+
+<!-- EMPLOYÉ CENTRAL -->
+<dia:object type="UML - Class" version="0" id="Employe">
+<dia:attribute name="obj_pos"><dia:point val="20,10"/></dia:attribute>
+<dia:attribute name="obj_bb"><dia:rectangle val="19.95,9.95;40.05,35.05"/></dia:attribute>
+<dia:attribute name="elem_corner"><dia:point val="20,10"/></dia:attribute>
+<dia:attribute name="elem_width"><dia:real val="20"/></dia:attribute>
+<dia:attribute name="elem_height"><dia:real val="25"/></dia:attribute>
+<dia:attribute name="name"><dia:string>#EMPLOYÉ#</dia:string></dia:attribute>
+<dia:attribute name="stereotype"><dia:string>#table#</dia:string></dia:attribute>
+<dia:attribute name="comment"><dia:string>#Cœur du système - Toutes les relations partent d'ici#</dia:string></dia:attribute>
+<dia:attribute name="fill_colour"><dia:color val="#e6f2ff"/></dia:attribute>
+<dia:attribute name="line_width"><dia:real val="0.2"/></dia:attribute>
+<dia:attribute name="attributes">
+<dia:composite type="umlattribute">
+<dia:attribute name="name"><dia:string>#code_employe : varchar(20) [PK, not null]#</dia:string></dia:attribute>
+<dia:attribute name="type"><dia:string>#HR-EMP-001 (identifiant unique)#</dia:string></dia:attribute>
+</dia:composite>
+<dia:composite type="umlattribute">
+<dia:attribute name="name"><dia:string>#cin : varchar(20) [not null]#</dia:string></dia:attribute>
+<dia:attribute name="type"><dia:string>#CIN / sécurité sociale#</dia:string></dia:attribute>
+</dia:composite>
+<dia:composite type="umlattribute">
+<dia:attribute name="name"><dia:string>#nom : varchar(50) [not null]#</dia:string></dia:attribute>
+<dia:attribute name="type"><dia:string>#nom de famille#</dia:string></dia:attribute>
+</dia:composite>
+<dia:composite type="umlattribute">
+<dia:attribute name="name"><dia:string>#prenom : varchar(50) [not null]#</dia:string></dia:attribute>
+<dia:attribute name="type"><dia:string>#prénom principal#</dia:string></dia:attribute>
+</dia:composite>
+<dia:composite type="umlattribute">
+<dia:attribute name="name"><dia:string>#sexe : char(1) [not null]#</dia:string></dia:attribute>
+<dia:attribute name="type"><dia:string>#M=Masculin, F=Féminin, O=Autre#</dia:string></dia:attribute>
+</dia:composite>
+<dia:composite type="umlattribute">
+<dia:attribute name="name"><dia:string>#date_naissance : date [not null]#</dia:string></dia:attribute>
+<dia:attribute name="type"><dia:string>#date de naissance#</dia:string></dia:attribute>
+</dia:composite>
+<dia:composite type="umlattribute">
+<dia:attribute name="name"><dia:string>#situation_matrimoniale : varchar(15) [not null]#</dia:string></dia:attribute>
+<dia:attribute name="type"><dia:string>#marié, célib, divorcé#</dia:string></dia:attribute>
+</dia:composite>
+<dia:composite type="umlattribute">
+<dia:attribute name="name"><dia:string>#nb_personnes_charge : integer [not null]#</dia:string></dia:attribute>
+<dia:attribute name="type"><dia:string>#pour calcul impôts#</dia:string></dia:attribute>
+</dia:composite>
+<dia:composite type="umlattribute">
+<dia:attribute name="name"><dia:string>#email_professionnel : varchar(100) [not null]#</dia:string></dia:attribute>
+<dia:attribute name="type"><dia:string>#email pro#</dia:string></dia:attribute>
+</dia:composite>
+<dia:composite type="umlattribute">
+<dia:attribute name="name"><dia:string>#telephone_mobile : varchar(20) [not null]#</dia:string></dia:attribute>
+<dia:attribute name="type"><dia:string>#portable#</dia:string></dia:attribute>
+</dia:composite>
+<dia:composite type="umlattribute">
+<dia:attribute name="name"><dia:string>#statut_emploi : varchar(20) [not null]#</dia:string></dia:attribute>
+<dia:attribute name="type"><dia:string>#ACTIF, CONGE, INACTIF#</dia:string></dia:attribute>
+</dia:composite>
+<dia:composite type="umlattribute">
+<dia:attribute name="name"><dia:string>#date_embauche : date [not null]#</dia:string></dia:attribute>
+<dia:attribute name="type"><dia:string>#date d'entrée#</dia:string></dia:attribute>
+</dia:composite>
+<dia:composite type="umlattribute">
+<dia:attribute name="name"><dia:string>#contrat_signe : boolean [not null]#</dia:string></dia:attribute>
+<dia:attribute name="type"><dia:string>#contrat signé?#</dia:string></dia:attribute>
+</dia:composite>
+<dia:composite type="umlattribute">
+<dia:attribute name="name"><dia:string>#est_valide : boolean [not null]#</dia:string></dia:attribute>
+<dia:attribute name="type"><dia:string>#actif et conforme#</dia:string></dia:attribute>
+</dia:composite>
+</dia:attribute>
+</dia:object>
+
+<!-- LIENS DEPUIS EMPLOYÉ -->
+
+<dia:object type="UML - Association" version="0" id="RelPaie">
+<dia:attribute name="obj_pos"><dia:point val="40,15"/></dia:attribute>
+<dia:attribute name="obj_bb"><dia:rectangle val="39.95,14.95;60.05,15.05"/></dia:attribute>
+<dia:attribute name="orth_points"><dia:point val="40,15"/><dia:point val="60,15"/></dia:attribute>
+<dia:attribute name="connections"><dia:point val="40,15"/><dia:point val="60,15"/></dia:attribute>
+<dia:attribute name="line_colour"><dia:color val="#cc0000"/></dia:attribute>
+<dia:attribute name="line_width"><dia:real val="0.15"/></dia:attribute>
+<dia:attribute name="uml_diagram_data">
+<dia:composite type="umlconnectiondata">
+<dia:attribute name="name"><dia:string>#perçoit#</dia:string></dia:attribute>
+<dia:attribute name="role1">
+<dia:composite type="umlrole">
+<dia:attribute name="name"><dia:string>#1,1#</dia:string></dia:attribute>
+<dia:attribute name="comment"><dia:string>#Un employé perçoit des paies#</dia:string></dia:attribute>
+</dia:composite>
+</dia:attribute>
+<dia:attribute name="role2">
+<dia:composite type="umlrole">
+<dia:attribute name="name"><dia:string>#0,N#</dia:string></dia:attribute>
+<dia:attribute name="comment"><dia:string>#Une paie concerne un employé#</dia:string></dia:attribute>
+</dia:composite>
+</dia:attribute>
+</dia:composite>
+</dia:attribute>
+</dia:object>
+
+<dia:object type="UML - Association" version="0" id="RelPointage">
+<dia:attribute name="obj_pos"><dia:point val="40,20"/></dia:attribute>
+<dia:attribute name="obj_bb"><dia:rectangle val="39.95,19.95;60.05,20.05"/></dia:attribute>
+<dia:attribute name="orth_points"><dia:point val="40,20"/><dia:point val="60,20"/></dia:attribute>
+<dia:attribute name="connections"><dia:point val="40,20"/><dia:point val="60,20"/></dia:attribute>
+<dia:attribute name="line_colour"><dia:color val="#009900"/></dia:attribute>
+<dia:attribute name="uml_diagram_data">
+<dia:composite type="umlconnectiondata">
+<dia:attribute name="name"><dia:string>#pointe#</dia:string></dia:attribute>
+<dia:attribute name="role1">
+<dia:composite type="umlrole">
+<dia:attribute name="name"><dia:string>#1,1#</dia:string></dia:attribute>
+<dia:attribute name="comment"><dia:string>#Un employé pointe ses heures#</dia:string></dia:attribute>
+</dia:composite>
+</dia:attribute>
+<dia:attribute name="role2">
+<dia:composite type="umlrole">
+<dia:attribute name="name"><dia:string>#0,N#</dia:string></dia:attribute>
+<dia:attribute name="comment"><dia:string>#Un pointage concerne un employé#</dia:string></dia:attribute>
+</dia:composite>
+</dia:attribute>
+</dia:composite>
+</dia:attribute>
+</dia:object>
+
+<dia:object type="UML - Association" version="0" id="RelConge">
+<dia:attribute name="obj_pos"><dia:point val="40,25"/></dia:attribute>
+<dia:attribute name="obj_bb"><dia:rectangle val="39.95,24.95;60.05,25.05"/></dia:attribute>
+<dia:attribute name="orth_points"><dia:point val="40,25"/><dia:point val="60,25"/></dia:attribute>
+<dia:attribute name="connections"><dia:point val="40,25"/><dia:point val="60,25"/></dia:attribute>
+<dia:attribute name="line_colour"><dia:color val="#0066cc"/></dia:attribute>
+<dia:attribute name="uml_diagram_data">
+<dia:composite type="umlconnectiondata">
+<dia:attribute name="name"><dia:string>#demande#</dia:string></dia:attribute>
+<dia:attribute name="role1">
+<dia:composite type="umlrole">
+<dia:attribute name="name"><dia:string>#1,1#</dia:string></dia:attribute>
+<dia:attribute name="comment"><dia:string>#Un employé demande des congés#</dia:string></dia:attribute>
+</dia:composite>
+</dia:attribute>
+<dia:attribute name="role2">
+<dia:composite type="umlrole">
+<dia:attribute name="name"><dia:string>#0,N#</dia:string></dia:attribute>
+<dia:attribute name="comment"><dia:string>#Un congé concerne un employé#</dia:string></dia:attribute>
+</dia:composite>
+</dia:attribute>
+</dia:composite>
+</dia:attribute>
+</dia:object>
+
+<!-- HIÉRARCHIE (auto-référence) -->
+<dia:object type="UML - Association" version="0" id="RelHierarchie">
+<dia:attribute name="obj_pos"><dia:point val="30,30"/></dia:attribute>
+<dia:attribute name="obj_bb"><dia:rectangle val="29.95,29.95;30.05,32.05"/></dia:attribute>
+<dia:attribute name="orth_points"><dia:point val="30,30"/><dia:point val="30,32"/></dia:attribute>
+<dia:attribute name="orth_orient"><dia:enum val="1"/></dia:attribute>
+<dia:attribute name="connections"><dia:point val="30,30"/><dia:point val="30,32"/></dia:attribute>
+<dia:attribute name="connection_end_points"><dia:point val="30,30"/><dia:point val="30,32"/></dia:attribute>
+<dia:attribute name="line_colour"><dia:color val="#9900cc"/></dia:attribute>
+<dia:attribute name="dashlength"><dia:real val="5"/></dia:attribute>
+<dia:attribute name="uml_diagram_data">
+<dia:composite type="umlconnectiondata">
+<dia:attribute name="name"><dia:string>#gère / est géré par#</dia:string></dia:attribute>
+<dia:attribute name="role1">
+<dia:composite type="umlrole">
+<dia:attribute name="name"><dia:string>#0,N#</dia:string></dia:attribute>
+<dia:attribute name="comment"><dia:string>#Un employé peut gérer d'autres employés#</dia:string></dia:attribute>
+</dia:composite>
+</dia:attribute>
+<dia:attribute name="role2">
+<dia:composite type="umlrole">
+<dia:attribute name="name"><dia:string>#0,1#</dia:string></dia:attribute>
+<dia:attribute name="comment"><dia:string>#Un employé peut avoir un manager#</dia:string></dia:attribute>
+</dia:composite>
+</dia:attribute>
+</dia:composite>
+</dia:attribute>
+</dia:object>
+
+<!-- TABLES LIÉES -->
+<dia:object type="UML - Class" version="0" id="Paie">
+<dia:attribute name="obj_pos"><dia:point val="60,10"/></dia:attribute>
+<dia:attribute name="obj_bb"><dia:rectangle val="59.95,9.95;75.05,20.05"/></dia:attribute>
+<dia:attribute name="elem_corner"><dia:point val="60,10"/></dia:attribute>
+<dia:attribute name="elem_width"><dia:real val="15"/></dia:attribute>
+<dia:attribute name="elem_height"><dia:real val="10"/></dia:attribute>
+<dia:attribute name="name"><dia:string>#PAIE#</dia:string></dia:attribute>
+<dia:attribute name="fill_colour"><dia:color val="#ffe6e6"/></dia:attribute>
+<dia:attribute name="attributes">
+<dia:composite type="umlattribute">
+<dia:attribute name="name"><dia:string>#code_employe : varchar(20) [not null]#</dia:string></dia:attribute>
+<dia:attribute name="type"><dia:string>#FK vers Employé#</dia:string></dia:attribute>
+</dia:composite>
+</dia:attribute>
+</dia:object>
+
+<dia:object type="UML - Class" version="0" id="Pointage">
+<dia:attribute name="obj_pos"><dia:point val="60,22"/></dia:attribute>
+<dia:attribute name="obj_bb"><dia:rectangle val="59.95,21.95;75.05,28.05"/></dia:attribute>
+<dia:attribute name="elem_corner"><dia:point val="60,22"/></dia:attribute>
+<dia:attribute name="elem_width"><dia:real val="15"/></dia:attribute>
+<dia:attribute name="elem_height"><dia:real val="6"/></dia:attribute>
+<dia:attribute name="name"><dia:string>#POINTAGE#</dia:string></dia:attribute>
+<dia:attribute name="fill_colour"><dia:color val="#e6ffe6"/></dia:attribute>
+<dia:attribute name="attributes">
+<dia:composite type="umlattribute">
+<dia:attribute name="name"><dia:string>#code_employe : varchar(20) [not null]#</dia:string></dia:attribute>
+<dia:attribute name="type"><dia:string>#FK vers Employé#</dia:string></dia:attribute>
+</dia:composite>
+</dia:attribute>
+</dia:object>
+
+<dia:object type="UML - Class" version="0" id="Conge">
+<dia:attribute name="obj_pos"><dia:point val="60,30"/></dia:attribute>
+<dia:attribute name="obj_bb"><dia:rectangle val="59.95,29.95;75.05,36.05"/></dia:attribute>
+<dia:attribute name="elem_corner"><dia:point val="60,30"/></dia:attribute>
+<dia:attribute name="elem_width"><dia:real val="15"/></dia:attribute>
+<dia:attribute name="elem_height"><dia:real val="6"/></dia:attribute>
+<dia:attribute name="name"><dia:string>#CONGÉ#</dia:string></dia:attribute>
+<dia:attribute name="fill_colour"><dia:color val="#e6f2ff"/></dia:attribute>
+<dia:attribute name="attributes">
+<dia:composite type="umlattribute">
+<dia:attribute name="name"><dia:string>#code_employe : varchar(20) [not null]#</dia:string></dia:attribute>
+<dia:attribute name="type"><dia:string>#FK vers Employé#</dia:string></dia:attribute>
+</dia:composite>
+</dia:attribute>
+</dia:object>
+
+</dia:diagram>
