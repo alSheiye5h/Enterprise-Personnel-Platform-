@@ -1,0 +1,797 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dia:diagram xmlns:dia="http://www.lysator.liu.se/~alla/dia/">
+  <dia:diagramdata>
+    <dia:attribute name="background">
+      <dia:color val="#ffffff"/>
+    </dia:attribute>
+    <dia:attribute name="pagebreak">
+      <dia:color val="#000099"/>
+    </dia:attribute>
+    <dia:attribute name="paper">
+      <dia:composite type="paper">
+        <dia:attribute name="name">
+          <dia:string>#A4#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="tmargin">
+          <dia:real val="2.8222000598907471"/>
+        </dia:attribute>
+        <dia:attribute name="bmargin">
+          <dia:real val="2.8222000598907471"/>
+        </dia:attribute>
+        <dia:attribute name="lmargin">
+          <dia:real val="2.8222000598907471"/>
+        </dia:attribute>
+        <dia:attribute name="rmargin">
+          <dia:real val="2.8222000598907471"/>
+        </dia:attribute>
+        <dia:attribute name="is_portrait">
+          <dia:boolean val="true"/>
+        </dia:attribute>
+        <dia:attribute name="scaling">
+          <dia:real val="1"/>
+        </dia:attribute>
+        <dia:attribute name="fitto">
+          <dia:boolean val="false"/>
+        </dia:attribute>
+      </dia:composite>
+    </dia:attribute>
+  </dia:diagramdata>
+
+  <!-- ENTITÉ EMPLOYÉ -->
+  <dia:object type="UML - Class" version="0" id="O0">
+    <dia:attribute name="obj_pos">
+      <dia:point val="5,5"/>
+    </dia:attribute>
+    <dia:attribute name="obj_bb">
+      <dia:rectangle val="4.95,4.95;15.05,24.05"/>
+    </dia:attribute>
+    <dia:attribute name="elem_corner">
+      <dia:point val="5,5"/>
+    </dia:attribute>
+    <dia:attribute name="elem_width">
+      <dia:real val="10"/>
+    </dia:attribute>
+    <dia:attribute name="elem_height">
+      <dia:real val="19"/>
+    </dia:attribute>
+    <dia:attribute name="name">
+      <dia:string>#Employé#</dia:string>
+    </dia:attribute>
+    <dia:attribute name="stereotype">
+      <dia:string>#table#</dia:string>
+    </dia:attribute>
+    <dia:attribute name="comment">
+      <dia:string>#Table principale des employés#</dia:string>
+    </dia:attribute>
+    <dia:attribute name="abstract">
+      <dia:boolean val="false"/>
+    </dia:attribute>
+    <dia:attribute name="suppress_attributes">
+      <dia:boolean val="false"/>
+    </dia:attribute>
+    <dia:attribute name="suppress_operations">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+    <dia:attribute name="visible_attributes">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+    <dia:attribute name="visible_operations">
+      <dia:boolean val="false"/>
+    </dia:attribute>
+    <dia:attribute name="visible_comments">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+    <dia:attribute name="wrap_operations">
+      <dia:boolean val="false"/>
+    </dia:attribute>
+    <dia:attribute name="wrap_after_char">
+      <dia:int val="40"/>
+    </dia:attribute>
+    <dia:attribute name="comment_tag">
+      <dia:enum val="1"/>
+    </dia:attribute>
+    <dia:attribute name="line_width">
+      <dia:real val="0.10000000000000001"/>
+    </dia:attribute>
+    <dia:attribute name="line_colour">
+      <dia:color val="#000000"/>
+    </dia:attribute>
+    <dia:attribute name="fill_colour">
+      <dia:color val="#ffffff"/>
+    </dia:attribute>
+    <dia:attribute name="text_colour">
+      <dia:color val="#000000"/>
+    </dia:attribute>
+    <dia:attribute name="normal_font">
+      <dia:font family="sans" style="0" name="Helvetica"/>
+    </dia:attribute>
+    <dia:attribute name="abstract_font">
+      <dia:font family="sans" style="88" name="Helvetica-BoldOblique"/>
+    </dia:attribute>
+    <dia:attribute name="polymorphic_font">
+      <dia:font family="sans" style="8" name="Helvetica-Oblique"/>
+    </dia:attribute>
+    <dia:attribute name="classname_font">
+      <dia:font family="sans" style="8" name="Helvetica-Oblique"/>
+    </dia:attribute>
+    <dia:attribute name="abstract_classname_font">
+      <dia:font family="sans" style="88" name="Helvetica-BoldOblique"/>
+    </dia:attribute>
+    <dia:attribute name="comment_font">
+      <dia:font family="sans" style="0" name="Helvetica"/>
+    </dia:attribute>
+    <dia:attribute name="normal_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="abstract_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="polymorphic_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="classname_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="abstract_classname_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="comment_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="attributes">
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#code_employe : varchar(20) [PK, not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#identifiant interne comme HR-EMP-001#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="value">
+          <dia:string>##</dia:string>
+        </dia:attribute>
+        <dia:attribute name="comment">
+          <dia:string>##</dia:string>
+        </dia:attribute>
+        <dia:attribute name="visibility">
+          <dia:enum val="0"/>
+        </dia:attribute>
+        <dia:attribute name="abstract">
+          <dia:boolean val="false"/>
+        </dia:attribute>
+        <dia:attribute name="class_scope">
+          <dia:boolean val="false"/>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#cin : varchar(20) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#numéro CIN / sécurité sociale#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#prenom : varchar(50) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#prénom principal#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#nom : varchar(50) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#nom de famille#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#sexe : char(1) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#M/F/O#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#date_naissance : date [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#date de naissance#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#situation_matrimoniale : varchar(15) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#marié, célib, divorcé#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#nb_personnes_charge : integer [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#pour calcul impôts#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#email_professionnel : varchar(100) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#email professionnel#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#telephone_mobile : varchar(20) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#portable#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#adresse_ligne1 : varchar(100) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#rue et numéro#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#ville : varchar(50) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#ville#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#code_postal : varchar(20) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#code postal#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#pays : varchar(50) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#pays#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#code_departement : varchar(20) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#région/état#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#code_poste : varchar(20) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#région/état#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#statut_emploi : varchar(20) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#actif, congé, parti#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#date_embauche : date [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#date d'entrée#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+    </dia:attribute>
+    <dia:attribute name="operations"/>
+    <dia:attribute name="template">
+      <dia:boolean val="false"/>
+    </dia:attribute>
+    <dia:attribute name="templates"/>
+  </dia:object>
+
+  <!-- ENTITÉ DÉPARTEMENT -->
+  <dia:object type="UML - Class" version="0" id="O1">
+    <dia:attribute name="obj_pos">
+      <dia:point val="20,5"/>
+    </dia:attribute>
+    <dia:attribute name="obj_bb">
+      <dia:rectangle val="19.95,4.95;30.05,14.05"/>
+    </dia:attribute>
+    <dia:attribute name="elem_corner">
+      <dia:point val="20,5"/>
+    </dia:attribute>
+    <dia:attribute name="elem_width">
+      <dia:real val="10"/>
+    </dia:attribute>
+    <dia:attribute name="elem_height">
+      <dia:real val="9"/>
+    </dia:attribute>
+    <dia:attribute name="name">
+      <dia:string>#Département#</dia:string>
+    </dia:attribute>
+    <dia:attribute name="stereotype">
+      <dia:string>#table#</dia:string>
+    </dia:attribute>
+    <dia:attribute name="comment">
+      <dia:string>#Structure organisationnelle#</dia:string>
+    </dia:attribute>
+    <dia:attribute name="abstract">
+      <dia:boolean val="false"/>
+    </dia:attribute>
+    <dia:attribute name="suppress_attributes">
+      <dia:boolean val="false"/>
+    </dia:attribute>
+    <dia:attribute name="suppress_operations">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+    <dia:attribute name="visible_attributes">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+    <dia:attribute name="visible_operations">
+      <dia:boolean val="false"/>
+    </dia:attribute>
+    <dia:attribute name="visible_comments">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+    <dia:attribute name="wrap_operations">
+      <dia:boolean val="false"/>
+    </dia:attribute>
+    <dia:attribute name="wrap_after_char">
+      <dia:int val="40"/>
+    </dia:attribute>
+    <dia:attribute name="comment_tag">
+      <dia:enum val="1"/>
+    </dia:attribute>
+    <dia:attribute name="line_width">
+      <dia:real val="0.10000000000000001"/>
+    </dia:attribute>
+    <dia:attribute name="line_colour">
+      <dia:color val="#000000"/>
+    </dia:attribute>
+    <dia:attribute name="fill_colour">
+      <dia:color val="#ffffff"/>
+    </dia:attribute>
+    <dia:attribute name="text_colour">
+      <dia:color val="#000000"/>
+    </dia:attribute>
+    <dia:attribute name="normal_font">
+      <dia:font family="sans" style="0" name="Helvetica"/>
+    </dia:attribute>
+    <dia:attribute name="abstract_font">
+      <dia:font family="sans" style="88" name="Helvetica-BoldOblique"/>
+    </dia:attribute>
+    <dia:attribute name="polymorphic_font">
+      <dia:font family="sans" style="8" name="Helvetica-Oblique"/>
+    </dia:attribute>
+    <dia:attribute name="classname_font">
+      <dia:font family="sans" style="8" name="Helvetica-Oblique"/>
+    </dia:attribute>
+    <dia:attribute name="abstract_classname_font">
+      <dia:font family="sans" style="88" name="Helvetica-BoldOblique"/>
+    </dia:attribute>
+    <dia:attribute name="comment_font">
+      <dia:font family="sans" style="0" name="Helvetica"/>
+    </dia:attribute>
+    <dia:attribute name="normal_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="abstract_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="polymorphic_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="classname_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="abstract_classname_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="comment_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="attributes">
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#code_departement : varchar(20) [PK]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#ex: DEP-IT, DEP-HR#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#nom_departement : varchar(100) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#nom complet#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#type_departement : varchar(30) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#fonctionnel, projet, etc.#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#code_centre_cout : varchar(20) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#code centre coût#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#code_manager : varchar(20) [ref: <> employe.code_employe]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#responsable dépt#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#date_creation : date [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#date création#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#budget_annuel : decimal(12,2) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#budget annuel#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#effectif_approuve : integer [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#headcount approuvé#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#effectif_actuel : integer [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#taille réelle#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#code_departement_parent : varchar(20) [ref: <> departement.code_departement]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#dépt parent#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#niveau_hierarchique : integer#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#niveau dans l'arbre#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+    </dia:attribute>
+  </dia:object>
+
+  <!-- ENTITÉ POSTE -->
+  <dia:object type="UML - Class" version="0" id="O2">
+    <dia:attribute name="obj_pos">
+      <dia:point val="35,5"/>
+    </dia:attribute>
+    <dia:attribute name="obj_bb">
+      <dia:rectangle val="34.95,4.95;45.05,14.05"/>
+    </dia:attribute>
+    <dia:attribute name="elem_corner">
+      <dia:point val="35,5"/>
+    </dia:attribute>
+    <dia:attribute name="elem_width">
+      <dia:real val="10"/>
+    </dia:attribute>
+    <dia:attribute name="elem_height">
+      <dia:real val="9"/>
+    </dia:attribute>
+    <dia:attribute name="name">
+      <dia:string>#Poste#</dia:string>
+    </dia:attribute>
+    <dia:attribute name="stereotype">
+      <dia:string>#table#</dia:string>
+    </dia:attribute>
+    <dia:attribute name="comment">
+      <dia:string>#Description des postes dans l'entreprise#</dia:string>
+    </dia:attribute>
+    <dia:attribute name="abstract">
+      <dia:boolean val="false"/>
+    </dia:attribute>
+    <dia:attribute name="suppress_attributes">
+      <dia:boolean val="false"/>
+    </dia:attribute>
+    <dia:attribute name="suppress_operations">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+    <dia:attribute name="visible_attributes">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+    <dia:attribute name="visible_operations">
+      <dia:boolean val="false"/>
+    </dia:attribute>
+    <dia:attribute name="visible_comments">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+    <dia:attribute name="wrap_operations">
+      <dia:boolean val="false"/>
+    </dia:attribute>
+    <dia:attribute name="wrap_after_char">
+      <dia:int val="40"/>
+    </dia:attribute>
+    <dia:attribute name="comment_tag">
+      <dia:enum val="1"/>
+    </dia:attribute>
+    <dia:attribute name="line_width">
+      <dia:real val="0.10000000000000001"/>
+    </dia:attribute>
+    <dia:attribute name="line_colour">
+      <dia:color val="#000000"/>
+    </dia:attribute>
+    <dia:attribute name="fill_colour">
+      <dia:color val="#ffffff"/>
+    </dia:attribute>
+    <dia:attribute name="text_colour">
+      <dia:color val="#000000"/>
+    </dia:attribute>
+    <dia:attribute name="normal_font">
+      <dia:font family="sans" style="0" name="Helvetica"/>
+    </dia:attribute>
+    <dia:attribute name="abstract_font">
+      <dia:font family="sans" style="88" name="Helvetica-BoldOblique"/>
+    </dia:attribute>
+    <dia:attribute name="polymorphic_font">
+      <dia:font family="sans" style="8" name="Helvetica-Oblique"/>
+    </dia:attribute>
+    <dia:attribute name="classname_font">
+      <dia:font family="sans" style="8" name="Helvetica-Oblique"/>
+    </dia:attribute>
+    <dia:attribute name="abstract_classname_font">
+      <dia:font family="sans" style="88" name="Helvetica-BoldOblique"/>
+    </dia:attribute>
+    <dia:attribute name="comment_font">
+      <dia:font family="sans" style="0" name="Helvetica"/>
+    </dia:attribute>
+    <dia:attribute name="normal_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="abstract_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="polymorphic_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="classname_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="abstract_classname_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="comment_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="attributes">
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#code_poste : varchar(20) [PK]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#JOB-DEV-001#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#intitule_poste : varchar(100) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#nom complet et officiel du poste#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#famille_metier : varchar(50) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#technique, admin, etc.#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#grade_poste : varchar(10) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#grade G7, G8#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#categorie_eeo : varchar(10) [not null]#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#classif Equal Employment Opportunity#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#salaire_minimum : decimal(10,2)#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#plancher#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#salaire_median : decimal(10,2)#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#médian#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#salaire_maximum : decimal(10,2)#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#plafond#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+      <dia:composite type="umlattribute">
+        <dia:attribute name="name">
+          <dia:string>#devise : varchar(5)#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="type">
+          <dia:string>#EUR, USD, etc.#</dia:string>
+        </dia:attribute>
+      </dia:composite>
+    </dia:attribute>
+  </dia:object>
+
+  <!-- RELATIONS ENTRE ENTITÉS -->
+
+  <!-- Relation Employé - Département -->
+  <dia:object type="UML - Association" version="0" id="O3">
+    <dia:attribute name="obj_pos">
+      <dia:point val="15,10"/>
+    </dia:attribute>
+    <dia:attribute name="obj_bb">
+      <dia:rectangle val="14.95,9.95;20.05,10.05"/>
+    </dia:attribute>
+    <dia:attribute name="orth_points">
+      <dia:point val="15,10"/>
+      <dia:point val="20,10"/>
+    </dia:attribute>
+    <dia:attribute name="orth_orient">
+      <dia:enum val="0"/>
+    </dia:attribute>
+    <dia:attribute name="orth_autorouter">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+    <dia:attribute name="connections">
+      <dia:point val="15,10"/>
+      <dia:point val="20,10"/>
+    </dia:attribute>
+    <dia:attribute name="connection_end_points">
+      <dia:point val="15,10"/>
+      <dia:point val="20,10"/>
+    </dia:attribute>
+    <dia:attribute name="text_colour">
+      <dia:color val="#000000"/>
+    </dia:attribute>
+    <dia:attribute name="line_colour">
+      <dia:color val="#000000"/>
+    </dia:attribute>
+    <dia:attribute name="line_width">
+      <dia:real val="0.10000000000000001"/>
+    </dia:attribute>
+    <dia:attribute name="normal_font">
+      <dia:font family="sans" style="0" name="Helvetica"/>
+    </dia:attribute>
+    <dia:attribute name="normal_font_height">
+      <dia:real val="0.80000000000000004"/>
+    </dia:attribute>
+    <dia:attribute name="dashlength">
+      <dia:real val="0"/>
+    </dia:attribute>
+    <dia:attribute name="head">
+      <dia:enum val="0"/>
+    </dia:attribute>
+    <dia:attribute name="tail">
+      <dia:enum val="0"/>
+    </dia:attribute>
+    <dia:attribute name="corner_radius">
+      <dia:real val="0"/>
+    </dia:attribute>
+    <dia:attribute name="uml_diagram_data">
+      <dia:composite type="umlconnectiondata">
+        <dia:attribute name="name">
+          <dia:string>#travaille dans#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="stereotype">
+          <dia:string>##</dia:string>
+        </dia:attribute>
+        <dia:attribute name="comment">
+          <dia:string>#Relation N:M avec table de liaison#</dia:string>
+        </dia:attribute>
+        <dia:attribute name="direction">
+          <dia:enum val="0"/>
+        </dia:attribute>
+        <dia:attribute name="role1">
+          <dia:composite type="umlrole">
+            <dia:attribute name="name">
+              <dia:string>#1,N#</dia:string>
+            </dia:attribute>
+            <dia:attribute name="multiplicity">
+              <dia:string>##</dia:string>
+            </dia:attribute>
+            <dia:attribute name="comment">
+              <dia:string>##</dia:string>
+            </dia:attribute>
+            <dia:attribute name="aggregation">
+              <dia:enum val="0"/>
+            </dia:attribute>
+            <dia:attribute name="visibility">
+              <dia:enum val="0"/>
+            </dia:attribute>
+            <dia:attribute name="target_anchor">
+              <dia:enum val="1"/>
+            </dia:attribute>
+          </dia:composite>
+        </dia:attribute>
+        <dia:attribute name="role2">
+          <dia:composite type="umlrole">
+            <dia:attribute name="name">
+              <dia:string>#1,N#</dia:string>
+            </dia:attribute>
+            <dia:attribute name="multiplicity">
+              <dia:string>##</dia:string>
+            </dia:attribute>
+            <dia:attribute name="comment">
+              <dia:string>##</dia:string>
+            </dia:attribute>
+            <dia:attribute name="aggregation">
+              <dia:enum val="0"/>
+            </dia:attribute>
+            <dia:attribute name="visibility">
+              <dia:enum val="0"/>
+            </dia:attribute>
+            <dia:attribute name="target_anchor">
+              <dia:enum val="0"/>
+            </dia:attribute>
+          </dia:composite>
+        </dia:attribute>
+      </dia:composite>
+    </dia:attribute>
+  </dia:object>
+
+  <!-- Relation Employé - Poste -->
+  <dia:object type="UML - Association"
