@@ -1,234 +1,284 @@
+// version avec des commentaires plus naturels, comme un humain les écrirait
+
 table employe {
-  code_employe varchar(20) // "HR-EMP-001" (Identifiant métier)
-  cin varchar(20) // Numéro de sécurité sociale
-  numero_passeport varchar(20) // Numéro de passeport (pour employés internationaux)
-
-  // INFORMATIONS PERSONNELLES
-  prenom varchar(50) // Prénom
-  nom varchar(50) // Nom
-  deuxieme_prenom varchar(30) // Deuxième prénom
-  sexe char(1) // "M"/"F"/"O" (Genre)
-  date_naissance date // struct tm from time.h - Date de naissance
-  situation_matrimoniale varchar(15) // "Célibataire", "Marié", "Divorcé"
-  nb_personnes_charge integer // Nombre de personnes à charge (pour calcul fiscal)
-
-  // COORDONNÉES
-  email_personnel varchar(100) // Email personnel
-  email_professionnel varchar(100) // Email professionnel
-  telephone_mobile varchar(20) // Téléphone mobile
-  telephone_domicile varchar(20) // Téléphone domicile
-  adresse_ligne1 varchar(100) // Adresse ligne 1
-  adresse_ligne2 varchar(100) // Adresse ligne 2
-  ville varchar(50) // Ville
-  region varchar(50) // État/Région
-  code_postal varchar(20) // Code postal
-  pays varchar(50) // Pays
-
-  // CONTACT D'URGENCE
-  nom_contact_urgence varchar(100) // Nom du contact d'urgence
-  telephone_contact_urgence varchar(20) // Téléphone du contact d'urgence
-  relation_contact_urgence varchar(30) // Relation avec le contact
-
-  // ATTRIBUTS MÉTIER (RELATIONS MCD)
-  code_departement varchar(20) // Code département (Relation avec Département)
-  code_poste varchar(20) // Code poste (Relation avec Poste)
-  code_manager varchar(20) // Code manager (Relation réflexive)
-
-  // STATUT PROFESSIONNEL
-  statut_emploi varchar(20) // "Actif", "En congé", "Terminé"
-  date_embauche date // Date d'embauche
-  date_fin_periode_essai date // Date fin période d'essai
-  date_depart date // Date de départ
-  raison_depart varchar(50) // Raison du départ
-
-  // CONFORMITÉ
-  contrat_signe boolean // Contrat signé (0/1)
-  verification_antecedents boolean // Vérification antécédents (0/1)
-  verifie boolean // Employé vérifié (0/1)
-
-  // RÈGLES MÉTIER
-  est_valide boolean // Employé valide (attribut dérivé - règle métier)
+  code_employe varchar(20)        // identifiant interne comme HR-EMP-001
+  cin varchar(20)                 // numéro CIN / sécurité sociale
+  numero_passeport varchar(20)    // pour les internationaux
+  
+  // section infos personnelles
+  prenom varchar(50)              // prénom principal
+  nom varchar(50)                 // nom de famille
+  deuxieme_prenom varchar(30)     // 2ème prénom si existe
+  sexe char(1)                    // M/F/O
+  date_naissance date             // date de naissance
+  situation_matrimoniale varchar(15) // marié, célib, divorcé
+  nb_personnes_charge integer     // pour calcul impôts
+  
+  // coordonnées diverses
+  email_personnel varchar(100)    // perso
+  email_professionnel varchar(100) // pro
+  telephone_mobile varchar(20)    // portable
+  telephone_domicile varchar(20)  // fixe maison
+  adresse_ligne1 varchar(100)     // rue et numéro
+  adresse_ligne2 varchar(100)     // complément adresse
+  ville varchar(50)               // ville
+  region varchar(50)              // région/état
+  code_postal varchar(20)         // code postal
+  pays varchar(50)                // pays
+  
+  // contact urgence
+  nom_contact_urgence varchar(100)   // nom du contact
+  telephone_contact_urgence varchar(20) // tel contact
+  relation_contact_urgence varchar(30)  // lien familial
+  
+  // liens vers autres tables
+  code_departement varchar(20)    // réf. département
+  code_poste varchar(20)          // réf. poste
+  code_manager varchar(20)        // son responsable
+  
+  // statut dans l'entreprise
+  statut_emploi varchar(20)       // actif, congé, parti
+  date_embauche date              // date d'entrée
+  date_fin_periode_essai date     // fin période essai
+  date_depart date                // date de sortie
+  raison_depart varchar(50)       // motif départ
+  
+  // conformité administrative
+  contrat_signe boolean           // oui/non
+  verification_antecedents boolean // vérif faite ?
+  verifie boolean                 // dossier complet
+  
+  // flag métier
+  est_valide boolean              // actif et conforme
 }
 
 table departement {
-  code_departement varchar(20) // "DEP-IT", "DEP-HR"
-  nom_departement varchar(100) // Nom du département
-  type_departement varchar(30) // "Fonctionnel", "Projet", "Centre de coût"
-  code_centre_cout varchar(20) // Code centre de coût
-  code_localisation varchar(20) // Code localisation
-  code_manager varchar(20) // Code manager (Relation avec Employé)
-  date_creation date // Date de création
-  budget_annuel decimal(12,2) // Budget annuel
-  effectif_approuve integer // Effectif approuvé
-  effectif_actuel integer // Effectif actuel
-
-  // STRUCTURE HIÉRARCHIQUE
-  code_departement_parent varchar(20) // Code département parent
-  niveau_hierarchique integer // Niveau hiérarchique
+  code_departement varchar(20)    // ex: DEP-IT, DEP-HR
+  nom_departement varchar(100)    // nom complet
+  type_departement varchar(30)    // fonctionnel, projet, etc.
+  code_centre_cout varchar(20)    // code centre coût
+  code_localisation varchar(20)   // lieu géo
+  code_manager varchar(20)        // responsable dépt
+  date_creation date              // date création
+  budget_annuel decimal(12,2)     // budget annuel
+  effectif_approuve integer       // headcount approuvé
+  effectif_actuel integer         // taille réelle
+  
+  // hiérarchie
+  code_departement_parent varchar(20) // dépt parent
+  niveau_hierarchique integer     // niveau dans l'arbre
 }
 
 table poste {
-  code_poste varchar(20) // "JOB-DEV-001"
-  intitule_poste varchar(100) // Intitulé du poste
-  famille_metier varchar(50) // "Technique", "Administratif", "Managerial"
-  grade_poste varchar(10) // "G7", "G8" (Niveau de classification)
-  categorie_eeo varchar(10) // Catégorie EEO (Égalité des chances)
-
-  // GRILLE SALARIALE (RÈGLE MÉTIER)
-  salaire_minimum decimal(10,2) // Salaire minimum
-  salaire_median decimal(10,2) // Salaire médian
-  salaire_maximum decimal(10,2) // Salaire maximum
-  devise varchar(5) // "USD", "EUR", "GBP" (Devise)
-
-  // EXIGENCES
-  annees_experience_requises integer // Années d'expérience requises
-  niveau_education varchar(50) // Niveau d'éducation requis
-  certifications_requises text // Certifications requises (attribut multivalué)
+  code_poste varchar(20)          // JOB-DEV-001
+  intitule_poste varchar(100)     // intitulé officiel
+  famille_metier varchar(50)      // technique, admin, etc.
+  grade_poste varchar(10)         // grade G7, G8
+  categorie_eeo varchar(10)       // classif EEO
+  
+  // fourchettes salariales
+  salaire_minimum decimal(10,2)   // plancher
+  salaire_median decimal(10,2)    // médian
+  salaire_maximum decimal(10,2)   // plafond
+  devise varchar(5)               // EUR, USD, etc.
+  
+  // prérequis
+  annees_experience_requises integer // expérience requise
+  niveau_education varchar(50)    // niveau études
+  certifications_requises text    // certs obligatoires
 }
 
 table paie {
-  id_paie varchar(30) // "PAY-2024-01-EMP001"
-  code_employe varchar(20) // Code employé (Relation)
-  periode_debut date // Début période
-  periode_fin date // Fin période
-  date_paiement date // Date de paiement
-
-  // GAINS (MCD : AGGRÉGATION DES ÉLÉMENTS DE PAIE)
-  salaire_base decimal(10,2) // Salaire de base
-  allocation_logement decimal(10,2) // Allocation logement
-  allocation_transport decimal(10,2) // Allocation transport
-  heures_supplementaires decimal(10,2) // Heures supplémentaires
-  prime_performance decimal(10,2) // Prime performance
-  commission decimal(10,2) // Commission
-  autres_allocations decimal(10,2) // Autres allocations
-  total_gains decimal(10,2) // Total gains
-
-  // DÉDUCTIONS (MCD : AGGRÉGATION)
-  impot_revenu decimal(10,2) // Impôt sur le revenu
-  securite_sociale_employe decimal(10,2) // Sécurité sociale employé
-  securite_sociale_employeur decimal(10,2) // Sécurité sociale employeur
-  assurance_sante decimal(10,2) // Assurance santé
-  cotisation_retraite decimal(10,2) // Cotisation retraite
-  retenues_prets decimal(10,2) // Retenues prêts
-  autres_deductions decimal(10,2) // Autres déductions
-  total_deductions decimal(10,2) // Total déductions
-
-  // SALAIRE NET (ATTRIBUT DÉRIVÉ - RÈGLE MÉTIER)
-  salaire_net decimal(10,2) // Salaire net
-
-  // DÉTAILS PAIEMENT
-  mode_paiement varchar(20) // "Virement", "Espèces", "Chèque"
-  numero_compte_bancaire varchar(30) // Numéro compte bancaire
-  nom_banque varchar(50) // Nom banque
-  statut_paiement varchar(20) // "En attente", "Payé", "Échoué"
-
-  // CONFORMITÉ
-  numero_certificat_fiscal varchar(30) // Numéro certificat fiscal
-  declaration_fiscale_deposee boolean // Déclaration fiscale déposée (0/1)
+  id_paie varchar(30)             // PAY-2024-01-EMP001
+  code_employe varchar(20)        // employé concerné
+  periode_debut date              // début période
+  periode_fin date                // fin période
+  date_paiement date              // date versement
+  
+  // section revenus
+  salaire_base decimal(10,2)      // salaire fixe
+  allocation_logement decimal(10,2) // complément logement
+  allocation_transport decimal(10,2) // transport
+  heures_supplementaires decimal(10,2) // heures sup
+  prime_performance decimal(10,2) // prime perf
+  commission decimal(10,2)        // commissions
+  autres_allocations decimal(10,2) // divers
+  total_gains decimal(10,2)       // total brut
+  
+  // section retenues
+  impot_revenu decimal(10,2)      // impôt sur revenu
+  cotisation_cnss_employe decimal(10,2) // part salarié
+  cotisation_cnss_employeur decimal(10,2) // part employeur
+  assurance_sante_AMO decimal(10,2) // santé
+  cotisation_retraite decimal(10,2) // retraite CIMR
+  retenues_prets decimal(10,2)    // prélèvements prêts
+  autres_deductions decimal(10,2) // autres
+  total_deductions decimal(10,2)  // total retenues
+  
+  // net
+  salaire_net decimal(10,2)       // net à payer
+  
+  // infos paiement
+  mode_paiement varchar(20)       // virement, chèque
+  numero_compte_bancaire varchar(30) // compte bancaire
+  nom_banque varchar(50)          // banque
+  statut_paiement varchar(20)     // payé, en attente
+  
+  // fiscal
+  numero_certificat_fiscal varchar(30) // certif fiscal
+  declaration_fiscale_deposee boolean  // déclaration faite
 }
 
 table pointage {
-  id_pointage varchar(30) // "ATT-2024-01-01-EMP001"
-  code_employe varchar(20) // Code employé
-  date date // Date du pointage
-
-  // SUIVI DU TEMPS
-  heure_debut_prevue timestamp // Heure début prévue
-  heure_fin_prevue timestamp // Heure fin prévue
-  heure_debut_reelle timestamp // Heure début réelle
-  heure_fin_reelle timestamp // Heure fin réelle
-
-  // CALCULS (RÈGLES MÉTIER)
-  heures_programmees decimal(4,2) // Heures programmées
-  heures_reelles decimal(4,2) // Heures réelles
-  heures_normales decimal(4,2) // Heures normales
-  heures_supplementaires decimal(4,2) // Heures supplémentaires
-  heures_nuit decimal(4,2) // Heures de nuit
-  heures_jours_feries decimal(4,2) // Heures jours fériés
-
-  // STATUT
-  statut_presence varchar(20) // "Présent", "Absent", "Retard", "Demi-journée"
-  code_shift varchar(20) // "Matin", "Soir", "Nuit"
-  statut_approbation varchar(20) // "En attente", "Approuvé", "Rejeté"
-  code_approbateur varchar(20) // Code approbateur (Relation)
-
-  // NOTES
-  remarques varchar(200) // Remarques
+  id_pointage varchar(30)         // ATT-2024-01-01-EMP001
+  code_employe varchar(20)        // employé
+  date date                       // jour concerné
+  
+  // horaires
+  heure_debut_prevue timestamp    // début prévu
+  heure_fin_prevue timestamp      // fin prévu
+  heure_debut_reelle timestamp    // début réel
+  heure_fin_reelle timestamp      // fin réel
+  
+  // calculs temps
+  heures_programmees decimal(4,2) // heures prévues
+  heures_reelles decimal(4,2)     // heures faites
+  heures_normales decimal(4,2)    // heures normales
+  heures_supplementaires decimal(4,2) // heures sup
+  heures_nuit decimal(4,2)        // nuit
+  heures_jours_feries decimal(4,2) // fériés
+  
+  // statuts
+  statut_presence varchar(20)     // présent, absent
+  code_shift varchar(20)          // matin, soir, nuit
+  statut_approbation varchar(20)  // approuvé ou non
+  code_approbateur varchar(20)    // qui a approuvé
+  
+  remarques varchar(200)          // notes éventuelles
 }
 
 table conge {
-  id_conge varchar(30) // "LVE-2024-EMP001-001"
-  code_employe varchar(20) // Code employé
-  type_conge varchar(30) // "Annuel", "Maladie", "Maternité", "Non payé"
-  date_debut date // Date début
-  date_fin date // Date fin
-  total_jours decimal(5,2) // Total jours
-
-  // ÉTATS WORKFLOW (PROCESSUS MCT)
-  statut_demande varchar(20) // "Brouillon", "Soumis", "Approuvé", "Rejeté"
-  date_demande date // Date demande
-  date_approbation date // Date approbation
-  code_approbateur varchar(20) // Code approbateur
-
-  // RÈGLES MÉTIER
-  jours_deduits decimal(5,2) // Jours déduits
-  chemin_document_justificatif varchar(200) // Chemin document justificatif
-  est_medical boolean // Congé maladie (0/1)
-  numero_certificat_medical varchar(30) // Numéro certificat médical
-
-  // RELATION AVEC PAIE
-  est_conge_paye boolean // Congé payé (0/1)
+  id_conge varchar(30)            // LVE-2024-EMP001-001
+  code_employe varchar(20)        // demandeur
+  type_conge varchar(30)          // annuel, maladie, etc.
+  date_debut date                 // début congé
+  date_fin date                   // fin congé
+  total_jours decimal(5,2)        // nombre jours
+  
+  // workflow
+  statut_demande varchar(20)      // brouillon, soumis...
+  date_demande date               // quand demandé
+  date_approbation date           // quand approuvé
+  code_approbateur varchar(20)    // approbateur
+  
+  // gestion
+  jours_deduits decimal(5,2)      // jours décomptés
+  chemin_document_justificatif varchar(200) // justificatif
+  est_medical boolean             // congé maladie ?
+  numero_certificat_medical varchar(30) // no certif médical
+  
+  // lien paie
+  est_conge_paye boolean          // payé ou non
 }
 
 table contrat {
-  id_contrat varchar(30) // "CNT-EMP001-2024"
-  code_employe varchar(20) // Code employé
-  type_contrat varchar(30) // "CDI", "CDD", "Période d'essai"
-  date_debut date // Date début
-  date_fin date // Date fin
-  date_signature date // Date signature
-
-  // CONDITIONS
-  salaire_base decimal(10,2) // Salaire de base
-  devise_salaire varchar(5) // Devise du salaire
-  heures_par_semaine integer // Heures par semaine
-  periode_essai_jours integer // Jours période d'essai
-  preavis_jours integer // Jours préavis
-
-  // AVANTAGES (MCD : COMPOSITION)
-  assurance_sante boolean // Assurance santé (0/1)
-  retraite boolean // Retraite (0/1)
-  stock_options boolean // Actions (0/1)
-  jours_conges_annuels decimal(5,2) // Jours congés annuels
-  jours_conges_maladie decimal(5,2) // Jours congés maladie
-
-  // DOCUMENTS
-  chemin_contrat varchar(200) // Chemin contrat
-  chemin_copie_signee varchar(200) // Chemin copie signée
-  signature_numerique boolean // Signature numérique (0/1)
+  id_contrat varchar(30)          // CNT-EMP001-2024
+  code_employe varchar(20)        // signataire
+  type_contrat varchar(30)        // CDI, CDD, etc.
+  date_debut date                 // début contrat
+  date_fin date                   // fin si CDD
+  date_signature date             // date signature
+  
+  // rémunération
+  salaire_base decimal(10,2)      // salaire annuel/mensuel
+  devise_salaire varchar(5)       // devise
+  heures_par_semaine integer      // heures semaine
+  periode_essai_jours integer     // jours période essai
+  preavis_jours integer           // jours préavis
+  
+  // avantages
+  assurance_sante boolean         // oui/non
+  retraite boolean                // oui/non
+  stock_options boolean           // oui/non
+  jours_conges_annuels decimal(5,2) // congés annuels
+  jours_conges_maladie decimal(5,2) // congés maladie
+  
+  // documents
+  chemin_contrat varchar(200)     // chemin fichier
+  chemin_copie_signee varchar(200) // copie signée
+  signature_numerique boolean     // signé numérique
 }
 
 table configuration_fiscale {
-  code_pays varchar(5) // "US", "UK", "FR", "DE"
-  annee_fiscale integer // Année fiscale
+  code_pays varchar(5)            // US, FR, MA, etc.
+  annee_fiscale integer           // année
+  
+  // tranches
+  brackets json                   // tableau des tranches
+  nombre_tranches integer         // nb de tranches
+  
+  // allocations
+  allocation_personnelle decimal(10,2) // perso
+  allocation_marie decimal(10,2)  // marié
+  allocation_personne_charge decimal(10,2) // par charge
+  
+  // sécu sociale
+  taux_employe decimal(5,4)       // taux salarié
+  taux_employeur decimal(5,4)     // taux employeur
+  plafond_cotisation decimal(10,2) // plafond
+  
+  // déclaration
+  code_formulaire_fiscal varchar(20) // formulaire
+  date_limite_declaration date    // deadline
+}
 
-  // TRANCHES FISCALES (MCD : ATTRIBUT MULTIVALUÉ)
-  // -- Tableau des tranches : plafonds, taux, montant_fixe
-  // -- Format JSON ou table séparée
-  brackets json // Tableau des tranches (min_revenu, max_revenu, taux_imposition, montant_fixe)
-  nombre_tranches integer // Nombre de tranches
+// les autres tables avec le même style...
+table competence {
+  code_competence varchar(20)     // COMP-JAVA-01
+  nom_competence varchar(100)     // java spring boot
+  categorie varchar(50)           // technique
+  niveau varchar(20)              // débutant, intermédiaire...
+  date_certification date         // date certification
+  organisme_certificateur varchar(100) // qui a certifié
+  date_expiration date            // date expiration
+  duree_validite_mois integer     // durée validité
+}
 
-  // ALLOCATIONS
-  allocation_personnelle decimal(10,2) // Allocation personnelle
-  allocation_marie decimal(10,2) // Allocation marié
-  allocation_personne_charge decimal(10,2) // Allocation personne à charge
+table formation {
+  id_formation varchar(30)        // FORM-2024-001
+  intitule_formation varchar(200) // titre formation
+  type_formation varchar(50)      // interne, externe
+  date_debut date                 // date début
+  date_fin date                   // date fin
+  duree_heures integer            // durée heures
+  cout decimal(10,2)              // coût
+  prestataire varchar(100)        // fournisseur
+  lieu varchar(100)               // lieu
+  nb_participants integer         // nombre participants
+  statut varchar(20)              // planifiée, terminée...
+}
 
-  // SÉCURITÉ SOCIALE
-  taux_employe decimal(5,4) // Taux employé
-  taux_employeur decimal(5,4) // Taux employeur
-  plafond_cotisation decimal(10,2) // Plafond cotisation
+// tables de relation
+table travaille_dans {
+  code_employe varchar(20)        // employé
+  code_departement varchar(20)    // département
+  date_affectation date           // date affectation
+  type_affectation varchar(30)    // principal, temporaire...
+  pourcentage_allocation decimal(5,2) // % temps
+}
 
-  // DÉCLARATION
-  code_formulaire_fiscal varchar(20) // Code formulaire fiscal
-  date_limite_declaration date // Date limite déclaration
+table occupe_poste {
+  code_employe varchar(20)        // employé
+  code_poste varchar(20)          // poste
+  date_effet date                 // date prise poste
+  date_fin date                   // date fin
+  niveau_grade varchar(10)        // grade
+}
+
+table possede_competence {
+  code_employe varchar(20)        // employé
+  code_competence varchar(20)     // compétence
+  niveau_maitrise varchar(20)     // débutant, expert...
+  date_certification date         // quand certifié
+  certifie_par varchar(50)        // par qui
 }
