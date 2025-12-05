@@ -39,6 +39,9 @@ typedef struct {
     char emergency_contact_phone[20];
     char emergency_contact_relation[30];
 
+    // Business Attributes (MCD Relationships)
+    
+
 
 
 
