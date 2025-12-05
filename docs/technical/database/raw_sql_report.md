@@ -9,7 +9,7 @@
   - JSONB pour les configurations flexibles
   - Contraintes CHECK complexes pour la validation légale
 
----
+--- 
 
 ## Architecture des Tables
 
@@ -89,7 +89,7 @@ CASE
     WHEN revenu_imposable <= 80000 THEN (revenu_imposable * 0.30) - 14000
     WHEN revenu_imposable <= 120000 THEN (revenu_imposable * 0.34) - 17200
     WHEN revenu_imposable > 120000 THEN (revenu_imposable * 0.38) - 22000
-END AS Impot_Brut_Annuel
+END 
 ```
 
 ---
@@ -392,3 +392,8 @@ WHERE annee_applicable = 2025;
 -  Avocat spécialisé droit du travail
 -  Conseiller CNSS pour interprétations
 
+---
+
+**Document généré le** : 2025  
+**Version** : 2.0  
+**Conformité** : Code du Travail Marocain, CNSS, AMO, IGR
