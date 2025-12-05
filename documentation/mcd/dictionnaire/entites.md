@@ -55,7 +55,7 @@
 - **approuvee_par** : varchar(20) - Approuvé par
 - **date_approbation** : date - Date approbation
 - **date_creation** : timestamp - Date création
-- **commentaires** : text - Commentaires
+- **commentaires** : text - Commentaires 
 
 ## departement
 - **code_departement** (PK) : varchar(20) - Code département (ex: DEP-IT)
