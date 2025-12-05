@@ -351,12 +351,12 @@ CREATE TABLE fiche_paie (
     -- Calcul IGR selon barème progressif
     igr_calculé DECIMAL(10,2) GENERATED ALWAYS AS (
         CASE
-            WHEN revenu_imposable <= 5000 THEN 0
-            WHEN revenu_imposable <= 16667 THEN ROUND((revenu_imposable - 5000) * 0.10, 2)
-            WHEN revenu_imposable <= 41667 THEN ROUND(1166.70 + (revenu_imposable - 16667) * 0.20, 2)
-            WHEN revenu_imposable <= 66667 THEN ROUND(6166.70 + (revenu_imposable - 41667) * 0.30, 2)
-            WHEN revenu_imposable <= 150000 THEN ROUND(13666.70 + (revenu_imposable - 66667) * 0.34, 2)
-            ELSE ROUND(42000 + (revenu_imposable - 150000) * 0.38, 2)
+            WHEN revenu_imposable <= 30000 THEN 0
+            WHEN revenu_imposable <= 50000 THEN ROUND((revenu_imposable - 30000) * 0.10, 2) -- ROUND function to ensure that the value rendred is decimal with 2 apres virgule
+            WHEN revenu_imposable <= 60000 THEN ROUND(2000.00 + (revenu_imposable - 8000) * 0.20, 2)
+            WHEN revenu_imposable <= 80000 THEN ROUND(4000.00 + (revenu_imposable - 14000) * 0.30, 2)
+            WHEN revenu_imposable <= 120000 THEN ROUND(10000.00 + (revenu_imposable - 17200) * 0.34, 2)
+            ELSE ROUND(23600.00 + (revenu_imposable - 22000) * 0.38, 2)
         END
     ) STORED,
     
