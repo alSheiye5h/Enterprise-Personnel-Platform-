@@ -1,0 +1,118 @@
+# À insérer dans la section fichiers
+merise-hr-nexus/                 # 5,000+ fichiers, 200+ dossiers
+├── src/                         # 2,500 fichiers C (.c/.h)
+│   ├── core/                    # Noyau système (500 fichiers)
+│   │   ├── database/           # Gestion BDD (150 fichiers)
+│   │   │   ├── btree/         # Arbre B+ (50 fichiers)
+│   │   │   ├── hash/          # Tables de hachage (30)
+│   │   │   ├── cache/         # Cache mémoire (25)
+│   │   │   └── transaction/   # Transactions ACID (45)
+│   │   ├── security/           # Sécurité (80 fichiers)
+│   │   │   ├── encryption/    # AES-256, RSA (30)
+│   │   │   ├── auth/          # Authentification (25)
+│   │   │   └── audit/         # Audit trail (25)
+│   │   └── utils/             # Utilitaires (120 fichiers)
+│   ├── modules/                # Modules métier (1,200 fichiers)
+│   │   ├── employee/          # Module employé (300 fichiers)
+│   │   │   ├── crud/         # CRUD employés (80)
+│   │   │   ├── search/       # Recherche (60)
+│   │   │   ├── import/       # Import CSV/Excel (80)
+│   │   │   └── export/       # Export rapports (80)
+│   │   ├── payroll/           # Module paie (350 fichiers)
+│   │   │   ├── calculation/  # Calcul salaires (100)
+│   │   │   ├── tax/          # Calcul taxes (80)
+│   │   │   ├── slip/         # Génération bulletins (90)
+│   │   │   └── declaration/  # Déclarations sociales (80)
+│   │   ├── attendance/        # Présence (250 fichiers)
+│   │   │   ├── tracking/     # Suivi temps (80)
+│   │   │   ├── schedule/     # Planning (90)
+│   │   │   └── overtime/     # Heures supp (80)
+│   │   └── leave/            # Congés (300 fichiers)
+│   │       ├── request/      # Demandes (100)
+│   │       ├── approval/     # Approbations (100)
+│   │       └── balance/      # Soldes (100)
+│   └── interfaces/            # Interfaces (800 fichiers)
+│       ├── cli/              # CLI admin (400 fichiers)
+│       │   ├── commands/     # Commandes (200)
+│       │   ├── menus/        # Menus interactifs (100)
+│       │   └── help/         # Système d'aide (100)
+│       └── web/              # Portail web (400 fichiers)
+│           ├── api/          # API REST (150)
+│           ├── frontend/     # Interface HTML (150)
+│           └── auth/         # Authentification web (100)
+├── data/                       # Données système
+│   ├── master/                # Données maîtres (50 fichiers)
+│   │   ├── employees.dat     # 10,000 employés (10MB)
+│   │   ├── departments.dat   # 50 départements (50KB)
+│   │   ├── jobs.dat          # 200 postes (100KB)
+│   │   └── contracts.dat     # 10,000 contrats (20MB)
+│   ├── transactions/          # Transactions (100+ fichiers/mois)
+│   │   ├── payroll/          # Paie mensuelle
+│   │   │   ├── 2024/        # Archives par année
+│   │   │   │   ├── 01_january.dat   # 10MB
+│   │   │   │   ├── 02_february.dat  # 10MB
+│   │   │   │   └── ...              # 120MB/an
+│   │   │   └── current.dat   # Paie en cours (10MB)
+│   │   ├── attendance/       # Présence
+│   │   │   ├── 2024/        # Archives
+│   │   │   │   ├── 01_january/     # 31 fichiers
+│   │   │   │   └── ...             # 365 fichiers/an
+│   │   │   └── today.dat    # Aujourd'hui
+│   │   └── leaves/          # Congés
+│   │       ├── requests.dat # Demandes (5MB)
+│   │       └── balances.dat # Soldes (2MB)
+│   ├── indexes/             # Indexes (50+ fichiers)
+│   │   ├── employee/        # Index employés
+│   │   │   ├── by_id.idx    # B+Tree (2MB)
+│   │   │   ├── by_name.idx  # B+Tree (3MB)
+│   │   │   └── by_dept.idx  # Hash index (1MB)
+│   │   ├── payroll/         # Index paie
+│   │   │   ├── by_employee.idx  # B+Tree (4MB)
+│   │   │   └── by_date.idx      # B+Tree (3MB)
+│   │   └── attendance/      # Index présence
+│   │       └── by_date_employee.idx  # Composite (5MB)
+│   ├── audit/               # Audit (fichiers journaux)
+│   │   ├── security.log     # Logs sécurité (rotation quotidienne)
+│   │   ├── changes.log      # Modifications données (10MB/jour)
+│   │   ├── access.log       # Accès (5MB/jour)
+│   │   └── transactions.log # Transactions (20MB/jour)
+│   ├── backup/              # Sauvegardes
+│   │   ├── full/            # Complètes hebdomadaires (1GB)
+│   │   ├── incremental/     # Incrémentielles quotidiennes (100MB/jour)
+│   │   └── logs/            # Logs backup
+│   └── temp/                # Temporaires
+│       ├── cache/           # Cache (500MB max)
+│       ├── uploads/         # Téléchargements
+│       └── processing/      # Traitement en cours
+├── tests/                    # Tests (1,000+ fichiers)
+│   ├── unit/               # Tests unitaires (600 fichiers)
+│   │   ├── employee/       # Tests employé (150)
+│   │   ├── payroll/        # Tests paie (200)
+│   │   ├── attendance/     # Tests présence (150)
+│   │   └── leave/          # Tests congés (100)
+│   ├── integration/        # Tests intégration (300 fichiers)
+│   │   ├── workflows/      # Tests workflows (150)
+│   │   ├── api/            # Tests API (100)
+│   │   └── performance/    # Tests performance (50)
+│   └── data/               # Données de test (100 fichiers)
+│       ├── employees.csv   # 1,000 employés test
+│       ├── payroll.csv     # Données paie test
+│       └── scenarios/      # Scénarios de test
+├── docs/                    # Documentation (500+ fichiers)
+│   ├── technical/          # Technique (200 fichiers)
+│   │   ├── api/            # Documentation API
+│   │   ├── database/       # Documentation BDD
+│   │   └── deployment/     # Déploiement
+│   ├── user/               # Utilisateur (200 fichiers)
+│   │   ├── admin/          # Guide administrateur
+│   │   ├── hr/             # Guide RH
+│   │   └── employee/       # Guide employé
+│   └── project/            # Projet (100 fichiers)
+│       ├── specifications/ # Spécifications
+│       ├── meetings/       # Comptes-rendus
+│       └── planning/       # Planning
+└── scripts/                # Scripts (200+ fichiers)
+    ├── deployment/         # Déploiement (50)
+    ├── maintenance/        # Maintenance (100)
+    ├── monitoring/         # Monitoring (30)
+    └── backup/             # Sauvegarde (20)
