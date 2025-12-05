@@ -83,12 +83,12 @@ solde_conges = jours_conges_acquis - jours_conges_prise
 #### Barème IR Automatique :
 ```sql
 CASE
-    WHEN revenu_imposable <= 30000 THEN 0.00
-    WHEN revenu_imposable <= 50000 THEN (revenu_imposable * 0.10) - 3000
-    WHEN revenu_imposable <= 60000 THEN (revenu_imposable * 0.20) - 8000
-    WHEN revenu_imposable <= 80000 THEN (revenu_imposable * 0.30) - 14000
-    WHEN revenu_imposable <= 120000 THEN (revenu_imposable * 0.34) - 17200
-    WHEN revenu_imposable > 120000 THEN (revenu_imposable * 0.38) - 22000
+    WHEN revenu_imposable <= 2500 THEN 0
+    WHEN revenu_imposable <= 4166.66 THEN ROUND((revenu_imposable - 2500) * 0.10, 2) -- ROUND function to ensure that the value rendred is decimal with 2 apres virgule
+    WHEN revenu_imposable <= 5000 THEN ROUND(166.67 + (revenu_imposable - 4166.67) * 0.20, 2)
+    WHEN revenu_imposable <= 6666.66 THEN ROUND(333.33 + (revenu_imposable - 5000.00) * 0.30, 2)
+    WHEN revenu_imposable <= 10000 THEN ROUND(833.33 + (revenu_imposable - 6666.67) * 0.34, 2)
+    ELSE ROUND(1966.67 + (revenu_imposable - 10000.00) * 0.38, 2)
 END 
 ```
 

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cahier des Charges - MERISE HR Nexus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <!-- for icons -->
+    <link rel="stylesheet" href="./style_cc.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-file-contract"></i> CAHIER DES CHARGES</h1>
+            <div class="subtitle">MERISE HR Nexus - Système de Gestion RH & Paie</div>
+            <div class="badges">
+                <div class="badge"><i class="fas fa-method"></i> Méthodologie MERISE</div>
+                <div class="badge"><i class="fas fa-code"></i> Langage C</div>
+                <div class="badge"><i class="fas fa-database"></i> Système de Fichiers</div>
+                <div class="badge"><i class="fas fa-shield-alt"></i> Entreprise Grade</div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="download-section">
+                <h2><i class="fas fa-download"></i> TÉLÉCHARGER LE CAHIER DES CHARGES COMPLET</h2>
+                <p>Téléchargez le document complet en un seul fichier</p>
+                <a href="#" class="download-btn" onclick="downloadAll()">
+                    <i class="fas fa-file-archive"></i> TÉLÉCHARGER TOUT (ZIP)
+                </a>
+                <p>Ou téléchargez par section :</p>
+                <div class="format-options">
+                    <a href="#" class="format-btn" onclick="downloadPDF()"><i class="fas fa-file-pdf"></i> PDF Complet</a>
+                    <a href="#" class="format-btn" onclick="downloadDOC()"><i class="fas fa-file-word"></i> Word Document</a>
+                    <a href="#" class="format-btn" onclick="downloadMD()"><i class="fas fa-file-alt"></i> Markdown</a>
+                </div>
+            </div>
+            
+            <div class="toc">
+                <h2><i class="fas fa-list"></i> TABLE DES MATIÈRES</h2>
+                <ul>
+                    <li><a href="#intro"><i class="fas fa-play-circle"></i> 1. INTRODUCTION</a></li>
+                    <li><a href="#contexte"><i class="fas fa-bullseye"></i> 2. CONTEXTE & OBJECTIFS</a></li>
+                    <li><a href="#merise"><i class="fas fa-project-diagram"></i> 3. MÉTHODOLOGIE MERISE</a></li>
+                    <li><a href="#exigences"><i class="fas fa-tasks"></i> 4. EXIGENCES FONCTIONNELLES</a></li>
+                    <li><a href="#technique"><i class="fas fa-cogs"></i> 5. EXIGENCES TECHNIQUES</a></li>
+                    <li><a href="#mcd"><i class="fas fa-sitemap"></i> 6. MODÈLE CONCEPTUEL (MCD)</a></li>
+                    <li><a href="#mct"><i class="fas fa-project-diagram"></i> 7. MODÈLE CONCEPTUEL DES TRAITEMENTS (MCT)</a></li>
+                    <li><a href="#mld"><i class="fas fa-database"></i> 8. MODÈLE LOGIQUE (MLD)</a></li>
+                    <li><a href="#mpd"><i class="fas fa-hdd"></i> 9. MODÈLE PHYSIQUE (MPD)</a></li>
+                    <li><a href="#architecture"><i class="fas fa-layer-group"></i> 10. ARCHITECTURE</a></li>
+                    <li><a href="#fichiers"><i class="fas fa-folder-tree"></i> 11. STRUCTURE DES FICHIERS</a></li>
+                    <li><a href="#plan"><i class="fas fa-calendar-alt"></i> 12. PLAN DE DÉVELOPPEMENT</a></li>
+                    <li><a href="#livrables"><i class="fas fa-box"></i> 13. LIVRABLES</a></li>
+                </ul>
+            </div>
+            
+            <!-- Section 1: Introduction -->
+            <div class="section" id="intro">
+                <h2><i class="fas fa-play-circle"></i> 1. INTRODUCTION</h2>
+                <p><strong>Projet :</strong> MERISE HR Nexus - Système de Gestion RH & Paie</p>
+                <p><strong>Référence :</strong> HR-MERISE-2024-001</p>
+                <p><strong>Version :</strong> 1.0.0</p>
+                <p><strong>Date :</strong> Janvier 2024</p>
+                
+                <div class="highlight">
+                    <h3><i class="fas fa-info-circle"></i> Présentation du Projet</h3>
+                    <p>Le projet <strong>MERISE HR Nexus</strong> vise à développer un système intégré de gestion des ressources humaines et de la paie en appliquant rigoureusement la méthodologie <strong>MERISE</strong>. Ce système doit permettre la gestion complète du cycle de vie des employés avec un module de paie automatisé et conforme aux réglementations.</p>
+                </div>
+                
+                <h3><i class="fas fa-bullseye"></i> Portée du Projet</h3>
+                <ul>
+                    <li>Gestion des données des employés</li>
+                    <li>Traitement automatique de la paie</li>
+                    <li>Gestion des temps et présences</li>
+                    <li>Gestion des congés et absences</li>
+                    <li>Reporting et conformité réglementaire</li>
+                    <li>Interface administrateur et portail employé</li>
+                </ul>
+            </div>
+            
+            <!-- Section 2: Contexte et Objectifs -->
+            <div class="section" id="contexte">
+                <h2><i class="fas fa-bullseye"></i> 2. CONTEXTE & OBJECTIFS</h2>
+                
+                <h3><i class="fas fa-history"></i> Contexte Actuel</h3>
+                <p>L'entreprise dispose actuellement de systèmes RH dispersés avec traitement manuel de la paie, absence de traçabilité et non-conformité avec les nouvelles réglementations.</p>
+                
+                <h3><i class="fas fa-chart-line"></i> Objectifs Stratégiques</h3>
+                <div class="merise-grid">
+                    <div class="merise-card">
+                        <div class="icon"><i class="fas fa-database"></i></div>
+                        <h3>Centraliser</h3>
+                        <p>Toutes les données RH dans un système unique</p>
+                    </div>
+                    <div class="merise-card">
+                        <div class="icon"><i class="fas fa-robot"></i></div>
+                        <h3>Automatiser</h3>
+                        <p>Les processus de paie et gestion des temps</p>
+                    </div>
+                    <div class="merise-card">
+                        <div class="icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3>Garantir</h3>
+                        <p>La conformité légale et fiscale</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 3: Méthodologie MERISE -->
+            <div class="section" id="merise">
+                <h2><i class="fas fa-project-diagram"></i> 3. MÉTHODOLOGIE MERISE</h2>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>CYCLE ABSTRAIT</h4>
+                            <p><strong>MCD</strong> - Modèle Conceptuel de Données</p>
+                            <p><strong>MCT</strong> - Modèle Conceptuel de Traitements</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>CYCLE DES DÉCISIONS</h4>
+                            <p><strong>MLD</strong> - Modèle Logique de Données</p>
+                            <p><strong>MOT</strong> - Modèle Organisationnel de Traitements</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>CYCLE PHYSIQUE</h4>
+                            <p><strong>MPD</strong> - Modèle Physique de Données</p>
+                            <p><strong>MOP</strong> - Modèle Opérationnel de Traitements</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="merise-grid">
+                    <div class="merise-card mcd">
+                        <div class="icon"><i class="fas fa-sitemap"></i></div>
+                        <h3>MCD</h3>
+                        <p>Modèle Conceptuel de Données</p>
+                        <p><strong>Entités et relations</strong></p>
+                        <p><em>Quoi ?</em></p>
+                    </div>
+                    <div class="merise-card mct">
+                        <div class="icon"><i class="fas fa-project-diagram"></i></div>
+                        <h3>MCT</h3>
+                        <p>Modèle Conceptuel de Traitements</p>
+                        <p><strong>Processus métier</strong></p>
+                        <p><em>Comment ?</em></p>
+                    </div>
+                    <div class="merise-card mld">
+                        <div class="icon"><i class="fas fa-database"></i></div>
+                        <h3>MLD</h3>
+                        <p>Modèle Logique de Données</p>
+                        <p><strong>Schéma relationnel</strong></p>
+                        <p><em>Structure ?</em></p>
+                    </div>
+                    <div class="merise-card mpd">
+                        <div class="icon"><i class="fas fa-hdd"></i></div>
+                        <h3>MPD</h3>
+                        <p>Modèle Physique de Données</p>
+                        <p><strong>Implémentation physique</strong></p>
+                        <p><em>Avec quoi ?</em></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 4: Exigences -->
+            <div class="section" id="exigences">
+                <h2><i class="fas fa-tasks"></i> 4. EXIGENCES FONCTIONNELLES</h2>
+                
+                <h3><i class="fas fa-users"></i> Gestion des Employés</h3>
+                <ul>
+                    <li><strong>FON-EMP-001</strong>: Gestion du profil employé (CRUD)</li>
+                    <li><strong>FON-EMP-002</strong>: Gestion hiérarchique et organisationnelle</li>
+                    <li><strong>FON-EMP-003</strong>: Gestion des contrats et statuts</li>
+                </ul>
+                
+                <h3><i class="fas fa-money-bill-wave"></i> Gestion de la Paie</h3>
+                <ul>
+                    <li><strong>FON-PAY-001</strong>: Calcul automatique mensuel</li>
+                    <li><strong>FON-PAY-002</strong>: Génération des bulletins (PDF)</li>
+                    <li><strong>FON-PAY-003</strong>: Déclarations sociales automatiques</li>
+                </ul>
+            </div>
+            
+            <!-- Section 6: MCD -->
+            <div class="section" id="mcd">
+                <h2><i class="fas fa-sitemap"></i> 6. MODÈLE CONCEPTUEL (MCD)</h2>
+                
+                <div class="highlight">
+                    <h3><i class="fas fa-download"></i> Livrables MCD à Produire</h3>
+                    <div class="file-structure">
+                        <pre>📁 mcd/
+├── 📄 diagrammes/
+│   ├── mcd_complet.dia
+│   ├── mcd_employe.dia
+│   └── mcd_paie.dia
+├── 📄 dictionnaire/
+│   ├── entites.md
+│   ├── associations.md <span class="descrip-file-structure">[Documente les relations entre entités (1:N, M:N) avec leurs cardinalités et contraintes] (contrainte: must)</span>
+│   └── regles_metier.md <span class="descrip-file-structure">[Spécifie les contraintes métier (ex: "un employé ne peut avoir qu'un contrat actif")]</span>
+└── 📄 validation/
+    ├── check_list.md <span class="descrip-file-structure">[Liste de vérification pour valider la complétude et cohérence du modèle]</span>
+    └── compte_rendu.md <span class="descrip-file-structure">[Rapport détaillé des validations effectuées et des décisions prises]</span></pre>
+                    </div>
+                </div>
+                
+                <h3><i class="fas fa-table"></i> Entités Principales</h3>
+                <table style="width:100%; border-collapse: collapse; margin:20px 0;">
+                    <tr style="background:#667eea; color:white;">
+                        <th style="padding:12px; text-align:left;">Entité</th>
+                        <th style="padding:12px; text-align:left;">Identifiant</th>
+                        <th style="padding:12px; text-align:left;">Attributs Clés</th>
+                    </tr>
+                    <tr style="border-bottom:1px solid #ddd;">
+                        <td style="padding:10px;"><strong>Employé</strong></td>
+                        <td style="padding:10px;">Code Employé</td>
+                        <td style="padding:10px;">Nom, Prénom, Date Naissance, CIN</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid #ddd;">
+                        <td style="padding:10px;"><strong>Département</strong></td>
+                        <td style="padding:10px;">Code Département</td>
+                        <td style="padding:10px;">Nom, Budget, Responsable</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid #ddd;">
+                        <td style="padding:10px;"><strong>Paie</strong></td>
+                        <td style="padding:10px;">ID Paie</td>
+                        <td style="padding:10px;">Période, Salaire Brut, Net, Date Paiement</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- Section 7: MCT -->
+            <div class="section" id="mct">
+                <h2><i class="fas fa-project-diagram"></i> 7. MODÈLE CONCEPTUEL DES TRAITEMENTS (MCT)</h2>
+                
+                <div class="highlight">
+                    <h3><i class="fas fa-download"></i> Livrables MCT à Produire</h3>
+                    <div class="file-structure">
+                        <pre>📁 mct/
+├── 📄 processus/
+│   ├── processus_paie.md
+│   ├── processus_conge.md
+│   └── processus_recrutement.md
+├── 📄 flux/
+│   ├── flux_donnees.md
+│   ├── flux_validation.md
+│   └── flux_erreurs.md
+└── 📄 acteurs/
+    ├── roles.md
+    ├── permissions.md
+    └── interfaces.md</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 8: MLD -->
+            <div class="section" id="mld">
+                <h2><i class="fas fa-database"></i> 8. MODÈLE LOGIQUE (MLD)</h2>
+                
+                <h3><i class="fas fa-code"></i> Exemple de Schéma SQL</h3>
+                <div class="file-structure">
+                    <pre>CREATE TABLE employe (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    code_employe VARCHAR(20) UNIQUE NOT NULL,
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL,
+    date_naissance DATE NOT NULL,
+    nir VARCHAR(15) UNIQUE NOT NULL,
+    id_departement INT NOT NULL,
+    id_poste INT NOT NULL,
+    date_embauche DATE NOT NULL,
+    statut ENUM('ACTIF', 'INACTIF', 'CONGE') DEFAULT 'ACTIF',
+    FOREIGN KEY (id_departement) REFERENCES departement(id)
+);</pre>
+                </div>
+            </div>
+            
+            <!-- Section 9: MPD -->
+            <div class="section" id="mpd">
+                <h2><i class="fas fa-hdd"></i> 9. MODÈLE PHYSIQUE (MPD)</h2>
+                
+                <h3><i class="fas fa-file-code"></i> Structure de Fichier Binaire</h3>
+                <div class="file-structure">
+                    <pre>typedef struct {
+    uint32_t magic;          // 0x4852454D "HREM"
+    uint32_t version;        // Version du format
+    uint64_t created;        // Timestamp création
+    uint32_t record_size;    // Taille d'un enregistrement
+    uint32_t record_count;   // Nombre d'enregistrements
+    uint32_t free_list_head; // Tête de liste libre
+    uint32_t checksum;       // Checksum CRC32
+} EmployeeFileHeader;</pre>
+                </div>
+            </div>
+            
+            <!-- Section 10: Architecture -->
+            <div class="section" id="architecture">
+                <h2><i class="fas fa-layer-group"></i> 10. ARCHITECTURE LOGICIELLE</h2>
+                
+                <div class="highlight">
+                    <h3><i class="fas fa-download"></i> Modules en C à Implémenter</h3>
+                    <div class="file-structure">
+                        <pre>📁 src/
+├── 📁 abstract_cycle/      # MCD + MCT
+├── 📁 decision_cycle/     # MLD + MOT
+├── 📁 physical_cycle/     # MPD + MOP
+├── 📁 modules/           # Modules fonctionnels
+│   ├── employe/
+│   ├── paie/
+│   ├── temps/
+│   └── conges/
+├── 📁 interfaces/        # Interfaces utilisateur
+└── 📁 core/             # Noyau système</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 11: Structure des Fichiers -->
+            <div class="section" id="fichiers">
+                <h2><i class="fas fa-folder-tree"></i> 11. STRUCTURE DES FICHIERS</h2>
+                
+                <h3><i class="fas fa-folder-open"></i> Arborescence Complète du Projet</h3>
+                <div class="file-structure">
+                    <pre>merise-hr-nexus/
+├── 📁 src/                          # Code source (5,000+ fichiers)
+├── 📁 data/                         # Données système
+│   ├── 📁 master/                   # Données maîtres
+│   ├── 📁 transactions/             # Données transactionnelles
+│   ├── 📁 indexes/                  # Indexes B+Tree
+│   ├── 📁 audit/                    # Logs d'audit
+│   ├── 📁 backup/                   # Sauvegardes
+│   └── 📁 temp/                     # Fichiers temporaires
+├── 📁 tests/                        # Tests unitaires/intégration
+├── 📁 docs/                         # Documentation complète
+│   ├── 📁 merise/                   # Documentation MERISE
+│   ├── 📁 technique/                # Documentation technique
+│   ├── 📁 utilisateur/              # Documentation utilisateur
+│   └── 📁 projet/                   # Documentation projet
+└── 📁 scripts/                      # Scripts utilitaires</pre>
+                </div>
+            </div>
+            <div class="merise-card">
+                <h3>Module Employé</h3>
+                <p><strong>Responsable:</strong> Jean Dupont</p>
+                <p><strong>Fonctions:</strong> CRUD employés, import/export, reporting</p>
+                <p><strong>Interfaces:</strong> employe.h (15 fonctions publiques)</p>
+                <p><strong>Dépendances:</strong> database.h, security.h</p>
+            </div>
+            <div class="merise-card">
+                <h3>Module Paie</h3>
+                <p><strong>Responsable:</strong> Marie Martin</p>
+                <p><strong>Fonctions:</strong> Calcul salaires, génération bulletins, déclarations</p>
+                <p><strong>Interfaces:</strong> payroll.h (12 fonctions)</p>
+                <p><strong>Dépendances:</strong> tax.h, social_security.h</p>
+            </div>
+            
+            <!-- Section 12: Plan de Développement -->
+            <div class="section" id="plan">
+                <h2><i class="fas fa-calendar-alt"></i> 12. PLAN DE DÉVELOPPEMENT</h2>
+                
+                <h3><i class="fas fa-road"></i> Roadmap 12 Semaines</h3>
+                <div class="timeline">
+                    <!-- À insérer dans la timeline -->
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>15-28 JANVIER 2024</h4>
+                            <p><strong>Phase 1: Cycle Abstrait</strong></p>
+                            <p><strong>Livrables:</strong></p>
+                            <ul>
+                                <li>MCD complet avec 15 entités</li>
+                                <li>MCT avec 10 processus détaillés</li>
+                                <li>Validation client signée</li>
+                            </ul>
+                            <p><strong>Équipe:</strong> Architecte + Analyste métier</p>
+                            <p><strong>Budget:</strong> 8,000 €</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>29 JANVIER - 11 FÉVRIER</h4>
+                            <p><strong>Phase 2: Cycle des Décisions</strong></p>
+                            <p><strong>Livrables:</strong></p>
+                            <ul>
+                                <li>MLD normalisé (3NF)</li>
+                                <li>Algorithmes de calcul paie</li>
+                                <li>Prototypes d'interface</li>
+                            </ul>
+                            <p><strong>Équipe:</strong> Architecte DB + Développeur senior</p>
+                            <p><strong>Budget:</strong> 12,000 €</p>
+                        </div>
+                    </div>
+                    <!-- 10 phases supplémentaires -->
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>SEMAINES 5-8</h4>
+                            <p><strong>Cycle Physique</strong></p>
+                            <p>• Implémentation MPD<br>• Système de fichiers</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>SEMAINES 9-12</h4>
+                            <p><strong>Implémentation & Tests</strong></p>
+                            <p>• Développement modules<br>• Tests et validation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 13: Livrables -->
+            <div class="section" id="livrables">
+                <h2><i class="fas fa-box"></i> 13. LIVRABLES</h2>
+                <div class="merise-grid">
+                    <div class="merise-card">
+                        <h3>Documentation Technique</h3>
+                        <ul>
+                            <li><strong>Cahier des charges:</strong> PDF, 150 pages</li>
+                            <li><strong>Documentation API:</strong> HTML/PDF, 200 pages</li>
+                            <li><strong>Guide d'installation:</strong> PDF, 50 pages</li>
+                            <li><strong>Schémas de base:</strong> .dia/.drawio, 20 fichiers</li>
+                            <li><strong>Manuel administrateur:</strong> PDF, 100 pages</li>
+                        </ul>
+                    </div>
+                    <div class="merise-card">
+                        <h3>Code Source</h3>
+                        <ul>
+                            <li><strong>Application complète:</strong> 5,000+ fichiers C</li>
+                            <li><strong>Scripts de déploiement:</strong> 200+ fichiers</li>
+                            <li><strong>Tests automatisés:</strong> 1,000+ fichiers</li>
+                            <li><strong>Configurations:</strong> 50+ fichiers</li>
+                            <li><strong>Documentation code:</strong> Doxygen HTML</li>
+                        </ul>
+                    </div>
+                    <div class="merise-card">
+                        <h3>Exécutables</h3>
+                        <ul>
+                            <li><strong>Binaire principal:</strong> hr-system (Linux x64)</li>
+                            <li><strong>Outils d'admin:</strong> 10 utilitaires</li>
+                            <li><strong>Scripts de maintenance:</strong> 50 scripts</li>
+                            <li><strong>Base de données initiale:</strong> 100MB de données test</li>
+                            <li><strong>Images Docker:</strong> hr-system:latest</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="merise-grid">
+                    <div class="merise-card">
+                        <div class="icon"><i class="fas fa-file-alt"></i></div>
+                        <h3>Documentation</h3>
+                        <p>• Cahier des charges complet<br>• Documentation MERISE<br>• Manuel utilisateur</p>
+                    </div>
+                    <div class="merise-card">
+                        <div class="icon"><i class="fas fa-code"></i></div>
+                        <h3>Code Source</h3>
+                        <p>• 5,000+ fichiers C<br>• Makefile complet<br>• Scripts d'installation</p>
+                    </div>
+                    <div class="merise-card">
+                        <div class="icon"><i class="fas fa-check-circle"></i></div>
+                        <h3>Tests</h3>
+                        <p>• Tests unitaires<br>• Tests d'intégration<br>• Tests de performance</p>
+                    </div>
+                    <div class="merise-card">
+                        <div class="icon"><i class="fas fa-cogs"></i></div>
+                        <h3>Exécutable</h3>
+                        <p>• Application compilée<br>• Base de données<br>• Outils d'administration</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bouton de téléchargement final -->
+            <div class="download-section">
+                <h2><i class="fas fa-file-download"></i> PRÊT À TÉLÉCHARGER ?</h2>
+                <p>Cliquez sur le bouton ci-dessous pour télécharger le cahier des charges complet</p>
+                <a href="#" class="download-btn" onclick="downloadAll()">
+                    <i class="fas fa-download"></i> TÉLÉCHARGER TOUT LE CAHIER DES CHARGES
+                </a>
+                <p><small>Format : ZIP contenant tous les fichiers (PDF, DOC, MD, diagrammes)</small></p>
+            </div>
+        </div>
+        
+        <footer>
+            <p><strong>MERISE HR Nexus</strong> - Cahier des Charges Version 1.0.0</p>
+            <p>© 2024 - Tous droits réservés</p>
+            <p style="margin-top:20px; opacity:0.8;">
+                <i class="fas fa-envelope"></i> contact@merise-hr-nexus.com | 
+                <i class="fas fa-phone"></i> +33 1 23 45 67 89
+            </p>
+        </footer>
+    </div>
+    
+    <script src="./src_cc.js"></script>
+</body>
+</html>
