@@ -198,12 +198,12 @@ CREATE TABLE contrat_travail (
         regime_horaire IN ('JOUR', 'NUIT', 'ALTERNANT', 'POSTES')
     ),
     
-    -- === CONGÉS PAYÉS (Art. 234 Code du Travail) ===
+    -- CONGÉS PAYÉS (Art. 234 Code du Travail)
     jours_conges_acquis DECIMAL(5,2) NOT NULL DEFAULT 1.5, -- 1.5 jours/mois travaillé
     jours_conges_prise DECIMAL(5,2) DEFAULT 0,
     solde_conges DECIMAL(5,2) GENERATED ALWAYS AS (jours_conges_acquis - jours_conges_prise) STORED,
     
-    -- === AVANTAGES SOCIAUX ===
+    -- AVANTAGES SOCIAUX
     prime_anciennete BOOLEAN DEFAULT FALSE,
     taux_prime_anciennete DECIMAL(5,2) CHECK (taux_prime_anciennete BETWEEN 0 AND 100),
     assurance_sante BOOLEAN DEFAULT TRUE, -- AMO obligatoire
@@ -212,7 +212,7 @@ CREATE TABLE contrat_travail (
     tickets_restaurant BOOLEAN DEFAULT FALSE,
     valeur_ticket_restaurant DECIMAL(5,2),
     
-    -- === PRÉAVIS (Art. 62 Code du Travail) ===
+    -- PRÉAVIS 
     preavis_depart_jours INTEGER NOT NULL CHECK (
         -- Règle 7 : Préavis minimum selon ancienneté
         preavis_depart_jours >= CASE
@@ -222,26 +222,26 @@ CREATE TABLE contrat_travail (
         END
     ),
     
-    -- === INDEMNITÉS ===
+    -- INDEMNITÉS
     indemnite_licenciement_calcul VARCHAR(50), -- Formule de calcul
     indemnite_preavis_calcul VARCHAR(50),
     
-    -- === DOCUMENTS ===
+    -- DOCUMENTS
     chemin_contrat_pdf VARCHAR(255),
     chemin_annexes VARCHAR(255),
     contrat_bilingue BOOLEAN DEFAULT TRUE, -- Arabe/Français recommandé
     version_contrat INTEGER DEFAULT 1,
     
-    -- === STATUT ===
+    -- STATUT
     statut_contrat VARCHAR(20) NOT NULL DEFAULT 'ACTIF' CHECK (
         statut_contrat IN ('ACTIF', 'SUSPENDU', 'RESILIE', 'ACHEVE', 'RUPTURE')
     ),
     motif_rupture VARCHAR(100),
     
-    -- === MÉTADONNÉES ===
+    -- MÉTADONNÉES 
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     date_modification TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    createur VARCHAR(50),
+    createur VARCHAR(50) REFERENCES employe(code_employe),
     modificateur VARCHAR(50),
     
     -- === CONTRAINTES SPÉCIFIQUES ===
