@@ -348,7 +348,7 @@ CREATE TABLE fiche_paie (
     ) STORED,
     
     -- Calcul IGR selon barème progressif
-    igr_calculé DECIMAL(10,2) GENERATED ALWAYS AS (
+    ir_calculé DECIMAL(10,2) GENERATED ALWAYS AS (
         CASE
             WHEN revenu_imposable <= 2500 THEN 0
             WHEN revenu_imposable <= 4166.67 THEN ROUND((revenu_imposable - 2500) * 0.10, 2) -- ROUND function to ensure that the value rendred is decimal with 2 apres virgule
@@ -364,16 +364,16 @@ CREATE TABLE fiche_paie (
     avance_salaire DECIMAL(10,2) DEFAULT 0,
     autres_retenues DECIMAL(10,2) DEFAULT 0,
     
-    -- === TOTAUX ===
+    -- TOTAUX
     total_cotisations DECIMAL(10,2) GENERATED ALWAYS AS (
-        cotisation_cnss_employe + cotisation_amo_employe + igr_calculé
+        cotisation_cnss_employe + cotisation_amo_employe + ir_calculé
     ) STORED,
     total_a_payer DECIMAL(10,2) GENERATED ALWAYS AS (
         salaire_brut - total_cotisations - retenue_pret - avance_salaire - autres_retenues
     ) STORED,
     net_a_payer DECIMAL(10,2) GENERATED ALWAYS AS (total_a_payer) STORED,
     
-    -- === INFORMATIONS DE PAIEMENT ===
+    -- INFORMATIONS DE PAIEMENT
     mode_paiement VARCHAR(20) NOT NULL CHECK (
         mode_paiement IN ('VIREMENT', 'CHEQUE', 'ESPECES')
     ),
@@ -382,27 +382,27 @@ CREATE TABLE fiche_paie (
         statut_paiement IN ('A_PAYER', 'PAYE', 'ANNULE', 'RETARD')
     ),
     
-    -- === RÉFÉRENCES LÉGALES ===
+    -- RÉFÉRENCES LÉGALES
     numero_bulletin_cnss VARCHAR(30),
     numero_declaration_fiscale VARCHAR(30),
     date_declaration_cnss DATE,
     date_declaration_fiscale DATE,
     
-    -- === VALIDATION ===
-    valide_par VARCHAR(50),
+    -- VALIDATION
+    valide_par VARCHAR(50) REFERENCES employe(code_employe),
     date_validation DATE,
     paiement_effectue_par VARCHAR(50),
     date_paiement_effectif DATE,
     
-    -- === MÉTADONNÉES ===
+    -- MÉTADONNÉES
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
-    -- === CONTRAINTES ===
+    -- CONTRAINTES
     CONSTRAINT chk_periode CHECK (periode_fin > periode_debut),
     CONSTRAINT chk_date_paiement CHECK (date_paiement >= periode_fin),
     CONSTRAINT chk_heures_supp CHECK (
-        heures_supp_25 + heures_supp_50 + heures_supp_100 <= 20 -- Limite mensuelle
+        heures_supp_25 + heures_supp_50 + heures_supp_100 <= 20 -- limite mensuelle
     )
 );
 

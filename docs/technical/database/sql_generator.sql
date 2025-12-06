@@ -303,7 +303,115 @@ CREATE TABLE fiche_paie (
     ),
 
     -- SALLAIRE BRUT
-)
+    salaire_brut DECIMAL(10, 2) GENERATED ALWAYS AS (
+        salaire_base +
+        (heures_supp_25 * (salaire_base/191) * 1.25) +
+        (heures_supp_50 * (salaire_base/191) * 1.50) +
+        (heures_supp_100 * (salaire_base/191) * 2.00) +
+        prime_anciennete + prime_logement + prime_panier + prime_performance +
+        prime_presence + prime_transport + commission + autres_primes +
+        allocation_familiale
+    ) STORED,
+
+    -- ASSIETTE CNSS (plafonnee )
+    assiette_cnss DECIMAL(10,2) GENERATED ALWAYS AS (
+        -- Règle 9 : CNSS plafonnée à 6,000 MAD
+        LEAST(salaire_brut, 6000)
+    ) STORED,
+    
+    -- COTISATIONS CNSS
+    taux_cnss_employe DECIMAL(5,4) DEFAULT 0.0426, -- 4.26%
+    taux_cnss_employeur DECIMAL(5,4) DEFAULT 0.0874, -- 8.74%
+    cotisation_cnss_employe DECIMAL(10,2) GENERATED ALWAYS AS (
+        ROUND(assiette_cnss * taux_cnss_employe, 2)
+    ) STORED,
+    cotisation_cnss_employeur DECIMAL(10,2) GENERATED ALWAYS AS (
+        ROUND(assiette_cnss * taux_cnss_employeur, 2)
+    ) STORED,
+    
+    -- COTISATION AMO 
+    assiette_amo DECIMAL(10,2) GENERATED ALWAYS AS (salaire_brut) STORED,
+    taux_amo_employe DECIMAL(5,4) DEFAULT 0.0226, -- 2.26%
+    taux_amo_employeur DECIMAL(5,4) DEFAULT 0.0339, -- 3.39%
+    cotisation_amo_employe DECIMAL(10,2) GENERATED ALWAYS AS (
+        ROUND(assiette_amo * taux_amo_employe, 2)
+    ) STORED,
+    cotisation_amo_employeur DECIMAL(10,2) GENERATED ALWAYS AS (
+        ROUND(assiette_amo * taux_amo_employeur, 2)
+    ) STORED,
+    
+    -- IMPOT SUR LE REVENU (IR)
+    revenu_net_imposable DECIMAL(10,2) GENERATED ALWAYS AS (
+        salaire_brut - cotisation_cnss_employe - cotisation_amo_employe
+    ) STORED,
+    
+    -- Deduction forfaitaire et abattements
+    deduction_forfaitaire DECIMAL(10,2) DEFAULT 0,
+    abattement_20 DECIMAL(10,2) GENERATED ALWAYS AS (
+        LEAST(ROUND((revenu_net_imposable - deduction_forfaitaire) * 0.20, 2), 2500.00)
+    ) STORED,
+    revenu_imposable DECIMAL(10,2) GENERATED ALWAYS AS (
+        GREATEST(revenu_net_imposable - deduction_forfaitaire - abattement_20, 0)
+    ) STORED,
+    
+    -- Calcul IGR selon barème progressif
+    ir_calculé DECIMAL(10,2) GENERATED ALWAYS AS (
+        CASE
+            WHEN revenu_imposable <= 2500 THEN 0
+            WHEN revenu_imposable <= 4166.67 THEN ROUND((revenu_imposable - 2500) * 0.10, 2) -- ROUND function to ensure that the value rendred is decimal with 2 apres virgule
+            WHEN revenu_imposable <= 5000 THEN ROUND(166.67 + (revenu_imposable - 4166.67) * 0.20, 2)
+            WHEN revenu_imposable <= 6666.66 THEN ROUND(333.33 + (revenu_imposable - 5000.00) * 0.30, 2)
+            WHEN revenu_imposable <= 10000 THEN ROUND(833.33 + (revenu_imposable - 6666.67) * 0.34, 2)
+            ELSE ROUND(1966.67 + (revenu_imposable - 10000.00) * 0.38, 2)
+        END
+    ) STORED,
+    -- AUTRES RETENUES
+    retenue_pret DECIMAL(10,2) DEFAULT 0,
+    avance_salaire DECIMAL(10,2) DEFAULT 0,
+    autres_retenues DECIMAL(10,2) DEFAULT 0,
+    
+    -- TOTAUX
+    total_cotisations DECIMAL(10,2) GENERATED ALWAYS AS (
+        cotisation_cnss_employe + cotisation_amo_employe + ir_calculé
+    ) STORED,
+    total_a_payer DECIMAL(10,2) GENERATED ALWAYS AS (
+        salaire_brut - total_cotisations - retenue_pret - avance_salaire - autres_retenues
+    ) STORED,
+    net_a_payer DECIMAL(10,2) GENERATED ALWAYS AS (total_a_payer) STORED,
+    
+    -- INFORMATIONS DE PAIEMENT
+    mode_paiement VARCHAR(20) NOT NULL CHECK (
+        mode_paiement IN ('VIREMENT', 'CHEQUE', 'ESPECES')
+    ),
+    numero_virement VARCHAR(50),
+    statut_paiement VARCHAR(20) NOT NULL DEFAULT 'A_PAYER' CHECK (
+        statut_paiement IN ('A_PAYER', 'PAYE', 'ANNULE', 'RETARD')
+    ),
+    
+    -- RÉFÉRENCES LÉGALES
+    numero_bulletin_cnss VARCHAR(30),
+    numero_declaration_fiscale VARCHAR(30),
+    date_declaration_cnss DATE,
+    date_declaration_fiscale DATE,
+    
+    -- VALIDATION
+    valide_par VARCHAR(50) REFERENCES employe(code_employe),
+    date_validation DATE,
+    paiement_effectue_par VARCHAR(50),
+    date_paiement_effectif DATE,
+    
+    -- MÉTADONNÉES
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- CONTRAINTES
+    CONSTRAINT chk_periode CHECK (periode_fin > periode_debut),
+    CONSTRAINT chk_date_paiement CHECK (date_paiement >= periode_fin),
+    CONSTRAINT chk_heures_supp CHECK (
+        heures_supp_25 + heures_supp_50 + heures_supp_100 <= 20 -- limite mensuelle
+    )
+);
+
 
 
 
