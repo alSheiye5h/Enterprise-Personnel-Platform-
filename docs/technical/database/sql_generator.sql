@@ -174,8 +174,9 @@ CREATE TABLE contrat_travail (
     date_signature DATE NOT NULL,
     date_effet DATE NOT NULL,
     
-    -- PERIODE D'ESSAI
+    -- PERIODE D'ESSAI (Art. 14 Code du Travail)
     periode_essai_jours INTEGER NOT NULL CHECK (
+        -- Règle 6 : Période d'essai conforme (max 180 jours selon statut)
         periode_essai_jours BETWEEN 0 AND CASE
             WHEN type_employe IN ('CADRE', 'DIRIGEANT') THEN 180
             ELSE 90
