@@ -13,11 +13,13 @@ CREATE TABLE employe (
         END
     ),
 
+    -- Règle 1 : CIN obligatoire pour Marocains
     cin VARCHAR(20) CHECK (
         (pays = 'Maroc' and cin IS NOT NULL AND LENGTH(cin) = 12) or (pays != 'Maroc' and cin IS NULL)
     ),
 
     numero_passeport VARCHAR(20) CHECK (
+        -- Règle 2 : Passeport obligatoire pour étrangers
         (pays != 'Maroc' AND numero_passeport IS NOT NULL)
     ),
 
@@ -33,6 +35,7 @@ CREATE TABLE employe (
     deuxieme_prenom VARCHAR(30),
     sexe VARCHAR(1) CHECK (sexe IN ('M', 'F'))    
     date_naissance date NOT NULL CHECK (
+        -- Règle 3 : Âge minimum 18 ans (Code du Travail)
         date_naissance <= CURRENT_DATE - INTERVAL '18 years' -- minimum age 18 ans
     ),
     lieu_naissance VARCHAR(100),
@@ -46,6 +49,7 @@ CREATE TABLE employe (
     -- COORDONNEES
     email_personnel VARCHAR(100) CHECK (email_personnel ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
     email_professionnel VARCHAR(100) NOT NULL CHECK (
+        -- Règle 5 : Format email valide
         email_professionnel ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
     ),
     telephone_mobile VARCHAR(20) NOT NULL,
@@ -154,7 +158,7 @@ CREATE TABLE contrat_travail (
     id_contrat SERIAL PRIMARY KEY,
     code_employe VARCHAR(20) NOT NULL REFERENCES employe(code_employe),
     
-    -- type de contrat
+    -- type de contrat (Art. 16 Code du Travail)
     type_contrat VARCHAR(30) NOT NULL CHECK (
         type_contrat IN ('CDI', 'CDD', 'CONTRAT_MISSION', 'CONTRAT_INTERIMAIRE', 'STAGE')
     ),
