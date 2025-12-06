@@ -414,13 +414,13 @@ CREATE TABLE declaration_cnss (
     id_declaration SERIAL PRIMARY KEY,
     numero_declaration VARCHAR(30) UNIQUE DEFAULT CONCAT('DCNSS-', TO_CHAR(CURRENT_DATE, 'YYYYMM'), '-', LPAD(nextval('decl_seq')::TEXT, 4, '0')),
     
-    -- === PÉRIODE ===
+    -- PÉRIODE
     mois_declaration INTEGER NOT NULL CHECK (mois_declaration BETWEEN 1 AND 12),
     annee_declaration INTEGER NOT NULL,
     date_declaration DATE NOT NULL,
-    date_limite DATE NOT NULL, -- Généralement le 10 du mois suivant
+    date_limite DATE NOT NULL, -- generalement le 10 du mois suivant
     
-    -- === TOTAUX DÉCLARÉS ===
+    -- TOTAUX DECLARES
     total_salaires_bruts DECIMAL(12,2) NOT NULL,
     total_assiette_cnss DECIMAL(12,2) NOT NULL,
     total_cotisations_employe DECIMAL(12,2) NOT NULL,
@@ -429,7 +429,7 @@ CREATE TABLE declaration_cnss (
     total_cotisations_amo_employeur DECIMAL(12,2) NOT NULL,
     total_general DECIMAL(12,2) NOT NULL,
     
-    -- === ÉTAT ===
+    -- ÉTAT
     statut VARCHAR(20) NOT NULL DEFAULT 'BROUILLON' CHECK (
         statut IN ('BROUILLON', 'VALIDEE', 'TRANSMISE', 'ACCEPTEE', 'REJETEE')
     ),
@@ -437,16 +437,16 @@ CREATE TABLE declaration_cnss (
     date_acceptation DATE,
     reference_acceptation VARCHAR(50),
     
-    -- === DOCUMENTS ===
+    -- DOCUMENTS
     fichier_declaration VARCHAR(255),
     fichier_quittance VARCHAR(255),
     observations TEXT,
     
-    -- === RESPONSABLE ===
+    -- RESPONSABLE
     declare_par VARCHAR(50) NOT NULL,
     verifie_par VARCHAR(50),
     
-    -- === MÉTADONNÉES ===
+    -- MÉTADONNÉES
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -459,7 +459,7 @@ CREATE TABLE conge (
     id_conge SERIAL PRIMARY KEY,
     code_employe VARCHAR(20) NOT NULL REFERENCES employe(code_employe),
     
-    -- === TYPE DE CONGÉ (Art. 234 à 247 Code du Travail) ===
+    -- TYPE DE CONGÉ (Article 234 a 247 code du travail)
     type_conge VARCHAR(30) NOT NULL CHECK (
         type_conge IN (
             'CONGE_ANNUEL', 
@@ -471,18 +471,18 @@ CREATE TABLE conge (
         )
     ),
     
-    -- === PÉRIODE ===
+    -- PÉRIODE
     date_debut DATE NOT NULL,
     date_fin DATE NOT NULL,
     date_demande DATE DEFAULT CURRENT_DATE,
     
-    -- === DURÉE ===
+    -- DURÉE
     jours_ouvrables DECIMAL(5,2) NOT NULL CHECK (jours_ouvrables > 0),
     jours_calendaires DECIMAL(5,2) GENERATED ALWAYS AS (
         date_fin - date_debut + 1
     ) STORED,
     
-    -- === CONGÉS SPÉCIFIQUES ===
+    -- CONGÉS SPÉCIFIQUES 
     -- Congé maternité (14 semaines)
     certificat_medical_maternite VARCHAR(100),
     date_accouchement DATE,
@@ -491,7 +491,7 @@ CREATE TABLE conge (
     certificat_medical VARCHAR(100),
     maladie_professionnelle BOOLEAN DEFAULT FALSE,
     
-    -- === WORKFLOW D'APPROBATION ===
+    -- WORKFLOW D'APPROBATION
     statut_demande VARCHAR(20) NOT NULL DEFAULT 'EN_ATTENTE' CHECK (
         statut_demande IN ('EN_ATTENTE', 'APPROUVE', 'REJETE', 'ANNULE')
     ),
@@ -499,7 +499,7 @@ CREATE TABLE conge (
     date_approbation DATE,
     motif_rejet VARCHAR(200),
     
-    -- === IMPACT PAIE ===
+    -- IMPACT PAIE 
     solde_conge_avant DECIMAL(5,2) NOT NULL,
     solde_conge_apres DECIMAL(5,2) GENERATED ALWAYS AS (
         solde_conge_avant - jours_ouvrables
@@ -507,19 +507,19 @@ CREATE TABLE conge (
     deduction_salaire DECIMAL(10,2) DEFAULT 0,
     pris_en_compte_paie BOOLEAN DEFAULT FALSE,
     
-    -- === RÈGLES LÉGALES ===
+    -- RÈGLES LÉGALES
     conge_paye BOOLEAN GENERATED ALWAYS AS (
         CASE type_conge
-            WHEN 'CONGE_MALADIE' THEN jours_calendaires > 4 -- Justificatif obligatoire > 4 jours
+            WHEN 'CONGE_MALADIE' THEN jours_calendaries > 4 -- Justificatif obligatoire > 4 jours
             ELSE TRUE
         END
     ) STORED,
     
-    -- === MÉTADONNÉES ===
+    -- MÉTADONNÉES
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
-    -- === CONTRAINTES ===
+    -- CONTRAINTES
     CONSTRAINT chk_periode_conge CHECK (date_fin >= date_debut),
     CONSTRAINT chk_conge_maternite CHECK (
         (type_conge != 'CONGE_MATERNITE') OR 

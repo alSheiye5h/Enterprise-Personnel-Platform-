@@ -412,7 +412,211 @@ CREATE TABLE fiche_paie (
     )
 );
 
+-- TABLE : DÉCLARATIONS CNSS MENSUELLES
+CREATE TABLE declaration_cnss (
+    id_declaration SERIAL PRIMARY KEY,
+    numero_declaration VARCHAR(30) UNIQUE DEFAULT CONCAT('DCNSS-', TO_CHAR(CURRENT_DATE, 'YYYYMM'), '-', LPAD(nextval('decl_seq')::TEXT, 4, '0')),
+    
+    -- PÉRIODE
+    mois_declaration INTEGER NOT NULL CHECK (mois_declaration BETWEEN 1 AND 12),
+    annee_declaration INTEGER NOT NULL,
+    date_declaration DATE NOT NULL,
+    date_limite DATE NOT NULL, -- generalement le 10 du mois suivant
+    
+    -- TOTAUX DECLARES
+    total_salaires_bruts DECIMAL(12,2) NOT NULL,
+    total_assiette_cnss DECIMAL(12,2) NOT NULL,
+    total_cotisations_employe DECIMAL(12,2) NOT NULL,
+    total_cotisations_employeur DECIMAL(12,2) NOT NULL,
+    total_cotisations_amo_employe DECIMAL(12,2) NOT NULL,
+    total_cotisations_amo_employeur DECIMAL(12,2) NOT NULL,
+    total_general DECIMAL(12,2) NOT NULL,
+    
+    -- ÉTAT
+    statut VARCHAR(20) NOT NULL DEFAULT 'BROUILLON' CHECK (
+        statut IN ('BROUILLON', 'VALIDEE', 'TRANSMISE', 'ACCEPTEE', 'REJETEE')
+    ),
+    date_transmission DATE,
+    date_acceptation DATE,
+    reference_acceptation VARCHAR(50),
+    
+    -- DOCUMENTS
+    fichier_declaration VARCHAR(255),
+    fichier_quittance VARCHAR(255),
+    observations TEXT,
+    
+    -- RESPONSABLE
+    declare_par VARCHAR(50) NOT NULL,
+    verifie_par VARCHAR(50),
+    
+    -- MÉTADONNÉES
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
+
+-- TABLE : GESTION DES CONGÉS (Conformité Code du Travail)
+CREATE TABLE conge (
+    id_conge SERIAL PRIMARY KEY,
+    code_employe VARCHAR(20) NOT NULL REFERENCES employe(code_employe),
+    
+    -- TYPE DE CONGÉ (Article 234 a 247 code du travail)
+    type_conge VARCHAR(30) NOT NULL CHECK (
+        type_conge IN (
+            'CONGE_ANNUEL', 
+            'CONGE_MALADIE', 
+            'CONGE_MATERNITE', 
+            'CONGE_PATERNITE',
+            'CONGE_EXCEPTIONNEL',
+            'CONGE_SANS_SOLDE'
+        )
+    ),
+    
+    -- PÉRIODE
+    date_debut DATE NOT NULL,
+    date_fin DATE NOT NULL,
+    date_demande DATE DEFAULT CURRENT_DATE,
+    
+    -- DURÉE
+    jours_ouvrables DECIMAL(5,2) NOT NULL CHECK (jours_ouvrables > 0),
+    jours_calendaires DECIMAL(5,2) GENERATED ALWAYS AS (
+        date_fin - date_debut + 1
+    ) STORED,
+    
+    -- CONGÉS SPÉCIFIQUES 
+    -- Congé maternité (14 semaines)
+    certificat_medical_maternite VARCHAR(100),
+    date_accouchement DATE,
+    
+    -- Congé maladie
+    certificat_medical VARCHAR(100),
+    maladie_professionnelle BOOLEAN DEFAULT FALSE,
+    
+    -- WORKFLOW D'APPROBATION
+    statut_demande VARCHAR(20) NOT NULL DEFAULT 'EN_ATTENTE' CHECK (
+        statut_demande IN ('EN_ATTENTE', 'APPROUVE', 'REJETE', 'ANNULE')
+    ),
+    approbateur VARCHAR(20) REFERENCES employe(code_employe),
+    date_approbation DATE,
+    motif_rejet VARCHAR(200),
+    
+    -- IMPACT PAIE 
+    solde_conge_avant DECIMAL(5,2) NOT NULL,
+    solde_conge_apres DECIMAL(5,2) GENERATED ALWAYS AS (
+        solde_conge_avant - jours_ouvrables
+    ) STORED,
+    deduction_salaire DECIMAL(10,2) DEFAULT 0,
+    pris_en_compte_paie BOOLEAN DEFAULT FALSE,
+    
+    -- RÈGLES LÉGALES
+    conge_paye BOOLEAN GENERATED ALWAYS AS (
+        CASE type_conge
+            WHEN 'CONGE_MALADIE' THEN jours_calendaries > 4 -- Justificatif obligatoire > 4 jours
+            ELSE TRUE
+        END
+    ) STORED,
+    
+    -- MÉTADONNÉES
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- CONTRAINTES
+    CONSTRAINT chk_periode_conge CHECK (date_fin >= date_debut),
+    CONSTRAINT chk_conge_maternite CHECK (
+        (type_conge != 'CONGE_MATERNITE') OR 
+        (jours_calendaires >= 98) -- 14 semaines
+    ),
+    CONSTRAINT chk_conge_paternite CHECK (
+        (type_conge != 'CONGE_PATERNITE') OR 
+        (jours_calendaires = 3)
+    ),
+    CONSTRAINT chk_solde_suffisant CHECK (jours_ouvrables <= solde_conge_avant)
+);
+
+-- TABLE : POINTAGE ET TEMPS DE TRAVAIL
+CREATE TABLE pointage (
+    id_pointage SERIAL PRIMARY KEY,
+    code_employe VARCHAR(20) NOT NULL REFERENCES employe(code_employe),
+    
+    -- JOURNEE
+    date_pointage DATE NOT NULL,
+    jour_semaine VARCHAR(10) GENERATED ALWAYS AS (
+        TO_CHAR(date_pointage, 'Day') -- extraire le nom complet du jour
+    ) STORED,
+    est_jour_ferie BOOLEAN DEFAULT FALSE,
+    est_weekend BOOLEAN GENERATED ALWAYS AS (
+        EXTRACT(DOW FROM date_pointage) IN (0, 6)
+    ) STORED,
+    
+    -- HORAIRES THEORIQUES
+    heure_debut_theorique TIME NOT NULL,
+    heure_fin_theorique TIME NOT NULL,
+    pause_debut TIME,
+    pause_fin TIME,
+    
+    -- POINTAGES REELS
+    heure_arrivee TIME,
+    heure_depart TIME,
+    pointage_entree_valide BOOLEAN DEFAULT FALSE,
+    pointage_sortie_valide BOOLEAN DEFAULT FALSE,
+    
+    -- CALCULS
+    heures_theoriques DECIMAL(4,2) GENERATED ALWAYS AS (
+        EXTRACT(EPOCH FROM (heure_fin_theorique - heure_debut_theorique -
+        COALESCE(pause_fin - pause_debut, '00:00'::INTERVAL))) / 3600 -- coalesce(..) pour s assurer que si la pause est null ca va pas etre compter
+    ) STORED,
+    
+    heures_reelles DECIMAL(4,2) GENERATED ALWAYS AS (
+        CASE 
+            WHEN heure_arrivee IS NOT NULL AND heure_depart IS NOT NULL 
+            THEN EXTRACT(EPOCH FROM (heure_depart - heure_arrivee -
+                 COALESCE(pause_fin - pause_debut, '00:00'::INTERVAL))) / 3600
+            ELSE 0
+        END
+    ) STORED,
+    
+    retard_minutes INTEGER GENERATED ALWAYS AS (
+        CASE 
+            WHEN heure_arrivee IS NOT NULL AND heure_arrivee > heure_debut_theorique
+            THEN EXTRACT(EPOCH FROM (heure_arrivee - heure_debut_theorique)) / 60
+            ELSE 0
+        END
+    ) STORED,
+    
+    -- === HEURES SUPPLÉMENTAIRES ===
+    heures_supp_25 DECIMAL(4,2) DEFAULT 0,
+    heures_supp_50 DECIMAL(4,2) DEFAULT 0,
+    heures_supp_100 DECIMAL(4,2) DEFAULT 0,
+    
+    -- === ABSENCES ===
+    absent BOOLEAN DEFAULT FALSE,
+    type_absence VARCHAR(30) CHECK (
+        type_absence IN ('MALADIE', 'CONGE', 'AUTORISATION', 'NON_JUSTIFIEE')
+    ),
+    justificatif_absence VARCHAR(100),
+    
+    -- === VALIDATION ===
+    statut_pointage VARCHAR(20) DEFAULT 'SAISI' CHECK (
+        statut_pointage IN ('SAISI', 'CORRIGE', 'VALIDE', 'REJETE')
+    ),
+    validateur VARCHAR(20) REFERENCES employe(code_employe),
+    date_validation DATE,
+    
+    -- === OBSERVATIONS ===
+    observations TEXT,
+    
+    -- === MÉTADONNÉES ===
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- === CONTRAINTES ===
+    CONSTRAINT chk_heure_fin CHECK (heure_fin_theorique > heure_debut_theorique),
+    CONSTRAINT chk_pointage_complet CHECK (
+        (absent = TRUE) OR 
+        (heure_arrivee IS NOT NULL AND heure_depart IS NOT NULL)
+    ),
+    CONSTRAINT uk_pointage_jour UNIQUE (code_employe, date_pointage)
+);
 
 
 
