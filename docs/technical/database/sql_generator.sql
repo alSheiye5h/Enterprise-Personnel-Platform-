@@ -4,7 +4,7 @@
 CREATE sequence employe_seq START WITH 1 INCREMENT BY 1 MINVALUE 1 NO MAXVALUE;
 
 
-CREATE TABLE employe {
+CREATE TABLE employe (
     -- identifiant unique
     code_employe VARCHAR(20) PRIMARY KEY    GENERATED ALWAYS AS (
         CASE 
@@ -120,7 +120,7 @@ CREATE TABLE employe {
     CONSTRAINT chk_email_different CHECK (
         email_personnel IS NULL OR email_personnel != email_professionnel
     )
-};
+);
 
 -- trigger pour generer le code employe
 CREATE OR REPLACE function generate_employe_code()
@@ -264,7 +264,46 @@ CREATE TABLE contrat_travail (
 
 -- TABLE : BULLETIN DE PAIE (Conformité CNSS, AMO, IGR)
 
+CREATE TABLE fiche_paie (
+    id_paie VARCHAR(30) PRIMARY KEY DEFAULT CONCAT('PAY-', TO_CHAR(CURRENT_DATE, 'YYYY-MM'), '-', LPAD(nextval('paie_seq')::TEXT, 6, '0')),
+    code_employe VARCHAR(20) NOT NULL REFERENCES employe(code_employe),
+    
+    -- PÉRIODE DE PAIE
+    mois_paie INTEGER NOT NULL CHECK (mois_paie BETWEEN 1 AND 12),
+    annee_paie INTEGER NOT NULL CHECK (annee_paie >= 2020),
+    periode_debut DATE NOT NULL, -- premier jour inclus dans le calcul du salaire et des cotisation, a partir de cette date le system commence a comptabiliser les jour de presence, les heurs travaillé, les abscences ...
+    periode_fin DATE NOT NULL,
+    date_etablissement DATE DEFAULT CURRENT_DATE,
+    date_paiement DATE NOT NULL,
+    
+    -- ÉLÉMENTS DE RÉMUNÉRATION
+    salaire_base DECIMAL(10,2) NOT NULL CHECK (salaire_base >= 0),
+    heures_normales DECIMAL(6,2) DEFAULT 191, -- 44h/semaine * 52 semaines / 12 mois
+    heures_supp_25 DECIMAL(6,2) DEFAULT 0, -- Heures 44-48
+    heures_supp_50 DECIMAL(6,2) DEFAULT 0, -- Heures >48 et jours repos
+    heures_supp_100 DECIMAL(6,2) DEFAULT 0, -- Jours fériés
+    
+    -- PRIMES ET ALLOCATIONS
+    prime_anciennete DECIMAL(10,2) DEFAULT 0,
+    prime_panier DECIMAL(10,2) DEFAULT 0,
+    prime_transport DECIMAL(10,2) DEFAULT 0,
+    prime_logement DECIMAL(10,2) DEFAULT 0,
+    prime_presence DECIMAL(10,2) DEFAULT 0,
+    prime_performance DECIMAL(10,2) DEFAULT 0,
+    commission DECIMAL(10,2) DEFAULT 0,
+    autres_primes DECIMAL(10,2) DEFAULT 0,
 
+    -- ALLOCATIONS FAMILLIALES (CNSS)
+    allocation_familliale DECIMAL(10, 2) DEFAULT 0 CHECK (
+        allocation_familiale = CASE
+            WHEN (SELECT nb_personnes_charge FROM employe e WHERE e.code_employe = fiche_paie.code_employe) > 0
+            THEN (SELECT nb_personnes_charge FROM employe e WHERE e.code_employe = fiche_paie.code_employe) * 150
+            ELSE 0
+        END
+    ),
+
+    -- SALLAIRE BRUT
+)
 
 
 

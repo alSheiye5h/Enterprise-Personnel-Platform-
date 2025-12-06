@@ -263,19 +263,19 @@ CREATE TABLE fiche_paie (
     -- PÉRIODE DE PAIE
     mois_paie INTEGER NOT NULL CHECK (mois_paie BETWEEN 1 AND 12),
     annee_paie INTEGER NOT NULL CHECK (annee_paie >= 2020),
-    periode_debut DATE NOT NULL,
+    periode_debut DATE NOT NULL, -- premier jour inclus dans le calcul du salaire et des cotisation, a partir de cette date le system commence a comptabiliser les jour de presence, les heurs travaillé, les abscences ...
     periode_fin DATE NOT NULL,
     date_etablissement DATE DEFAULT CURRENT_DATE,
     date_paiement DATE NOT NULL,
     
-    -- === ÉLÉMENTS DE RÉMUNÉRATION ===
+    -- ÉLÉMENTS DE RÉMUNÉRATION
     salaire_base DECIMAL(10,2) NOT NULL CHECK (salaire_base >= 0),
     heures_normales DECIMAL(6,2) DEFAULT 191, -- 44h/semaine * 52 semaines / 12 mois
     heures_supp_25 DECIMAL(6,2) DEFAULT 0, -- Heures 44-48
     heures_supp_50 DECIMAL(6,2) DEFAULT 0, -- Heures >48 et jours repos
     heures_supp_100 DECIMAL(6,2) DEFAULT 0, -- Jours fériés
     
-    -- === PRIMES ET ALLOCATIONS ===
+    -- PRIMES ET ALLOCATIONS
     prime_anciennete DECIMAL(10,2) DEFAULT 0,
     prime_panier DECIMAL(10,2) DEFAULT 0,
     prime_transport DECIMAL(10,2) DEFAULT 0,
@@ -285,7 +285,7 @@ CREATE TABLE fiche_paie (
     commission DECIMAL(10,2) DEFAULT 0,
     autres_primes DECIMAL(10,2) DEFAULT 0,
     
-    -- === ALLOCATIONS FAMILIALES (CNSS) ===
+    -- ALLOCATIONS FAMILIALES (CNSS)
     allocation_familiale DECIMAL(10,2) DEFAULT 0 CHECK (
         -- Règle 11 : Allocation familiale CNSS
         allocation_familiale = CASE 
@@ -295,7 +295,7 @@ CREATE TABLE fiche_paie (
         END
     ),
     
-    -- === SALAIRE BRUT ===
+    -- SALAIRE BRUT
     salaire_brut DECIMAL(10,2) GENERATED ALWAYS AS (
         salaire_base + 
         (heures_supp_25 * salaire_base/191 * 1.25) +
@@ -306,13 +306,13 @@ CREATE TABLE fiche_paie (
         allocation_familiale
     ) STORED,
     
-    -- === ASSIETTE CNSS (Plafonnée) ===
+    -- ASSIETTE CNSS (plafonnee )
     assiette_cnss DECIMAL(10,2) GENERATED ALWAYS AS (
         -- Règle 9 : CNSS plafonnée à 6,000 MAD
         LEAST(salaire_brut, 6000)
     ) STORED,
     
-    -- === COTISATIONS CNSS ===
+    -- COTISATIONS CNSS
     taux_cnss_employe DECIMAL(5,4) DEFAULT 0.0426, -- 4.26%
     taux_cnss_employeur DECIMAL(5,4) DEFAULT 0.0874, -- 8.74%
     cotisation_cnss_employe DECIMAL(10,2) GENERATED ALWAYS AS (
@@ -322,27 +322,26 @@ CREATE TABLE fiche_paie (
         ROUND(assiette_cnss * taux_cnss_employeur, 2)
     ) STORED,
     
-    -- === COTISATION AMO ===
+    -- COTISATION AMO 
     assiette_amo DECIMAL(10,2) GENERATED ALWAYS AS (salaire_brut) STORED,
     taux_amo_employe DECIMAL(5,4) DEFAULT 0.0226, -- 2.26%
     taux_amo_employeur DECIMAL(5,4) DEFAULT 0.0339, -- 3.39%
     cotisation_amo_employe DECIMAL(10,2) GENERATED ALWAYS AS (
-        -- Règle 10 : Cotisation AMO
         ROUND(assiette_amo * taux_amo_employe, 2)
     ) STORED,
     cotisation_amo_employeur DECIMAL(10,2) GENERATED ALWAYS AS (
         ROUND(assiette_amo * taux_amo_employeur, 2)
     ) STORED,
     
-    -- === IMPÔT SUR LE REVENU (IGR) ===
+    -- IMPOT SUR LE REVENU (IR)
     revenu_net_imposable DECIMAL(10,2) GENERATED ALWAYS AS (
         salaire_brut - cotisation_cnss_employe - cotisation_amo_employe
     ) STORED,
     
-    -- Déduction forfaitaire et abattements
+    -- Deduction forfaitaire et abattements
     deduction_forfaitaire DECIMAL(10,2) DEFAULT 0,
     abattement_20 DECIMAL(10,2) GENERATED ALWAYS AS (
-        GREATEST(ROUND((revenu_net_imposable - deduction_forfaitaire) * 0.20, 2), 0)
+        LEAST(ROUND((revenu_net_imposable - deduction_forfaitaire) * 0.20, 2), 2500.00)
     ) STORED,
     revenu_imposable DECIMAL(10,2) GENERATED ALWAYS AS (
         GREATEST(revenu_net_imposable - deduction_forfaitaire - abattement_20, 0)
@@ -352,7 +351,7 @@ CREATE TABLE fiche_paie (
     igr_calculé DECIMAL(10,2) GENERATED ALWAYS AS (
         CASE
             WHEN revenu_imposable <= 2500 THEN 0
-            WHEN revenu_imposable <= 4166.66 THEN ROUND((revenu_imposable - 2500) * 0.10, 2) -- ROUND function to ensure that the value rendred is decimal with 2 apres virgule
+            WHEN revenu_imposable <= 4166.67 THEN ROUND((revenu_imposable - 2500) * 0.10, 2) -- ROUND function to ensure that the value rendred is decimal with 2 apres virgule
             WHEN revenu_imposable <= 5000 THEN ROUND(166.67 + (revenu_imposable - 4166.67) * 0.20, 2)
             WHEN revenu_imposable <= 6666.66 THEN ROUND(333.33 + (revenu_imposable - 5000.00) * 0.30, 2)
             WHEN revenu_imposable <= 10000 THEN ROUND(833.33 + (revenu_imposable - 6666.67) * 0.34, 2)
@@ -360,7 +359,7 @@ CREATE TABLE fiche_paie (
         END
     ) STORED,
     
-    -- === AUTRES RETENUES ===
+    -- AUTRES RETENUES
     retenue_pret DECIMAL(10,2) DEFAULT 0,
     avance_salaire DECIMAL(10,2) DEFAULT 0,
     autres_retenues DECIMAL(10,2) DEFAULT 0,
