@@ -3,16 +3,12 @@
 -- squence employe_seq
 CREATE sequence employe_seq START WITH 1 INCREMENT BY 1 MINVALUE 1 NO MAXVALUE;
 
-
 CREATE TABLE employe (
     -- identifiant unique
-    code_employe VARCHAR(20) PRIMARY KEY    GENERATED ALWAYS AS (
-        CASE 
-            WHEN pays = 'MAROC' THEN CONCAT('MA-EMP-', LPAD(nextval('employe_seq')::TEXT, 14, '0')) -- LPAD leftpad function to fill the gap in left with 0 for total of 14
-            ELSE CONCAT('INT-EMP-', LPAD(nextval('employe_seq')::TEXT, 13, '0')) -- nextval recuper automatiquement une sequence de nomber
-        END
-    ),
-
+    code_employe VARCHAR(20) PRIMARY KEY,
+    
+    pays VARCHAR(50) NOT NULL DEFAULT 'Maroc',
+    
     -- Règle 1 : CIN obligatoire pour Marocains
     cin VARCHAR(20) CHECK (
         (pays = 'Maroc' and cin IS NOT NULL AND LENGTH(cin) = 12) or (pays != 'Maroc' and cin IS NULL)
@@ -33,7 +29,7 @@ CREATE TABLE employe (
     prenom VARCHAR(50) NOT NULL,
     nom VARCHAR(50) NOT NULL,
     deuxieme_prenom VARCHAR(30),
-    sexe VARCHAR(1) CHECK (sexe IN ('M', 'F'))    
+    sexe VARCHAR(1) CHECK (sexe IN ('M', 'F')),    
     date_naissance date NOT NULL CHECK (
         -- Règle 3 : Âge minimum 18 ans (Code du Travail)
         date_naissance <= CURRENT_DATE - INTERVAL '18 years' -- minimum age 18 ans
@@ -41,7 +37,7 @@ CREATE TABLE employe (
     lieu_naissance VARCHAR(100),
     nationalite VARCHAR(50) NOT NULL DEFAULT 'Marocaine',
     situation_matrimoniale VARCHAR(20) NOT NULL CHECK (
-        situation_matrimoniale IS IN ('MARIE', 'CELIBATAIRE', 'VEUF', 'DIVORCE')
+        situation_matrimoniale IN ('MARIE', 'CELIBATAIRE', 'VEUF', 'DIVORCE')
     ),
     nombre_enfants INTEGER DEFAULT 0 CHECK (nombre_enfants >= 0),
     nb_personnes_charge INTEGER DEFAULT 0 CHECK (nb_personnes_charge >= 0),
@@ -61,7 +57,6 @@ CREATE TABLE employe (
     ville VARCHAR(50) NOT NULL,
     region VARCHAR(50) NOT NULL,
     code_postal VARCHAR(20) NOT NULL,
-    pays VARCHAR(50) NOT NULL DEFAULT 'Maroc',
     
     -- CONTACT D'URGENCE (obligatoire legal) 
     nom_contact_urgence VARCHAR(100) NOT NULL,
@@ -128,7 +123,7 @@ CREATE TABLE employe (
 
 -- trigger pour generer le code employe
 CREATE OR REPLACE function generate_employe_code()
-RETURN TRIGGER AS $$
+RETURNS TRIGGER AS $$
 BEGIN
     NEW.code_employe := CASE
         WHEN NEW.pays = 'Maroc' THEN
@@ -147,13 +142,16 @@ EXECUTE FUNCTION generate_employe_code();
 
 
 -- des index pour faciliter la recherche pour plus de performance
-CREATE INDEX idx_emlploye_cin ON employe(cin) WHERE cin IS NOT NULL;
+CREATE INDEX idx_employe_cin ON employe(cin) WHERE cin IS NOT NULL;
 CREATE INDEX idx_employe_cnss ON employe(numero_immatriculation_cnss);
 CREATE INDEX idx_employe_statut ON employe(statut_emploi) WHERE statut_emploi = 'ACTIF';
 CREATE INDEX idx_employe_embauche ON employe(date_embauche);
 
--- Table contract_travail conforme au code du travail
+-- Sequences supplémentaires
+CREATE SEQUENCE paie_seq START WITH 1 INCREMENT BY 1 MINVALUE 1 NO MAXVALUE;
+CREATE SEQUENCE decl_seq START WITH 1 INCREMENT BY 1 MINVALUE 1 NO MAXVALUE;
 
+-- Table contract_travail conforme au code du travail
 CREATE TABLE contrat_travail (
     id_contrat SERIAL PRIMARY KEY,
     code_employe VARCHAR(20) NOT NULL REFERENCES employe(code_employe),
@@ -177,26 +175,18 @@ CREATE TABLE contrat_travail (
     -- PERIODE D'ESSAI (Art. 14 Code du Travail)
     periode_essai_jours INTEGER NOT NULL CHECK (
         -- Règle 6 : Periode d'essai conforme (max 180 jours selon statut)
-        periode_essai_jours BETWEEN 0 AND CASE
-            WHEN type_employe IN ('CADRE', 'DIRIGEANT') THEN 180
-            ELSE 90
-        END
-    )
+        periode_essai_jours BETWEEN 0 AND 180
+    ),
     periode_essai_renouvelable BOOLEAN DEFAULT FALSE,
     date_fin_periode_essai DATE,
     
     -- remuneration
     salaire_base_mensuel DECIMAL(10,2) NOT NULL CHECK (salaire_base_mensuel >= 0),
-    salaire_horaire DECIMAL(8,2) GENERATED ALWAYS AS (
-        ROUND((salaire_base_mensuel * 12) / (52 * heures_hebdomadaires), 2)
-    ) STORED,
+    heures_hebdomadaires INTEGER NOT NULL,
+    salaire_horaire DECIMAL(8,2),
     devise VARCHAR(3) NOT NULL DEFAULT 'MAD',
     
     -- TEMPS DE TRAVAIL (Art. 184 Code du Travail)
-    heures_hebdomadaires INTEGER NOT NULL CHECK (
-        -- Règle 8 : Maximum 44 heures/semaine
-        heures_hebdomadaires BETWEEN 1 AND 44
-    ),
     heures_journalieres INTEGER CHECK (heures_journalieres BETWEEN 1 AND 10),
     jours_travail_semaine INTEGER CHECK (jours_travail_semaine BETWEEN 1 AND 6),
     regime_horaire VARCHAR(30) CHECK (
@@ -206,7 +196,7 @@ CREATE TABLE contrat_travail (
     -- CONGES PAYES (Art. 234 Code du Travail)
     jours_conges_acquis DECIMAL(5,2) NOT NULL DEFAULT 1.5, -- 1.5 jours/mois travaille
     jours_conges_prise DECIMAL(5,2) DEFAULT 0,
-    solde_conges DECIMAL(5,2) GENERATED ALWAYS AS (jours_conges_acquis - jours_conges_prise) STORED,
+    solde_conges DECIMAL(5,2),
     
     -- AVANTAGES SOCIAUX
     prime_anciennete BOOLEAN DEFAULT FALSE,
@@ -220,11 +210,7 @@ CREATE TABLE contrat_travail (
     -- PREAVIS 
     preavis_depart_jours INTEGER NOT NULL CHECK (
         -- Règle 7 : Preavis minimum selon anciennete
-        preavis_depart_jours >= CASE
-            WHEN (CURRENT_DATE - date_debut_contrat) < INTERVAL '1 year' THEN 8
-            WHEN (CURRENT_DATE - date_debut_contrat) < INTERVAL '5 years' THEN 30
-            ELSE 60
-        END
+        preavis_depart_jours >= 8
     ),
     
     -- INDEMNITES
@@ -246,7 +232,7 @@ CREATE TABLE contrat_travail (
     -- METADONNEES 
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     date_modification TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    createur VARCHAR(50) REFERENCES employe(code_employe),
+    createur VARCHAR(50),
     modificateur VARCHAR(50),
     
     -- CONTRAINTES SPECIFIQUES
@@ -257,18 +243,12 @@ CREATE TABLE contrat_travail (
         (type_contrat != 'CDD') OR 
         (date_fin_contrat IS NOT NULL AND date_fin_contrat > date_debut_contrat)
     ),
-    CONSTRAINT chk_smic CHECK (
-        -- Verification SMIG/SMAG (à adapter selon les revalorisations)
-        salaire_base_mensuel >= CASE
-            WHEN type_employe = 'OUVRIER' THEN 3000 -- SMAG indicatif
-            WHEN type_employe = 'EMPLOYE' THEN 3500 -- SMIG indicatif
-            ELSE 0
-        END
+    CONSTRAINT chk_heures_hebdo CHECK (
+        heures_hebdomadaires BETWEEN 1 AND 44
     )
 );
 
 -- TABLE : BULLETIN DE PAIE (Conformite CNSS, AMO, IGR)
-
 CREATE TABLE fiche_paie (
     id_paie VARCHAR(30) PRIMARY KEY DEFAULT CONCAT('PAY-', TO_CHAR(CURRENT_DATE, 'YYYY-MM'), '-', LPAD(nextval('paie_seq')::TEXT, 6, '0')),
     code_employe VARCHAR(20) NOT NULL REFERENCES employe(code_employe),
@@ -299,90 +279,47 @@ CREATE TABLE fiche_paie (
     autres_primes DECIMAL(10,2) DEFAULT 0,
 
     -- ALLOCATIONS FAMILLIALES (CNSS)
-    allocation_familliale DECIMAL(10, 2) DEFAULT 0 CHECK (
-        allocation_familiale = CASE
-            WHEN (SELECT nb_personnes_charge FROM employe e WHERE e.code_employe = fiche_paie.code_employe) > 0
-            THEN (SELECT nb_personnes_charge FROM employe e WHERE e.code_employe = fiche_paie.code_employe) * 150
-            ELSE 0
-        END
-    ),
+    allocation_familiale DECIMAL(10, 2) DEFAULT 0,
 
     -- SALLAIRE BRUT
-    salaire_brut DECIMAL(10, 2) GENERATED ALWAYS AS (
-        salaire_base +
-        (heures_supp_25 * (salaire_base/191) * 1.25) +
-        (heures_supp_50 * (salaire_base/191) * 1.50) +
-        (heures_supp_100 * (salaire_base/191) * 2.00) +
-        prime_anciennete + prime_logement + prime_panier + prime_performance +
-        prime_presence + prime_transport + commission + autres_primes +
-        allocation_familiale
-    ) STORED,
-
+    salaire_brut DECIMAL(10, 2),
+    
     -- ASSIETTE CNSS (plafonnee )
-    assiette_cnss DECIMAL(10,2) GENERATED ALWAYS AS (
-        -- Règle 9 : CNSS plafonnee à 6,000 MAD
-        LEAST(salaire_brut, 6000)
-    ) STORED,
+    assiette_cnss DECIMAL(10,2),
     
     -- COTISATIONS CNSS
     taux_cnss_employe DECIMAL(5,4) DEFAULT 0.0426, -- 4.26%
     taux_cnss_employeur DECIMAL(5,4) DEFAULT 0.0874, -- 8.74%
-    cotisation_cnss_employe DECIMAL(10,2) GENERATED ALWAYS AS (
-        ROUND(assiette_cnss * taux_cnss_employe, 2)
-    ) STORED,
-    cotisation_cnss_employeur DECIMAL(10,2) GENERATED ALWAYS AS (
-        ROUND(assiette_cnss * taux_cnss_employeur, 2)
-    ) STORED,
+    cotisation_cnss_employe DECIMAL(10,2),
+    cotisation_cnss_employeur DECIMAL(10,2),
     
     -- COTISATION AMO 
-    assiette_amo DECIMAL(10,2) GENERATED ALWAYS AS (salaire_brut) STORED,
+    assiette_amo DECIMAL(10,2),
     taux_amo_employe DECIMAL(5,4) DEFAULT 0.0226, -- 2.26%
     taux_amo_employeur DECIMAL(5,4) DEFAULT 0.0339, -- 3.39%
-    cotisation_amo_employe DECIMAL(10,2) GENERATED ALWAYS AS (
-        ROUND(assiette_amo * taux_amo_employe, 2)
-    ) STORED,
-    cotisation_amo_employeur DECIMAL(10,2) GENERATED ALWAYS AS (
-        ROUND(assiette_amo * taux_amo_employeur, 2)
-    ) STORED,
+    cotisation_amo_employe DECIMAL(10,2),
+    cotisation_amo_employeur DECIMAL(10,2),
     
     -- IMPOT SUR LE REVENU (IR)
-    revenu_net_imposable DECIMAL(10,2) GENERATED ALWAYS AS (
-        salaire_brut - cotisation_cnss_employe - cotisation_amo_employe
-    ) STORED,
+    revenu_net_imposable DECIMAL(10,2),
     
     -- Deduction forfaitaire et abattements
     deduction_forfaitaire DECIMAL(10,2) DEFAULT 0,
-    abattement_20 DECIMAL(10,2) GENERATED ALWAYS AS (
-        LEAST(ROUND((revenu_net_imposable - deduction_forfaitaire) * 0.20, 2), 2500.00)
-    ) STORED,
-    revenu_imposable DECIMAL(10,2) GENERATED ALWAYS AS (
-        GREATEST(revenu_net_imposable - deduction_forfaitaire - abattement_20, 0)
-    ) STORED,
+    abattement_20 DECIMAL(10,2),
+    revenu_imposable DECIMAL(10,2),
     
     -- Calcul IGR selon barème progressif
-    ir_calcule DECIMAL(10,2) GENERATED ALWAYS AS (
-        CASE
-            WHEN revenu_imposable <= 2500 THEN 0
-            WHEN revenu_imposable <= 4166.67 THEN ROUND((revenu_imposable - 2500) * 0.10, 2) -- ROUND function to ensure that the value rendred is decimal with 2 apres virgule
-            WHEN revenu_imposable <= 5000 THEN ROUND(166.67 + (revenu_imposable - 4166.67) * 0.20, 2)
-            WHEN revenu_imposable <= 6666.66 THEN ROUND(333.33 + (revenu_imposable - 5000.00) * 0.30, 2)
-            WHEN revenu_imposable <= 10000 THEN ROUND(833.33 + (revenu_imposable - 6666.67) * 0.34, 2)
-            ELSE ROUND(1966.67 + (revenu_imposable - 10000.00) * 0.38, 2)
-        END
-    ) STORED,
+    ir_calcule DECIMAL(10,2),
+    
     -- AUTRES RETENUES
     retenue_pret DECIMAL(10,2) DEFAULT 0,
     avance_salaire DECIMAL(10,2) DEFAULT 0,
     autres_retenues DECIMAL(10,2) DEFAULT 0,
     
     -- TOTAUX
-    total_cotisations DECIMAL(10,2) GENERATED ALWAYS AS (
-        cotisation_cnss_employe + cotisation_amo_employe + ir_calcule
-    ) STORED,
-    total_a_payer DECIMAL(10,2) GENERATED ALWAYS AS (
-        salaire_brut - total_cotisations - retenue_pret - avance_salaire - autres_retenues
-    ) STORED,
-    net_a_payer DECIMAL(10,2) GENERATED ALWAYS AS (total_a_payer) STORED,
+    total_cotisations DECIMAL(10,2),
+    total_a_payer DECIMAL(10,2),
+    net_a_payer DECIMAL(10,2),
     
     -- INFORMATIONS DE PAIEMENT
     mode_paiement VARCHAR(20) NOT NULL CHECK (
@@ -400,7 +337,7 @@ CREATE TABLE fiche_paie (
     date_declaration_fiscale DATE,
     
     -- VALIDATION
-    valide_par VARCHAR(50) REFERENCES employe(code_employe),
+    valide_par VARCHAR(50),
     date_validation DATE,
     paiement_effectue_par VARCHAR(50),
     date_paiement_effectif DATE,
@@ -484,9 +421,7 @@ CREATE TABLE conge (
     
     -- DUREE
     jours_ouvrables DECIMAL(5,2) NOT NULL CHECK (jours_ouvrables > 0),
-    jours_calendaires DECIMAL(5,2) GENERATED ALWAYS AS (
-        date_fin - date_debut + 1
-    ) STORED,
+    jours_calendaires DECIMAL(5,2),
     
     -- CONGES SPECIFIQUES 
     -- Conge maternite (14 semaines)
@@ -501,25 +436,18 @@ CREATE TABLE conge (
     statut_demande VARCHAR(20) NOT NULL DEFAULT 'EN_ATTENTE' CHECK (
         statut_demande IN ('EN_ATTENTE', 'APPROUVE', 'REJETE', 'ANNULE')
     ),
-    approbateur VARCHAR(20) REFERENCES employe(code_employe),
+    approbateur VARCHAR(20),
     date_approbation DATE,
     motif_rejet VARCHAR(200),
     
     -- IMPACT PAIE 
     solde_conge_avant DECIMAL(5,2) NOT NULL,
-    solde_conge_apres DECIMAL(5,2) GENERATED ALWAYS AS (
-        solde_conge_avant - jours_ouvrables
-    ) STORED,
+    solde_conge_apres DECIMAL(5,2),
     deduction_salaire DECIMAL(10,2) DEFAULT 0,
     pris_en_compte_paie BOOLEAN DEFAULT FALSE,
     
     -- RÈGLES LEGALES
-    conge_paye BOOLEAN GENERATED ALWAYS AS (
-        CASE type_conge
-            WHEN 'CONGE_MALADIE' THEN jours_calendaries > 4 -- Justificatif obligatoire > 4 jours
-            ELSE TRUE
-        END
-    ) STORED,
+    conge_paye BOOLEAN,
     
     -- METADONNEES
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -545,13 +473,9 @@ CREATE TABLE pointage (
     
     -- JOURNEE
     date_pointage DATE NOT NULL,
-    jour_semaine VARCHAR(10) GENERATED ALWAYS AS (
-        TO_CHAR(date_pointage, 'Day') -- extraire le nom complet du jour
-    ) STORED,
+    jour_semaine VARCHAR(10),
     est_jour_ferie BOOLEAN DEFAULT FALSE,
-    est_weekend BOOLEAN GENERATED ALWAYS AS (
-        EXTRACT(DOW FROM date_pointage) IN (0, 6)
-    ) STORED,
+    est_weekend BOOLEAN,
     
     -- HORAIRES THEORIQUES
     heure_debut_theorique TIME NOT NULL,
@@ -566,27 +490,9 @@ CREATE TABLE pointage (
     pointage_sortie_valide BOOLEAN DEFAULT FALSE,
     
     -- CALCUL
-    heures_theoriques DECIMAL(4,2) GENERATED ALWAYS AS (
-        EXTRACT(EPOCH FROM (heure_fin_theorique - heure_debut_theorique -
-        COALESCE(pause_fin - pause_debut, '00:00'::INTERVAL))) / 3600 -- coalesce(..) pour s assurer que si la pause est null ca va pas etre compter
-    ) STORED,
-    
-    heures_reelles DECIMAL(4,2) GENERATED ALWAYS AS (
-        CASE 
-            WHEN heure_arrivee IS NOT NULL AND heure_depart IS NOT NULL 
-            THEN EXTRACT(EPOCH FROM (heure_depart - heure_arrivee -
-                 COALESCE(pause_fin - pause_debut, '00:00'::INTERVAL))) / 3600
-            ELSE 0
-        END
-    ) STORED,
-    
-    retard_minutes INTEGER GENERATED ALWAYS AS (
-        CASE 
-            WHEN heure_arrivee IS NOT NULL AND heure_arrivee > heure_debut_theorique
-            THEN EXTRACT(EPOCH FROM (heure_arrivee - heure_debut_theorique)) / 60
-            ELSE 0
-        END
-    ) STORED,
+    heures_theoriques DECIMAL(4,2),
+    heures_reelles DECIMAL(4,2),
+    retard_minutes INTEGER,
     
     -- HEURES SUPPLEMENTAIRES
     heures_supp_25 DECIMAL(4,2) DEFAULT 0,
@@ -604,7 +510,7 @@ CREATE TABLE pointage (
     statut_pointage VARCHAR(20) DEFAULT 'SAISI' CHECK (
         statut_pointage IN ('SAISI', 'CORRIGE', 'VALIDE', 'REJETE')
     ),
-    validateur VARCHAR(20) REFERENCES employe(code_employe),
+    validateur VARCHAR(20),
     date_validation DATE,
     
     -- OBSERVATIONS
@@ -624,7 +530,6 @@ CREATE TABLE pointage (
 );
 
 -- TABLE : CONFIGURATION FISCALE ET SOCIALE (Parametres legaux)
-
 CREATE TABLE configuration_legale (
     id_config SERIAL PRIMARY KEY,
     
@@ -641,7 +546,7 @@ CREATE TABLE configuration_legale (
     date_maj_smig DATE NOT NULL,
     
     -- BARÈME IR
-    bareme_ir JSONB NOT NULL CHECK (jsonb_typeof(bareme_ir) = 'array'),
+    bareme_ir JSONB NOT NULL,
     deduction_forfaitaire DECIMAL(10,2) NOT NULL,
     abattement_taux DECIMAL(5,4) NOT NULL DEFAULT 0.20,
     
@@ -758,10 +663,7 @@ CREATE TABLE document_employe (
     date_validation DATE,
     validateur VARCHAR(50),
     observations TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
-    -- Alerte automatique 30 jours avant expiration
-    CONSTRAINT chk_expiration CHECK (date_expiration IS NULL OR date_expiration > CURRENT_DATE)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- TABLE : AUDIT ET SUIVI DE CONFORMITE
@@ -783,12 +685,7 @@ CREATE TABLE audit_conformite (
     anomalies_mineures INTEGER DEFAULT 0,
     
     -- STATISTIQUES
-    taux_conformite DECIMAL(5,2) GENERATED ALWAYS AS (
-        CASE 
-            WHEN nombre_anomalies = 0 THEN 100
-            ELSE GREATEST(100 - (nombre_anomalies * 5), 0) -- calcul simplifie
-        END
-    ) STORED,
+    taux_conformite DECIMAL(5,2),
     
     -- RAPPORT
     observations TEXT,
@@ -840,7 +737,7 @@ SELECT
     SUM(fp.salaire_brut) AS salaire_brut_annuel,
     SUM(fp.cotisation_cnss_employe) AS cotisation_cnss_annuelle,
     SUM(fp.cotisation_amo_employe) AS cotisation_amo_annuelle,
-    SUM(fp.igr_calcule) AS igr_annuel,
+    SUM(fp.ir_calcule) AS igr_annuel,
     COUNT(DISTINCT fp.mois_paie) AS mois_payes
 FROM fiche_paie fp
 JOIN employe e ON fp.code_employe = e.code_employe
@@ -856,29 +753,3 @@ CREATE INDEX idx_conge_employe ON conge(code_employe, date_debut);
 CREATE INDEX idx_pointage_employe_date ON pointage(code_employe, date_pointage);
 CREATE INDEX idx_document_expiration ON document_employe(date_expiration) 
     WHERE date_expiration IS NOT NULL AND est_valide = TRUE;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
