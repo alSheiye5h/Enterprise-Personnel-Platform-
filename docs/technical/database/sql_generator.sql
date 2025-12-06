@@ -19,7 +19,7 @@ CREATE TABLE employe (
     ),
 
     numero_passeport VARCHAR(20) CHECK (
-        -- Règle 2 : Passeport obligatoire pour étrangers
+        -- Règle 2 : Passeport obligatoire pour etrangers
         (pays != 'Maroc' AND numero_passeport IS NOT NULL)
     ),
 
@@ -55,7 +55,7 @@ CREATE TABLE employe (
     telephone_mobile VARCHAR(20) NOT NULL,
     telephone_domicile VARCHAR(20),
     
-    -- adress complete déclarations légales
+    -- adress complete declarations legales
     adresse_ligne1 VARCHAR(100) NOT NULL,
     adresse_ligne2 VARCHAR(100),
     ville VARCHAR(50) NOT NULL,
@@ -63,12 +63,12 @@ CREATE TABLE employe (
     code_postal VARCHAR(20) NOT NULL,
     pays VARCHAR(50) NOT NULL DEFAULT 'Maroc',
     
-    -- CONTACT D'URGENCE (obligatoire légal) 
+    -- CONTACT D'URGENCE (obligatoire legal) 
     nom_contact_urgence VARCHAR(100) NOT NULL,
     telephone_contact_urgence VARCHAR(20) NOT NULL,
     relation_contact_urgence VARCHAR(30) NOT NULL,
     
-    -- COORDONNÉES BANCAIRES (pour virement )
+    -- COORDONNEES BANCAIRES (pour virement )
     rib VARCHAR(34) NOT NULL UNIQUE CHECK (LENGTH(rib) >= 24), -- RIB marocain
     nom_banque VARCHAR(50) NOT NULL,
     agence_bancaire VARCHAR(50),
@@ -83,17 +83,17 @@ CREATE TABLE employe (
     ),
     coefficient_hierarchique DECIMAL(5,2),
     
-    -- DONNÉES EMPLOYEUR
+    -- DONNEES EMPLOYEUR
     matricule_interne VARCHAR(20) UNIQUE,
     code_etablissement VARCHAR(20) NOT NULL, -- Pour entreprises multi-sites
     code_unite_organisationnelle VARCHAR(20),
     
-    -- CONFORMITÉ ADMINISTRATIVE
+    -- CONFORMITE ADMINISTRATIVE
     dossier_complet BOOLEAN NOT NULL DEFAULT FALSE,
     date_verification_dossier DATE,
     verificateur_dossier VARCHAR(20),
     
-    -- Documents obligatoires (contrôlés par batch)
+    -- Documents obligatoires (contrôles par batch)
     photocopie_cin_valide BOOLEAN DEFAULT FALSE,
     rib_verifie BOOLEAN DEFAULT FALSE,
     attestation_cnss_valide BOOLEAN DEFAULT FALSE,
@@ -110,13 +110,13 @@ CREATE TABLE employe (
     date_depart DATE,
     motif_depart VARCHAR(100),
     
-    -- MÉTADONNÉES
+    -- METADONNEES
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     date_modification TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     createur VARCHAR(50),
     modificateur VARCHAR(50),
     
-    -- === CONTRAINTES MÉTIERS ===
+    -- === CONTRAINTES METIERS ===
     CONSTRAINT chk_nationalite_consistance CHECK (
         (pays = 'Maroc' AND nationalite = 'Marocaine') OR
         (pays != 'Maroc' AND nationalite != 'Marocaine')
@@ -167,7 +167,7 @@ CREATE TABLE contrat_travail (
     -- DATES CONTRACTUELLES 
     date_debut_contrat DATE NOT NULL,
     date_fin_contrat DATE CHECK (
-        -- Pour CDD : durée maximale limitée
+        -- Pour CDD : duree maximale limitee
         (type_contrat != 'CDD') OR 
         (type_contrat = 'CDD' AND date_fin_contrat <= date_debut_contrat + INTERVAL '24 months') -- dcc ne depasse pas 2ans
     ),
@@ -176,7 +176,7 @@ CREATE TABLE contrat_travail (
     
     -- PERIODE D'ESSAI (Art. 14 Code du Travail)
     periode_essai_jours INTEGER NOT NULL CHECK (
-        -- Règle 6 : Période d'essai conforme (max 180 jours selon statut)
+        -- Règle 6 : Periode d'essai conforme (max 180 jours selon statut)
         periode_essai_jours BETWEEN 0 AND CASE
             WHEN type_employe IN ('CADRE', 'DIRIGEANT') THEN 180
             ELSE 90
@@ -203,8 +203,8 @@ CREATE TABLE contrat_travail (
         regime_horaire IN ('JOUR', 'NUIT', 'ALTERNANT', 'POSTES')
     ),
     
-    -- CONGÉS PAYÉS (Art. 234 Code du Travail)
-    jours_conges_acquis DECIMAL(5,2) NOT NULL DEFAULT 1.5, -- 1.5 jours/mois travaillé
+    -- CONGES PAYES (Art. 234 Code du Travail)
+    jours_conges_acquis DECIMAL(5,2) NOT NULL DEFAULT 1.5, -- 1.5 jours/mois travaille
     jours_conges_prise DECIMAL(5,2) DEFAULT 0,
     solde_conges DECIMAL(5,2) GENERATED ALWAYS AS (jours_conges_acquis - jours_conges_prise) STORED,
     
@@ -217,9 +217,9 @@ CREATE TABLE contrat_travail (
     tickets_restaurant BOOLEAN DEFAULT FALSE,
     valeur_ticket_restaurant DECIMAL(5,2),
     
-    -- PRÉAVIS 
+    -- PREAVIS 
     preavis_depart_jours INTEGER NOT NULL CHECK (
-        -- Règle 7 : Préavis minimum selon ancienneté
+        -- Règle 7 : Preavis minimum selon anciennete
         preavis_depart_jours >= CASE
             WHEN (CURRENT_DATE - date_debut_contrat) < INTERVAL '1 year' THEN 8
             WHEN (CURRENT_DATE - date_debut_contrat) < INTERVAL '5 years' THEN 30
@@ -227,14 +227,14 @@ CREATE TABLE contrat_travail (
         END
     ),
     
-    -- INDEMNITÉS
+    -- INDEMNITES
     indemnite_licenciement_calcul VARCHAR(50), -- Formule de calcul
     indemnite_preavis_calcul VARCHAR(50),
     
     -- DOCUMENTS
     chemin_contrat_pdf VARCHAR(255),
     chemin_annexes VARCHAR(255),
-    contrat_bilingue BOOLEAN DEFAULT TRUE, -- Arabe/Français recommandé
+    contrat_bilingue BOOLEAN DEFAULT TRUE, -- Arabe/Français recommande
     version_contrat INTEGER DEFAULT 1,
     
     -- STATUT
@@ -243,13 +243,13 @@ CREATE TABLE contrat_travail (
     ),
     motif_rupture VARCHAR(100),
     
-    -- MÉTADONNÉES 
+    -- METADONNEES 
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     date_modification TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     createur VARCHAR(50) REFERENCES employe(code_employe),
     modificateur VARCHAR(50),
     
-    -- CONTRAINTES SPÉCIFIQUES
+    -- CONTRAINTES SPECIFIQUES
     CONSTRAINT chk_cdd_motif CHECK (
         (type_contrat != 'CDD') OR (motif_cdd IS NOT NULL)
     ),
@@ -258,7 +258,7 @@ CREATE TABLE contrat_travail (
         (date_fin_contrat IS NOT NULL AND date_fin_contrat > date_debut_contrat)
     ),
     CONSTRAINT chk_smic CHECK (
-        -- Vérification SMIG/SMAG (à adapter selon les revalorisations)
+        -- Verification SMIG/SMAG (à adapter selon les revalorisations)
         salaire_base_mensuel >= CASE
             WHEN type_employe = 'OUVRIER' THEN 3000 -- SMAG indicatif
             WHEN type_employe = 'EMPLOYE' THEN 3500 -- SMIG indicatif
@@ -267,26 +267,26 @@ CREATE TABLE contrat_travail (
     )
 );
 
--- TABLE : BULLETIN DE PAIE (Conformité CNSS, AMO, IGR)
+-- TABLE : BULLETIN DE PAIE (Conformite CNSS, AMO, IGR)
 
 CREATE TABLE fiche_paie (
     id_paie VARCHAR(30) PRIMARY KEY DEFAULT CONCAT('PAY-', TO_CHAR(CURRENT_DATE, 'YYYY-MM'), '-', LPAD(nextval('paie_seq')::TEXT, 6, '0')),
     code_employe VARCHAR(20) NOT NULL REFERENCES employe(code_employe),
     
-    -- PÉRIODE DE PAIE
+    -- PERIODE DE PAIE
     mois_paie INTEGER NOT NULL CHECK (mois_paie BETWEEN 1 AND 12),
     annee_paie INTEGER NOT NULL CHECK (annee_paie >= 2020),
-    periode_debut DATE NOT NULL, -- premier jour inclus dans le calcul du salaire et des cotisation, a partir de cette date le system commence a comptabiliser les jour de presence, les heurs travaillé, les abscences ...
+    periode_debut DATE NOT NULL, -- premier jour inclus dans le calcul du salaire et des cotisation, a partir de cette date le system commence a comptabiliser les jour de presence, les heurs travaille, les abscences ...
     periode_fin DATE NOT NULL,
     date_etablissement DATE DEFAULT CURRENT_DATE,
     date_paiement DATE NOT NULL,
     
-    -- ÉLÉMENTS DE RÉMUNÉRATION
+    -- ELEMENTS DE REMUNERATION
     salaire_base DECIMAL(10,2) NOT NULL CHECK (salaire_base >= 0),
     heures_normales DECIMAL(6,2) DEFAULT 191, -- 44h/semaine * 52 semaines / 12 mois
     heures_supp_25 DECIMAL(6,2) DEFAULT 0, -- Heures 44-48
     heures_supp_50 DECIMAL(6,2) DEFAULT 0, -- Heures >48 et jours repos
-    heures_supp_100 DECIMAL(6,2) DEFAULT 0, -- Jours fériés
+    heures_supp_100 DECIMAL(6,2) DEFAULT 0, -- Jours feries
     
     -- PRIMES ET ALLOCATIONS
     prime_anciennete DECIMAL(10,2) DEFAULT 0,
@@ -320,7 +320,7 @@ CREATE TABLE fiche_paie (
 
     -- ASSIETTE CNSS (plafonnee )
     assiette_cnss DECIMAL(10,2) GENERATED ALWAYS AS (
-        -- Règle 9 : CNSS plafonnée à 6,000 MAD
+        -- Règle 9 : CNSS plafonnee à 6,000 MAD
         LEAST(salaire_brut, 6000)
     ) STORED,
     
@@ -360,7 +360,7 @@ CREATE TABLE fiche_paie (
     ) STORED,
     
     -- Calcul IGR selon barème progressif
-    ir_calculé DECIMAL(10,2) GENERATED ALWAYS AS (
+    ir_calcule DECIMAL(10,2) GENERATED ALWAYS AS (
         CASE
             WHEN revenu_imposable <= 2500 THEN 0
             WHEN revenu_imposable <= 4166.67 THEN ROUND((revenu_imposable - 2500) * 0.10, 2) -- ROUND function to ensure that the value rendred is decimal with 2 apres virgule
@@ -377,7 +377,7 @@ CREATE TABLE fiche_paie (
     
     -- TOTAUX
     total_cotisations DECIMAL(10,2) GENERATED ALWAYS AS (
-        cotisation_cnss_employe + cotisation_amo_employe + ir_calculé
+        cotisation_cnss_employe + cotisation_amo_employe + ir_calcule
     ) STORED,
     total_a_payer DECIMAL(10,2) GENERATED ALWAYS AS (
         salaire_brut - total_cotisations - retenue_pret - avance_salaire - autres_retenues
@@ -393,7 +393,7 @@ CREATE TABLE fiche_paie (
         statut_paiement IN ('A_PAYER', 'PAYE', 'ANNULE', 'RETARD')
     ),
     
-    -- RÉFÉRENCES LÉGALES
+    -- REFERENCES LEGALES
     numero_bulletin_cnss VARCHAR(30),
     numero_declaration_fiscale VARCHAR(30),
     date_declaration_cnss DATE,
@@ -405,7 +405,7 @@ CREATE TABLE fiche_paie (
     paiement_effectue_par VARCHAR(50),
     date_paiement_effectif DATE,
     
-    -- MÉTADONNÉES
+    -- METADONNEES
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
@@ -417,12 +417,12 @@ CREATE TABLE fiche_paie (
     )
 );
 
--- TABLE : DÉCLARATIONS CNSS MENSUELLES
+-- TABLE : DECLARATIONS CNSS MENSUELLES
 CREATE TABLE declaration_cnss (
     id_declaration SERIAL PRIMARY KEY,
     numero_declaration VARCHAR(30) UNIQUE DEFAULT CONCAT('DCNSS-', TO_CHAR(CURRENT_DATE, 'YYYYMM'), '-', LPAD(nextval('decl_seq')::TEXT, 4, '0')),
     
-    -- PÉRIODE
+    -- PERIODE
     mois_declaration INTEGER NOT NULL CHECK (mois_declaration BETWEEN 1 AND 12),
     annee_declaration INTEGER NOT NULL,
     date_declaration DATE NOT NULL,
@@ -437,7 +437,7 @@ CREATE TABLE declaration_cnss (
     total_cotisations_amo_employeur DECIMAL(12,2) NOT NULL,
     total_general DECIMAL(12,2) NOT NULL,
     
-    -- ÉTAT
+    -- ETAT
     statut VARCHAR(20) NOT NULL DEFAULT 'BROUILLON' CHECK (
         statut IN ('BROUILLON', 'VALIDEE', 'TRANSMISE', 'ACCEPTEE', 'REJETEE')
     ),
@@ -454,18 +454,18 @@ CREATE TABLE declaration_cnss (
     declare_par VARCHAR(50) NOT NULL,
     verifie_par VARCHAR(50),
     
-    -- MÉTADONNÉES
+    -- METADONNEES
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
--- TABLE : GESTION DES CONGÉS (Conformité Code du Travail)
+-- TABLE : GESTION DES CONGES (Conformite Code du Travail)
 CREATE TABLE conge (
     id_conge SERIAL PRIMARY KEY,
     code_employe VARCHAR(20) NOT NULL REFERENCES employe(code_employe),
     
-    -- TYPE DE CONGÉ (Article 234 a 247 code du travail)
+    -- TYPE DE CONGE (Article 234 a 247 code du travail)
     type_conge VARCHAR(30) NOT NULL CHECK (
         type_conge IN (
             'CONGE_ANNUEL', 
@@ -477,23 +477,23 @@ CREATE TABLE conge (
         )
     ),
     
-    -- PÉRIODE
+    -- PERIODE
     date_debut DATE NOT NULL,
     date_fin DATE NOT NULL,
     date_demande DATE DEFAULT CURRENT_DATE,
     
-    -- DURÉE
+    -- DUREE
     jours_ouvrables DECIMAL(5,2) NOT NULL CHECK (jours_ouvrables > 0),
     jours_calendaires DECIMAL(5,2) GENERATED ALWAYS AS (
         date_fin - date_debut + 1
     ) STORED,
     
-    -- CONGÉS SPÉCIFIQUES 
-    -- Congé maternité (14 semaines)
+    -- CONGES SPECIFIQUES 
+    -- Conge maternite (14 semaines)
     certificat_medical_maternite VARCHAR(100),
     date_accouchement DATE,
     
-    -- Congé maladie
+    -- Conge maladie
     certificat_medical VARCHAR(100),
     maladie_professionnelle BOOLEAN DEFAULT FALSE,
     
@@ -513,7 +513,7 @@ CREATE TABLE conge (
     deduction_salaire DECIMAL(10,2) DEFAULT 0,
     pris_en_compte_paie BOOLEAN DEFAULT FALSE,
     
-    -- RÈGLES LÉGALES
+    -- RÈGLES LEGALES
     conge_paye BOOLEAN GENERATED ALWAYS AS (
         CASE type_conge
             WHEN 'CONGE_MALADIE' THEN jours_calendaries > 4 -- Justificatif obligatoire > 4 jours
@@ -521,7 +521,7 @@ CREATE TABLE conge (
         END
     ) STORED,
     
-    -- MÉTADONNÉES
+    -- METADONNEES
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
@@ -588,7 +588,7 @@ CREATE TABLE pointage (
         END
     ) STORED,
     
-    -- HEURES SUPPLÉMENTAIRES
+    -- HEURES SUPPLEMENTAIRES
     heures_supp_25 DECIMAL(4,2) DEFAULT 0,
     heures_supp_50 DECIMAL(4,2) DEFAULT 0,
     heures_supp_100 DECIMAL(4,2) DEFAULT 0,
@@ -610,7 +610,7 @@ CREATE TABLE pointage (
     -- OBSERVATIONS
     observations TEXT,
     
-    -- MÉTADONNÉES
+    -- METADONNEES
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
@@ -655,20 +655,20 @@ CREATE TABLE configuration_legale (
     -- AMO
     taux_amo_employe DECIMAL(5,4) NOT NULL,
     taux_amo_employeur DECIMAL(5,4) NOT NULL,
-    plafond_amo DECIMAL(10,2), -- Si plafonné
+    plafond_amo DECIMAL(10,2), -- Si plafonne
     
-    -- RETRAITE COMPLÉMENTAIRE (CIMR)
+    -- RETRAITE COMPLEMENTAIRE (CIMR)
     taux_cimr_employe DECIMAL(5,4),
     taux_cimr_employeur DECIMAL(5,4),
     plafond_cimr DECIMAL(10,2),
     
-    -- HEURES SUPPLÉMENTAIRES
+    -- HEURES SUPPLEMENTAIRES
     taux_hsup_25 DECIMAL(5,4) NOT NULL DEFAULT 0.25,
     taux_hsup_50 DECIMAL(5,4) NOT NULL DEFAULT 0.50,
     taux_hsup_100 DECIMAL(5,4) NOT NULL DEFAULT 1.00,
     limite_mensuelle_hsup DECIMAL(6,2) DEFAULT 20,
     
-    -- CONGÉS
+    -- CONGES
     taux_acquisition_conges DECIMAL(5,2) NOT NULL DEFAULT 1.5, -- Jours/mois
     duree_conge_maternite_jours INTEGER DEFAULT 98,
     duree_conge_paternite_jours INTEGER DEFAULT 3,
@@ -677,7 +677,7 @@ CREATE TABLE configuration_legale (
     delai_declaration_cnss_jours INTEGER DEFAULT 10, -- Jours après fin de mois
     delai_paiement_salaire_jours INTEGER DEFAULT 15, -- Dernier jour du mois
     
-    -- MÉTADONNEES
+    -- METADONNEES
     source_officielle VARCHAR(255),
     reference_juridique VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -720,7 +720,7 @@ CREATE TABLE formation_employe (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table des compétences
+-- Table des competences
 CREATE TABLE competence_employe (
     code_employe VARCHAR(20) NOT NULL REFERENCES employe(code_employe),
     code_competence VARCHAR(20) NOT NULL,
@@ -764,7 +764,7 @@ CREATE TABLE document_employe (
     CONSTRAINT chk_expiration CHECK (date_expiration IS NULL OR date_expiration > CURRENT_DATE)
 );
 
--- TABLE : AUDIT ET SUIVI DE CONFORMITÉ
+-- TABLE : AUDIT ET SUIVI DE CONFORMITE
 CREATE TABLE audit_conformite (
     id_audit SERIAL PRIMARY KEY,
     
@@ -776,7 +776,7 @@ CREATE TABLE audit_conformite (
     periode_audit_fin DATE NOT NULL,
     date_audit DATE NOT NULL DEFAULT CURRENT_DATE,
     
-    -- RÉSULTATS
+    -- RESULTATS
     nombre_anomalies INTEGER DEFAULT 0,
     anomalies_critiques INTEGER DEFAULT 0,
     anomalies_majeures INTEGER DEFAULT 0,
@@ -830,7 +830,7 @@ LEFT JOIN contrat_travail ct ON e.code_employe = ct.code_employe
     AND ct.statut_contrat = 'ACTIF'
 WHERE e.statut_emploi = 'ACTIF';
 
--- vue pour l'etat annuel du personnel (déclaration fiscale)
+-- vue pour l'etat annuel du personnel (declaration fiscale)
 CREATE OR REPLACE VIEW etat_annuel_personnel AS
 SELECT 
     EXTRACT(YEAR FROM fp.periode_fin) AS annee,
@@ -840,7 +840,7 @@ SELECT
     SUM(fp.salaire_brut) AS salaire_brut_annuel,
     SUM(fp.cotisation_cnss_employe) AS cotisation_cnss_annuelle,
     SUM(fp.cotisation_amo_employe) AS cotisation_amo_annuelle,
-    SUM(fp.igr_calculé) AS igr_annuel,
+    SUM(fp.igr_calcule) AS igr_annuel,
     COUNT(DISTINCT fp.mois_paie) AS mois_payes
 FROM fiche_paie fp
 JOIN employe e ON fp.code_employe = e.code_employe
