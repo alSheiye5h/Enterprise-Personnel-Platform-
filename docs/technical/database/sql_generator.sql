@@ -554,13 +554,13 @@ CREATE TABLE pointage (
     pause_debut TIME,
     pause_fin TIME,
     
-    -- POINTAGES REELS
+    -- POINTAGES REEL
     heure_arrivee TIME,
     heure_depart TIME,
     pointage_entree_valide BOOLEAN DEFAULT FALSE,
     pointage_sortie_valide BOOLEAN DEFAULT FALSE,
     
-    -- CALCULS
+    -- CALCUL
     heures_theoriques DECIMAL(4,2) GENERATED ALWAYS AS (
         EXTRACT(EPOCH FROM (heure_fin_theorique - heure_debut_theorique -
         COALESCE(pause_fin - pause_debut, '00:00'::INTERVAL))) / 3600 -- coalesce(..) pour s assurer que si la pause est null ca va pas etre compter
@@ -583,46 +583,274 @@ CREATE TABLE pointage (
         END
     ) STORED,
     
-    -- === HEURES SUPPLÉMENTAIRES ===
+    -- HEURES SUPPLÉMENTAIRES
     heures_supp_25 DECIMAL(4,2) DEFAULT 0,
     heures_supp_50 DECIMAL(4,2) DEFAULT 0,
     heures_supp_100 DECIMAL(4,2) DEFAULT 0,
     
-    -- === ABSENCES ===
-    absent BOOLEAN DEFAULT FALSE,
+    -- ABSENCES
+    absence BOOLEAN DEFAULT FALSE,
     type_absence VARCHAR(30) CHECK (
         type_absence IN ('MALADIE', 'CONGE', 'AUTORISATION', 'NON_JUSTIFIEE')
     ),
     justificatif_absence VARCHAR(100),
     
-    -- === VALIDATION ===
+    -- VALIDATION
     statut_pointage VARCHAR(20) DEFAULT 'SAISI' CHECK (
         statut_pointage IN ('SAISI', 'CORRIGE', 'VALIDE', 'REJETE')
     ),
     validateur VARCHAR(20) REFERENCES employe(code_employe),
     date_validation DATE,
     
-    -- === OBSERVATIONS ===
+    -- OBSERVATIONS
     observations TEXT,
     
-    -- === MÉTADONNÉES ===
+    -- MÉTADONNÉES
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
-    -- === CONTRAINTES ===
+    -- CONTRAINTES
     CONSTRAINT chk_heure_fin CHECK (heure_fin_theorique > heure_debut_theorique),
     CONSTRAINT chk_pointage_complet CHECK (
-        (absent = TRUE) OR 
+        (absence = TRUE) OR 
         (heure_arrivee IS NOT NULL AND heure_depart IS NOT NULL)
     ),
     CONSTRAINT uk_pointage_jour UNIQUE (code_employe, date_pointage)
 );
 
+-- TABLE : CONFIGURATION FISCALE ET SOCIALE (Parametres legaux)
 
+CREATE TABLE configuration_legale (
+    id_config SERIAL PRIMARY KEY,
+    
+    -- IDENTIFICATION
+    code_pays VARCHAR(5) NOT NULL DEFAULT 'MA',
+    annee_applicable INTEGER NOT NULL,
+    date_debut_validite DATE NOT NULL,
+    date_fin_validite DATE,
+    
+    -- SMIG/SMAG
+    smig_industriel DECIMAL(10,2) NOT NULL, -- Salaire minimum industriel
+    smig_commercial DECIMAL(10,2) NOT NULL,
+    smig_agricole DECIMAL(10,2) NOT NULL,
+    date_maj_smig DATE NOT NULL,
+    
+    -- BARÈME IR
+    bareme_ir JSONB NOT NULL CHECK (jsonb_typeof(bareme_ir) = 'array'),
+    deduction_forfaitaire DECIMAL(10,2) NOT NULL,
+    abattement_taux DECIMAL(5,4) NOT NULL DEFAULT 0.20,
+    
+    -- CNSS
+    plafond_cnss DECIMAL(10,2) NOT NULL DEFAULT 6000,
+    taux_cnss_employe DECIMAL(5,4) NOT NULL,
+    taux_cnss_employeur DECIMAL(5,4) NOT NULL,
+    taux_allocation_familiale DECIMAL(5,4), -- Par enfant
+    montant_allocation_familiale DECIMAL(10,2) NOT NULL DEFAULT 150,
+    
+    -- AMO
+    taux_amo_employe DECIMAL(5,4) NOT NULL,
+    taux_amo_employeur DECIMAL(5,4) NOT NULL,
+    plafond_amo DECIMAL(10,2), -- Si plafonné
+    
+    -- RETRAITE COMPLÉMENTAIRE (CIMR)
+    taux_cimr_employe DECIMAL(5,4),
+    taux_cimr_employeur DECIMAL(5,4),
+    plafond_cimr DECIMAL(10,2),
+    
+    -- HEURES SUPPLÉMENTAIRES
+    taux_hsup_25 DECIMAL(5,4) NOT NULL DEFAULT 0.25,
+    taux_hsup_50 DECIMAL(5,4) NOT NULL DEFAULT 0.50,
+    taux_hsup_100 DECIMAL(5,4) NOT NULL DEFAULT 1.00,
+    limite_mensuelle_hsup DECIMAL(6,2) DEFAULT 20,
+    
+    -- CONGÉS
+    taux_acquisition_conges DECIMAL(5,2) NOT NULL DEFAULT 1.5, -- Jours/mois
+    duree_conge_maternite_jours INTEGER DEFAULT 98,
+    duree_conge_paternite_jours INTEGER DEFAULT 3,
+    
+    -- FORMALITES ADMINISTRATIVES
+    delai_declaration_cnss_jours INTEGER DEFAULT 10, -- Jours après fin de mois
+    delai_paiement_salaire_jours INTEGER DEFAULT 15, -- Dernier jour du mois
+    
+    -- MÉTADONNEES
+    source_officielle VARCHAR(255),
+    reference_juridique VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by VARCHAR(50),
+    
+    -- CONTRAINTES
+    CONSTRAINT uk_config_periode UNIQUE (code_pays, annee_applicable)
+);
 
+-- TABLES DE LIENS ET RELATIONS
+CREATE TABLE employe_departement (
+    code_employe VARCHAR(20) NOT NULL REFERENCES employe(code_employe),
+    code_departement VARCHAR(20) NOT NULL,
+    date_affectation DATE NOT NULL DEFAULT CURRENT_DATE,
+    date_fin_affectation DATE,
+    pourcentage_allocation DECIMAL(5,2) NOT NULL CHECK (pourcentage_allocation BETWEEN 0 AND 100),
+    manager_departement BOOLEAN DEFAULT FALSE,
+    statut_affectation VARCHAR(20) DEFAULT 'ACTIVE' CHECK (
+        statut_affectation IN ('ACTIVE', 'HISTORIQUE', 'FUTURE')
+    ),
+    PRIMARY KEY (code_employe, code_departement, date_affectation)
+);
 
+-- Table de suivi des formations
+CREATE TABLE formation_employe (
+    id_formation SERIAL PRIMARY KEY,
+    code_employe VARCHAR(20) NOT NULL REFERENCES employe(code_employe),
+    intitule_formation VARCHAR(200) NOT NULL,
+    type_formation VARCHAR(50) NOT NULL,
+    organisme_formateur VARCHAR(100),
+    date_debut DATE NOT NULL,
+    date_fin DATE NOT NULL,
+    duree_heures INTEGER NOT NULL,
+    cout_formation DECIMAL(10,2),
+    prise_en_charge_entreprise DECIMAL(5,2) DEFAULT 100,
+    certification_obtenue BOOLEAN DEFAULT FALSE,
+    nom_certification VARCHAR(100),
+    valide_par VARCHAR(50),
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
+-- Table des compétences
+CREATE TABLE competence_employe (
+    code_employe VARCHAR(20) NOT NULL REFERENCES employe(code_employe),
+    code_competence VARCHAR(20) NOT NULL,
+    nom_competence VARCHAR(100) NOT NULL,
+    niveau_maitrise VARCHAR(20) CHECK (niveau_maitrise IN ('DEBUTANT', 'INTERMEDIAIRE', 'AVANCE', 'EXPERT')),
+    date_acquisition DATE NOT NULL,
+    date_expiration DATE,
+    certifie_par VARCHAR(50),
+    organisme_certificateur VARCHAR(100),
+    PRIMARY KEY (code_employe, code_competence)
+);
 
+-- TABLE : SUIVI DES DOCUMENTS OBLIGATOIRES
+CREATE TABLE document_employe (
+    id_document SERIAL PRIMARY KEY,
+    code_employe VARCHAR(20) NOT NULL REFERENCES employe(code_employe),
+    type_document VARCHAR(50) NOT NULL CHECK (
+        type_document IN (
+            'CIN',
+            'PASSEPORT',
+            'RIB',
+            'DIPLOME',
+            'ATTESTATION_CNSS',
+            'VISITE_MEDICALE',
+            'CONTRAT',
+            'CERTIFICAT_TRAVAIL',
+            'AUTRE'
+        )
+    ),
+    nom_document VARCHAR(100) NOT NULL,
+    chemin_fichier VARCHAR(255) NOT NULL,
+    date_emission DATE,
+    date_expiration DATE,
+    est_valide BOOLEAN DEFAULT TRUE,
+    date_validation DATE,
+    validateur VARCHAR(50),
+    observations TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Alerte automatique 30 jours avant expiration
+    CONSTRAINT chk_expiration CHECK (date_expiration IS NULL OR date_expiration > CURRENT_DATE)
+);
+
+-- TABLE : AUDIT ET SUIVI DE CONFORMITÉ
+CREATE TABLE audit_conformite (
+    id_audit SERIAL PRIMARY KEY,
+    
+    -- SCOPE AUDIT
+    type_audit VARCHAR(50) NOT NULL CHECK (
+        type_audit IN ('PAIE', 'CNSS', 'CONTRAT', 'DOCUMENTS', 'TEMPS_TRAVAIL')
+    ),
+    periode_audit_debut DATE NOT NULL,
+    periode_audit_fin DATE NOT NULL,
+    date_audit DATE NOT NULL DEFAULT CURRENT_DATE,
+    
+    -- RÉSULTATS
+    nombre_anomalies INTEGER DEFAULT 0,
+    anomalies_critiques INTEGER DEFAULT 0,
+    anomalies_majeures INTEGER DEFAULT 0,
+    anomalies_mineures INTEGER DEFAULT 0,
+    
+    -- STATISTIQUES
+    taux_conformite DECIMAL(5,2) GENERATED ALWAYS AS (
+        CASE 
+            WHEN nombre_anomalies = 0 THEN 100
+            ELSE GREATEST(100 - (nombre_anomalies * 5), 0) -- calcul simplifie
+        END
+    ) STORED,
+    
+    -- RAPPORT
+    observations TEXT,
+    recommandations TEXT,
+    plan_action TEXT,
+    
+    -- RESPONSABLES
+    auditeur VARCHAR(50) NOT NULL,
+    valide_par VARCHAR(50),
+    date_validation DATE,
+    
+    --  METADONNEES 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- CONTRAINTES
+    CONSTRAINT chk_periode_audit CHECK (periode_audit_fin > periode_audit_debut)
+);
+
+-- vue pour le registre du personnel 
+CREATE OR REPLACE VIEW registre_personnel AS
+SELECT 
+    e.code_employe,
+    e.cin,
+    e.prenom || ' ' || e.nom AS nom_complet,
+    e.date_naissance,
+    e.lieu_naissance,
+    e.nationalite,
+    e.adresse_ligne1 || COALESCE(', ' || e.adresse_ligne2, '') || ', ' || e.ville AS adresse_complete,
+    e.telephone_mobile,
+    e.email_professionnel,
+    e.date_embauche,
+    ct.type_contrat,
+    ct.date_debut_contrat,
+    ct.salaire_base_mensuel,
+    e.statut_emploi,
+    e.numero_immatriculation_cnss
+FROM employe e
+LEFT JOIN contrat_travail ct ON e.code_employe = ct.code_employe 
+    AND ct.statut_contrat = 'ACTIF'
+WHERE e.statut_emploi = 'ACTIF';
+
+-- vue pour l'etat annuel du personnel (déclaration fiscale)
+CREATE OR REPLACE VIEW etat_annuel_personnel AS
+SELECT 
+    EXTRACT(YEAR FROM fp.periode_fin) AS annee,
+    e.code_employe,
+    e.cin,
+    e.prenom || ' ' || e.nom AS nom_complet,
+    SUM(fp.salaire_brut) AS salaire_brut_annuel,
+    SUM(fp.cotisation_cnss_employe) AS cotisation_cnss_annuelle,
+    SUM(fp.cotisation_amo_employe) AS cotisation_amo_annuelle,
+    SUM(fp.igr_calculé) AS igr_annuel,
+    COUNT(DISTINCT fp.mois_paie) AS mois_payes
+FROM fiche_paie fp
+JOIN employe e ON fp.code_employe = e.code_employe
+WHERE e.statut_emploi = 'ACTIF'
+GROUP BY EXTRACT(YEAR FROM fp.periode_fin), e.code_employe, e.cin, e.prenom, e.nom;
+
+-- Indexes
+CREATE INDEX idx_employe_nom_prenom ON employe(nom, prenom);
+CREATE INDEX idx_employe_date_embauche ON employe(date_embauche);
+CREATE INDEX idx_fiche_paie_periode ON fiche_paie(periode_debut, periode_fin);
+CREATE INDEX idx_fiche_paie_employe ON fiche_paie(code_employe);
+CREATE INDEX idx_conge_employe ON conge(code_employe, date_debut);
+CREATE INDEX idx_pointage_employe_date ON pointage(code_employe, date_pointage);
+CREATE INDEX idx_document_expiration ON document_employe(date_expiration) 
+    WHERE date_expiration IS NOT NULL AND est_valide = TRUE;
 
 
 

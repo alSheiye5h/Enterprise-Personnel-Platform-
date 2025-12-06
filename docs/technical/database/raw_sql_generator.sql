@@ -35,7 +35,7 @@ CREATE TABLE employe (
     -- === INFORMATIONS PERSONNELLES (validations légales) ===
     prenom VARCHAR(50) NOT NULL,
     nom VARCHAR(50) NOT NULL,
-    deuxieme_prenom VARCHAR(30),
+    -- deuxieme_prenom VARCHAR(30),
     sexe CHAR(1) NOT NULL CHECK (sexe IN ('M', 'F')), -- Règle 4
     date_naissance DATE NOT NULL CHECK (
         -- Règle 3 : Âge minimum 18 ans (Code du Travail)
