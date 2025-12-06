@@ -244,7 +244,7 @@ CREATE TABLE contrat_travail (
     createur VARCHAR(50) REFERENCES employe(code_employe),
     modificateur VARCHAR(50),
     
-    -- === CONTRAINTES SPÉCIFIQUES ===
+    -- CONTRAINTES SPÉCIFIQUES
     CONSTRAINT chk_cdd_motif CHECK (
         (type_contrat != 'CDD') OR (motif_cdd IS NOT NULL)
     ),
@@ -262,6 +262,7 @@ CREATE TABLE contrat_travail (
     )
 );
 
+-- TABLE : BULLETIN DE PAIE (Conformité CNSS, AMO, IGR)
 
 
 

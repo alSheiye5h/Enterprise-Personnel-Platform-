@@ -260,7 +260,7 @@ CREATE TABLE fiche_paie (
     id_paie VARCHAR(30) PRIMARY KEY DEFAULT CONCAT('PAY-', TO_CHAR(CURRENT_DATE, 'YYYY-MM'), '-', LPAD(nextval('paie_seq')::TEXT, 6, '0')),
     code_employe VARCHAR(20) NOT NULL REFERENCES employe(code_employe),
     
-    -- === PÉRIODE DE PAIE ===
+    -- PÉRIODE DE PAIE
     mois_paie INTEGER NOT NULL CHECK (mois_paie BETWEEN 1 AND 12),
     annee_paie INTEGER NOT NULL CHECK (annee_paie >= 2020),
     periode_debut DATE NOT NULL,
