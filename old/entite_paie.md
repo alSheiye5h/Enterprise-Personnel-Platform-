@@ -1,0 +1,29 @@
+## paie
+- **id_paie** (PK) : varchar(30) - Identifiant paie (ex: PAY-2024-01-EMP001)
+- **code_employe** : varchar(20) - Référence employé
+- **periode_debut** : date - Période début
+- **periode_fin** : date - Période fin
+- **date_paiement** : date - Date paiement
+- **salaire_base** : decimal(10,2) - Salaire base
+- **allocation_logement** : decimal(10,2) - Allocation logement
+- **allocation_transport** : decimal(10,2) - Allocation transport
+- **heures_supplementaires** : decimal(10,2) - Heures supplémentaires
+- **prime_performance** : decimal(10,2) - Prime performance
+- **commission** : decimal(10,2) - Commission
+- **autres_allocations** : decimal(10,2) - Autres allocations
+- **total_gains** : decimal(10,2) - Total gains
+- **impot_revenu** : decimal(10,2) - Impôt sur le revenu
+- **cotisation_cnss_employe** : decimal(10,2) - Cotisation CNSS employé
+- **cotisation_cnss_employeur** : decimal(10,2) - Cotisation CNSS employeur
+- **assurance_sante_AMO** : decimal(10,2) - Assurance santé AMO
+- **cotisation_retraite** : decimal(10,2) - Cotisation retraite
+- **retenues_prets** : decimal(10,2) - Retenues prêts
+- **autres_deductions** : decimal(10,2) - Autres déductions
+- **total_deductions** : decimal(10,2) - Total déductions
+- **salaire_net** : decimal(10,2) - Salaire net
+- **mode_paiement** : varchar(20) - Mode paiement
+- **numero_compte_bancaire** : varchar(30) - Numéro compte bancaire
+- **nom_banque** : varchar(50) - Nom banque
+- **statut_paiement** : varchar(20) - Statut paiement
+- **numero_certificat_fiscal** : varchar(30) - Numéro certificat fiscal
+- **declaration_fiscale_deposee** : boolean - Déclaration fiscale déposée

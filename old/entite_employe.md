@@ -1,0 +1,36 @@
+## employe
+- **code_employe** (PK) : varchar(20) - Identifiant interne (ex: HR-EMP-001)
+- **cin** : varchar(20) - Numéro CIN / sécurité sociale
+- **numero_passeport** : varchar(20) - Numéro de passeport (pour internationaux)
+- **numero_immatriculation_cnss** : varchar(20) - Numéro d'immatriculation CNSS
+- **prenom** : varchar(50) - Prénom principal
+- **nom** : varchar(50) - Nom de famille
+- **deuxieme_prenom** : varchar(30) - 2ème prénom (optionnel)
+- **sexe** : char(1) - Sexe (M/F/O)
+- **date_naissance** : date - Date de naissance
+- **situation_matrimoniale** : varchar(15) - Statut matrimonial
+- **nb_personnes_charge** : integer - Nombre de personnes à charge
+- **email_personnel** : varchar(100) - Email personnel
+- **email_professionnel** : varchar(100) - Email professionnel
+- **telephone_mobile** : varchar(20) - Téléphone mobile
+- **telephone_domicile** : varchar(20) - Téléphone fixe domicile
+- **adresse_ligne1** : varchar(100) - Adresse ligne 1
+- **adresse_ligne2** : varchar(100) - Adresse ligne 2 (complément)
+- **ville** : varchar(50) - Ville
+- **region** : varchar(50) - Région/État
+- **code_postal** : varchar(20) - Code postal
+- **pays** : varchar(50) - Pays
+- **nom_contact_urgence** : varchar(100) - Nom du contact d'urgence
+- **telephone_contact_urgence** : varchar(20) - Téléphone contact d'urgence
+- **relation_contact_urgence** : varchar(30) - Lien familial du contact
+- **code_departement** : varchar(20) - Référence département
+- **code_poste** : varchar(20) - Référence poste
+- **statut_emploi** : varchar(20) - Statut emploi (actif, congé, parti)
+- **date_embauche** : date - Date d'embauche
+- **date_fin_periode_essai** : date - Fin période d'essai
+- **date_depart** : date - Date de départ
+- **raison_depart** : varchar(50) - Motif de départ
+- **contrat_signe** : boolean - Contrat signé
+- **verification_antecedents** : boolean - Vérification antécédents
+- **verifie** : boolean - Dossier complet
+- **est_valide** : boolean - Actif et conforme

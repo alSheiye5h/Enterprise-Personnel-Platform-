@@ -1,20 +1,45 @@
-## contrat
-- **id_contrat** (PK) : varchar(30) - Identifiant contrat
-- **code_employe** : varchar(20) - Référence employé
-- **type_contrat** : varchar(30) - Type contrat
-- **date_debut** : date - Date début
-- **date_fin** : date - Date fin
-- **date_signature** : date - Date signature
-- **salaire_base** : decimal(10,2) - Salaire base
-- **devise_salaire** : varchar(5) - Devise salaire
-- **heures_par_semaine** : integer - Heures par semaine
-- **periode_essai_jours** : integer - Période essai (jours)
-- **preavis_jours** : integer - Préavis (jours)
-- **assurance_sante** : boolean - Assurance santé
-- **retraite** : boolean - Retraite
-- **stock_options** : boolean - Stock options
-- **jours_conges_annuels** : decimal(5,2) - Jours congés annuels
-- **jours_conges_maladie** : decimal(5,2) - Jours congés maladie
-- **chemin_contrat** : varchar(200) - Chemin contrat
-- **chemin_copie_signee** : varchar(200) - Chemin copie signée
-- **signature_numerique** : boolean - Signature numérique
+### contrat_travail
+- **id_contrat** : SERIAL - Clé primaire
+- **code_employe** : VARCHAR(20) - Référence à employe
+- **type_contrat** : VARCHAR(30) - NOT NULL
+  - Valeurs : 'CDI', 'CDD', 'CONTRAT_MISSION', 'CONTRAT_INTERIMAIRE', 'STAGE'
+- **motif_cdd** : VARCHAR(100) - Obligatoire pour CDD
+- **date_debut_contrat** : DATE - NOT NULL
+- **date_fin_contrat** : DATE - (≤ 24 mois pour CDD)
+- **date_signature** : DATE - NOT NULL
+- **date_effet** : DATE - NOT NULL
+- **periode_essai_jours** : INTEGER - NOT NULL (0-180 jours)
+- **periode_essai_renouvelable** : BOOLEAN - DEFAULT FALSE
+- **date_fin_periode_essai** : DATE
+- **salaire_base_mensuel** : DECIMAL(10,2) - NOT NULL
+- **heures_hebdomadaires** : INTEGER - NOT NULL
+- **salaire_horaire** : DECIMAL(8,2)
+- **devise** : VARCHAR(3) - DEFAULT 'MAD'
+- **heures_journalieres** : INTEGER (1-10)
+- **jours_travail_semaine** : INTEGER (1-6)
+- **regime_horaire** : VARCHAR(30)
+  - Valeurs : 'JOUR', 'NUIT', 'ALTERNANT', 'POSTES'
+- **jours_conges_acquis** : DECIMAL(5,2) - DEFAULT 1.5
+- **jours_conges_prise** : DECIMAL(5,2) - DEFAULT 0
+- **solde_conges** : DECIMAL(5,2)
+- **prime_anciennete** : BOOLEAN - DEFAULT FALSE
+- **taux_prime_anciennete** : DECIMAL(5,2) (0-100)
+- **assurance_sante** : BOOLEAN - DEFAULT TRUE
+- **retraite_complementaire** : BOOLEAN - DEFAULT FALSE
+- **mutuelle_entreprise** : BOOLEAN - DEFAULT FALSE
+- **tickets_restaurant** : BOOLEAN - DEFAULT FALSE
+- **valeur_ticket_restaurant** : DECIMAL(5,2)
+- **preavis_depart_jours** : INTEGER - NOT NULL (≥ 8 jours)
+- **indemnite_licenciement_calcul** : VARCHAR(50)
+- **indemnite_preavis_calcul** : VARCHAR(50)
+- **chemin_contrat_pdf** : VARCHAR(255)
+- **chemin_annexes** : VARCHAR(255)
+- **contrat_bilingue** : BOOLEAN - DEFAULT TRUE
+- **version_contrat** : INTEGER - DEFAULT 1
+- **statut_contrat** : VARCHAR(20) - DEFAULT 'ACTIF'
+  - Valeurs : 'ACTIF', 'SUSPENDU', 'RESILIE', 'ACHEVE', 'RUPTURE'
+- **motif_rupture** : VARCHAR(100)
+- **date_creation** : TIMESTAMP - DEFAULT CURRENT_TIMESTAMP
+- **date_modification** : TIMESTAMP - DEFAULT CURRENT_TIMESTAMP
+- **createur** : VARCHAR(50)
+- **modificateur** : VARCHAR(50)

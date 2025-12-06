@@ -1,29 +1,60 @@
-## paie
-- **id_paie** (PK) : varchar(30) - Identifiant paie (ex: PAY-2024-01-EMP001)
-- **code_employe** : varchar(20) - Référence employé
-- **periode_debut** : date - Période début
-- **periode_fin** : date - Période fin
-- **date_paiement** : date - Date paiement
-- **salaire_base** : decimal(10,2) - Salaire base
-- **allocation_logement** : decimal(10,2) - Allocation logement
-- **allocation_transport** : decimal(10,2) - Allocation transport
-- **heures_supplementaires** : decimal(10,2) - Heures supplémentaires
-- **prime_performance** : decimal(10,2) - Prime performance
-- **commission** : decimal(10,2) - Commission
-- **autres_allocations** : decimal(10,2) - Autres allocations
-- **total_gains** : decimal(10,2) - Total gains
-- **impot_revenu** : decimal(10,2) - Impôt sur le revenu
-- **cotisation_cnss_employe** : decimal(10,2) - Cotisation CNSS employé
-- **cotisation_cnss_employeur** : decimal(10,2) - Cotisation CNSS employeur
-- **assurance_sante_AMO** : decimal(10,2) - Assurance santé AMO
-- **cotisation_retraite** : decimal(10,2) - Cotisation retraite
-- **retenues_prets** : decimal(10,2) - Retenues prêts
-- **autres_deductions** : decimal(10,2) - Autres déductions
-- **total_deductions** : decimal(10,2) - Total déductions
-- **salaire_net** : decimal(10,2) - Salaire net
-- **mode_paiement** : varchar(20) - Mode paiement
-- **numero_compte_bancaire** : varchar(30) - Numéro compte bancaire
-- **nom_banque** : varchar(50) - Nom banque
-- **statut_paiement** : varchar(20) - Statut paiement
-- **numero_certificat_fiscal** : varchar(30) - Numéro certificat fiscal
-- **declaration_fiscale_deposee** : boolean - Déclaration fiscale déposée
+### fiche_paie 
+- **id_paie** : VARCHAR(30) - Clé primaire
+- **code_employe** : VARCHAR(20) - Référence à employe
+- **mois_paie** : INTEGER - NOT NULL (1-12)
+- **annee_paie** : INTEGER - NOT NULL (≥ 2020)
+- **periode_debut** : DATE - NOT NULL
+- **periode_fin** : DATE - NOT NULL
+- **date_etablissement** : DATE - DEFAULT CURRENT_DATE
+- **date_paiement** : DATE - NOT NULL
+- **salaire_base** : DECIMAL(10,2) - NOT NULL
+- **heures_normales** : DECIMAL(6,2) - DEFAULT 191
+- **heures_supp_25** : DECIMAL(6,2) - DEFAULT 0
+- **heures_supp_50** : DECIMAL(6,2) - DEFAULT 0
+- **heures_supp_100** : DECIMAL(6,2) - DEFAULT 0
+- **prime_anciennete** : DECIMAL(10,2) - DEFAULT 0
+- **prime_panier** : DECIMAL(10,2) - DEFAULT 0
+- **prime_transport** : DECIMAL(10,2) - DEFAULT 0
+- **prime_logement** : DECIMAL(10,2) - DEFAULT 0
+- **prime_presence** : DECIMAL(10,2) - DEFAULT 0
+- **prime_performance** : DECIMAL(10,2) - DEFAULT 0
+- **commission** : DECIMAL(10,2) - DEFAULT 0
+- **autres_primes** : DECIMAL(10,2) - DEFAULT 0
+- **allocation_familiale** : DECIMAL(10,2) - DEFAULT 0
+- **salaire_brut** : DECIMAL(10,2)
+- **assiette_cnss** : DECIMAL(10,2)
+- **taux_cnss_employe** : DECIMAL(5,4) - DEFAULT 0.0426
+- **taux_cnss_employeur** : DECIMAL(5,4) - DEFAULT 0.0874
+- **cotisation_cnss_employe** : DECIMAL(10,2)
+- **cotisation_cnss_employeur** : DECIMAL(10,2)
+- **assiette_amo** : DECIMAL(10,2)
+- **taux_amo_employe** : DECIMAL(5,4) - DEFAULT 0.0226
+- **taux_amo_employeur** : DECIMAL(5,4) - DEFAULT 0.0339
+- **cotisation_amo_employe** : DECIMAL(10,2)
+- **cotisation_amo_employeur** : DECIMAL(10,2)
+- **revenu_net_imposable** : DECIMAL(10,2)
+- **deduction_forfaitaire** : DECIMAL(10,2) - DEFAULT 0
+- **abattement_20** : DECIMAL(10,2)
+- **revenu_imposable** : DECIMAL(10,2)
+- **ir_calcule** : DECIMAL(10,2)
+- **retenue_pret** : DECIMAL(10,2) - DEFAULT 0
+- **avance_salaire** : DECIMAL(10,2) - DEFAULT 0
+- **autres_retenues** : DECIMAL(10,2) - DEFAULT 0
+- **total_cotisations** : DECIMAL(10,2)
+- **total_a_payer** : DECIMAL(10,2)
+- **net_a_payer** : DECIMAL(10,2)
+- **mode_paiement** : VARCHAR(20) - NOT NULL
+  - Valeurs : 'VIREMENT', 'CHEQUE', 'ESPECES'
+- **numero_virement** : VARCHAR(50)
+- **statut_paiement** : VARCHAR(20) - DEFAULT 'A_PAYER'
+  - Valeurs : 'A_PAYER', 'PAYE', 'ANNULE', 'RETARD'
+- **numero_bulletin_cnss** : VARCHAR(30)
+- **numero_declaration_fiscale** : VARCHAR(30)
+- **date_declaration_cnss** : DATE
+- **date_declaration_fiscale** : DATE
+- **valide_par** : VARCHAR(50)
+- **date_validation** : DATE
+- **paiement_effectue_par** : VARCHAR(50)
+- **date_paiement_effectif** : DATE
+- **created_at** : TIMESTAMP - DEFAULT CURRENT_TIMESTAMP
+- **updated_at** : TIMESTAMP - DEFAULT CURRENT_TIMESTAMP

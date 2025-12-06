@@ -1,0 +1,20 @@
+## contrat
+- **id_contrat** (PK) : varchar(30) - Identifiant contrat
+- **code_employe** : varchar(20) - Référence employé
+- **type_contrat** : varchar(30) - Type contrat
+- **date_debut** : date - Date début
+- **date_fin** : date - Date fin
+- **date_signature** : date - Date signature
+- **salaire_base** : decimal(10,2) - Salaire base
+- **devise_salaire** : varchar(5) - Devise salaire
+- **heures_par_semaine** : integer - Heures par semaine
+- **periode_essai_jours** : integer - Période essai (jours)
+- **preavis_jours** : integer - Préavis (jours)
+- **assurance_sante** : boolean - Assurance santé
+- **retraite** : boolean - Retraite
+- **stock_options** : boolean - Stock options
+- **jours_conges_annuels** : decimal(5,2) - Jours congés annuels
+- **jours_conges_maladie** : decimal(5,2) - Jours congés maladie
+- **chemin_contrat** : varchar(200) - Chemin contrat
+- **chemin_copie_signee** : varchar(200) - Chemin copie signée
+- **signature_numerique** : boolean - Signature numérique

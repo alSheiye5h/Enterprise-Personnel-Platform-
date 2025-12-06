@@ -1,36 +1,63 @@
-## employe
-- **code_employe** (PK) : varchar(20) - Identifiant interne (ex: HR-EMP-001)
-- **cin** : varchar(20) - Numéro CIN / sécurité sociale
-- **numero_passeport** : varchar(20) - Numéro de passeport (pour internationaux)
-- **numero_immatriculation_cnss** : varchar(20) - Numéro d'immatriculation CNSS
-- **prenom** : varchar(50) - Prénom principal
-- **nom** : varchar(50) - Nom de famille
-- **deuxieme_prenom** : varchar(30) - 2ème prénom (optionnel)
-- **sexe** : char(1) - Sexe (M/F/O)
-- **date_naissance** : date - Date de naissance
-- **situation_matrimoniale** : varchar(15) - Statut matrimonial
-- **nb_personnes_charge** : integer - Nombre de personnes à charge
-- **email_personnel** : varchar(100) - Email personnel
-- **email_professionnel** : varchar(100) - Email professionnel
-- **telephone_mobile** : varchar(20) - Téléphone mobile
-- **telephone_domicile** : varchar(20) - Téléphone fixe domicile
-- **adresse_ligne1** : varchar(100) - Adresse ligne 1
-- **adresse_ligne2** : varchar(100) - Adresse ligne 2 (complément)
-- **ville** : varchar(50) - Ville
-- **region** : varchar(50) - Région/État
-- **code_postal** : varchar(20) - Code postal
-- **pays** : varchar(50) - Pays
-- **nom_contact_urgence** : varchar(100) - Nom du contact d'urgence
-- **telephone_contact_urgence** : varchar(20) - Téléphone contact d'urgence
-- **relation_contact_urgence** : varchar(30) - Lien familial du contact
-- **code_departement** : varchar(20) - Référence département
-- **code_poste** : varchar(20) - Référence poste
-- **statut_emploi** : varchar(20) - Statut emploi (actif, congé, parti)
-- **date_embauche** : date - Date d'embauche
-- **date_fin_periode_essai** : date - Fin période d'essai
-- **date_depart** : date - Date de départ
-- **raison_depart** : varchar(50) - Motif de départ
-- **contrat_signe** : boolean - Contrat signé
-- **verification_antecedents** : boolean - Vérification antécédents
-- **verifie** : boolean - Dossier complet
-- **est_valide** : boolean - Actif et conforme
+### employe
+- **code_employe** : VARCHAR(20) - Clé primaire
+- **pays** : VARCHAR(50) - DEFAULT 'Maroc'
+- **cin** : VARCHAR(20) - CIN obligatoire pour Marocains (12 caractères)
+- **numero_passeport** : VARCHAR(20) - Passeport obligatoire pour étrangers
+- **numero_immatriculation_cnss** : VARCHAR(20) - NOT NULL
+- **date_immatriculation_cnss** : DATE - NOT NULL
+- **numero_assure_amo** : VARCHAR(30)
+- **statut_cotisation_cnss** : VARCHAR(20) - DEFAULT 'ACTIF'
+  - Valeurs : 'ACTIF', 'SUSPENDU', 'RADIE'
+- **prenom** : VARCHAR(50) - NOT NULL
+- **nom** : VARCHAR(50) - NOT NULL
+- **deuxieme_prenom** : VARCHAR(30)
+- **sexe** : VARCHAR(1) - 'M' ou 'F'
+- **date_naissance** : DATE - NOT NULL (≥ 18 ans)
+- **lieu_naissance** : VARCHAR(100)
+- **nationalite** : VARCHAR(50) - DEFAULT 'Marocaine'
+- **situation_matrimoniale** : VARCHAR(20) - NOT NULL
+  - Valeurs : 'MARIE', 'CELIBATAIRE', 'VEUF', 'DIVORCE'
+- **nombre_enfants** : INTEGER - DEFAULT 0
+- **nb_personnes_charge** : INTEGER - DEFAULT 0
+- **email_personnel** : VARCHAR(100)
+- **email_professionnel** : VARCHAR(100) - NOT NULL
+- **telephone_mobile** : VARCHAR(20) - NOT NULL
+- **telephone_domicile** : VARCHAR(20)
+- **adresse_ligne1** : VARCHAR(100) - NOT NULL
+- **adresse_ligne2** : VARCHAR(100)
+- **ville** : VARCHAR(50) - NOT NULL
+- **region** : VARCHAR(50) - NOT NULL
+- **code_postal** : VARCHAR(20) - NOT NULL
+- **nom_contact_urgence** : VARCHAR(100) - NOT NULL
+- **telephone_contact_urgence** : VARCHAR(20) - NOT NULL
+- **relation_contact_urgence** : VARCHAR(30) - NOT NULL
+- **rib** : VARCHAR(34) - NOT NULL UNIQUE (≥ 24 caractères)
+- **nom_banque** : VARCHAR(50) - NOT NULL
+- **agence_bancaire** : VARCHAR(50)
+- **type_employe** : VARCHAR(20) - NOT NULL
+  - Valeurs : 'CADRE', 'EMPLOYE', 'OUVRIER', 'DIRIGEANT'
+- **categorie_professionnelle** : VARCHAR(50)
+  - Valeurs : 'CATEGORIE 1', 'CATEGORIE 2', 'CATEGORIE 3', 'CATEGORIE 4', 'CATEGORIE 5'
+- **coefficient_hierarchique** : DECIMAL(5,2)
+- **matricule_interne** : VARCHAR(20) - UNIQUE
+- **code_etablissement** : VARCHAR(20) - NOT NULL
+- **code_unite_organisationnelle** : VARCHAR(20)
+- **dossier_complet** : BOOLEAN - DEFAULT FALSE
+- **date_verification_dossier** : DATE
+- **verificateur_dossier** : VARCHAR(20)
+- **photocopie_cin_valide** : BOOLEAN - DEFAULT FALSE
+- **rib_verifie** : BOOLEAN - DEFAULT FALSE
+- **attestation_cnss_valide** : BOOLEAN - DEFAULT FALSE
+- **diplomes_verifies** : BOOLEAN - DEFAULT FALSE
+- **visite_medicale_valide** : BOOLEAN - DEFAULT FALSE
+- **contrat_signe** : BOOLEAN - DEFAULT FALSE
+- **statut_emploi** : VARCHAR(20) - DEFAULT 'ACTIF'
+  - Valeurs : 'ACTIF', 'CONGE', 'SUSPENDU', 'LICENCIE', 'DEMISSIONNAIRE', 'RETRAITE'
+- **date_embauche** : DATE - NOT NULL
+- **date_fin_periode_essai** : DATE
+- **date_depart** : DATE
+- **motif_depart** : VARCHAR(100)
+- **date_creation** : TIMESTAMP - DEFAULT CURRENT_TIMESTAMP
+- **date_modification** : TIMESTAMP - DEFAULT CURRENT_TIMESTAMP
+- **createur** : VARCHAR(50)
+- **modificateur** : VARCHAR(50)
